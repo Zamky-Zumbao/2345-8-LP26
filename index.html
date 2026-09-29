@@ -1,0 +1,2756 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+<title>Licitación 2345-8-LP26 · Municipalidad de Las Condes</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --azul:#1664c0; --azul-claro:#4087cf; --gris-fondo:#f5f7fc; --blanco:#fff; --texto-oscuro:#1a2634; --texto-gris:#4a5a6e; --borde:#e2e8f0; --verde:#2c9e8c; --verde-claro:#e8f5e9; --rojo:#e74c3c; --rojo-claro:#fde8e8; --naranja:#e08e0b; --morado:#7c3aed; --morado-claro:#f3e8ff; --shadow:0 2px 8px rgba(0,0,0,0.06); }
+  body { font-family:'Inter','Segoe UI',sans-serif; background:var(--gris-fondo); color:var(--texto-oscuro); min-height:100vh; padding:0 0 40px 0; }
+  .login-overlay { position:fixed; inset:0; background:linear-gradient(135deg,#1664c0 0%,#0f4a8a 100%); display:flex; align-items:center; justify-content:center; z-index:9999; padding:20px; }
+  .login-card { background:white; border-radius:24px; padding:32px 24px; max-width:400px; width:100%; box-shadow:0 20px 60px rgba(0,0,0,0.3); text-align:center; }
+  .login-card img { height:60px; margin-bottom:12px; }
+  .login-card h1 { font-size:17px; color:var(--azul); margin-bottom:4px; }
+  .login-card p { font-size:11px; color:var(--texto-gris); margin-bottom:20px; }
+  .login-card input { width:100%; padding:14px 16px; border:2px solid var(--borde); border-radius:12px; font-size:15px; margin-bottom:12px; outline:none; font-family:inherit; }
+  .login-card input:focus { border-color:var(--azul); box-shadow:0 0 0 3px rgba(22,100,192,0.15); }
+  .login-card button { width:100%; padding:14px; background:var(--azul); color:white; border:none; border-radius:12px; font-size:15px; font-weight:700; cursor:pointer; }
+  .login-card button:disabled { opacity:0.6; }
+  .login-error { background:var(--rojo-claro); color:var(--rojo); padding:10px; border-radius:10px; font-size:12px; margin-bottom:12px; display:none; font-weight:600; }
+  .login-hint { font-size:10px; color:var(--texto-gris); margin-top:16px; padding-top:16px; border-top:1px dashed var(--borde); }
+  .header { background:linear-gradient(135deg,var(--azul) 0%,#0f4a8a 100%); padding:10px 16px; position:sticky; top:0; z-index:100; box-shadow:0 4px 12px rgba(0,0,0,0.08); }
+  .header-top { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:6px; }
+  .logo-muni { display:flex; align-items:center; gap:10px; }
+  .logo-muni img { height:40px; }
+  .logo-texto { font-weight:700; font-size:11px; color:white; line-height:1.2; }
+  .logo-texto small { font-size:7.5px; font-weight:400; opacity:0.85; display:block; }
+  .header-titulo { font-size:13px; font-weight:800; color:white; }
+  .badge-rol { display:inline-flex; padding:4px 12px; border-radius:20px; font-size:10px; font-weight:700; text-transform:uppercase; }
+  .badge-rol.operador { background:#eef2f8; color:var(--texto-gris); }
+  .badge-rol.admin { background:linear-gradient(135deg,#fbbf24,#f59e0b); color:white; }
+  .badge-rol.solicitante { background:linear-gradient(135deg,#34d399,#10b981); color:white; }
+  .nav-tabs { display:flex; background:var(--blanco); margin:10px 14px 0 14px; border-radius:16px 16px 0 0; overflow:hidden; box-shadow:var(--shadow); border:1px solid var(--borde); border-bottom:none; flex-wrap:wrap; }
+  .nav-tab { flex:1; min-width:100px; padding:10px 6px; text-align:center; font-weight:700; font-size:11px; cursor:pointer; color:var(--texto-gris); background:#fafbfc; border-bottom:3px solid transparent; }
+  .nav-tab.active { color:var(--azul); background:white; border-bottom:3px solid var(--azul); }
+  .nav-tab .icono { font-size:18px; display:block; margin-bottom:2px; }
+  .nav-tab .label { font-size:9px; }
+  .section { background:var(--blanco); border-radius:0 0 20px 20px; margin:0 14px 10px 14px; padding:14px 16px 20px; box-shadow:var(--shadow); border:1px solid var(--borde); border-top:none; display:none; }
+  .section.active { display:block; animation:fadeIn 0.3s; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(-5px);} to{opacity:1;transform:translateY(0);} }
+  .section-label { font-size:11px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--texto-oscuro); margin-bottom:12px; display:flex; align-items:center; gap:8px; border-left:3px solid var(--azul); padding-left:10px; }
+  label { display:block; font-size:11px; font-weight:600; color:var(--texto-gris); margin-bottom:4px; }
+  label.required::after { content:" *"; color:var(--rojo); }
+  input, select, textarea { width:100%; background:#fff; border:1.5px solid var(--borde); border-radius:12px; font-family:'Inter',sans-serif; font-size:14px; padding:9px 12px; outline:none; color:var(--texto-oscuro); }
+  input:focus, select:focus, textarea:focus { border-color:var(--azul); box-shadow:0 0 0 3px rgba(22,100,192,0.12); }
+  input:disabled, select:disabled { background:#f8fafc; color:var(--texto-gris); cursor:not-allowed; }
+  .field { margin-bottom:12px; }
+  .row-2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .btn-primario { background:var(--azul); border:none; padding:12px; width:100%; border-radius:50px; font-weight:700; color:white; font-size:15px; cursor:pointer; }
+  .btn-primario:disabled { opacity:0.6; cursor:not-allowed; }
+  .btn-secundario { background:#eef2f8; border:none; padding:10px; width:100%; border-radius:50px; font-weight:600; color:var(--texto-gris); font-size:12px; cursor:pointer; }
+  .btn-verde { background:var(--verde); border:none; padding:10px; width:100%; border-radius:50px; font-weight:700; color:white; font-size:14px; cursor:pointer; }
+  .btn-pequeno { padding:5px 12px; border-radius:30px; border:none; font-weight:600; font-size:10px; cursor:pointer; }
+  .btn-pequeno.azul { background:var(--azul); color:white; }
+  .btn-pequeno.verde { background:var(--verde); color:white; }
+  .btn-pequeno.rojo { background:var(--rojo); color:white; }
+  .btn-pequeno.morado { background:var(--morado); color:white; }
+  .btn-pequeno.gris { background:#eef2f8; color:var(--texto-oscuro); }
+  .tabla-container { overflow-x:auto; border-radius:12px; border:1px solid var(--borde); margin-top:8px; }
+  table { width:100%; border-collapse:collapse; font-size:12px; color:#000 !important; }
+  table th { background:#f8fafc; padding:8px 10px; text-align:left; font-weight:700; color:#000 !important; font-size:10px; text-transform:uppercase; border-bottom:2px solid var(--borde); }
+  table td { padding:7px 10px; border-bottom:1px solid var(--borde); vertical-align:middle; color:#000 !important; }
+  .filtros { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px; }
+  .filtros input, .filtros select { flex:1; min-width:120px; padding:6px 10px; font-size:12px; border-radius:10px; }
+  .producto-agregado { display:flex; justify-content:space-between; align-items:center; background:#f8fafc; border:1px solid var(--borde); border-radius:10px; padding:8px 12px; margin-bottom:6px; }
+  .producto-agregado .info { flex:1; }
+  .producto-agregado .info .nombre { font-weight:600; font-size:13px; }
+  .producto-agregado .info .detalle { font-size:11px; color:var(--texto-gris); }
+  .producto-agregado .cantidad { font-weight:700; font-size:14px; color:var(--rojo); margin:0 12px; }
+  .producto-agregado .btn-eliminar-prod { background:none; border:none; color:var(--rojo); cursor:pointer; font-size:16px; }
+  .custom-dropdown { position:relative; }
+  .dropdown-input { width:100%; background:#fff; border:1.5px solid var(--borde); border-radius:12px; font-size:14px; padding:9px 12px; outline:none; color:#000; }
+  .dropdown-input:focus { border-color:var(--azul); box-shadow:0 0 0 3px rgba(22,100,192,0.12); }
+  .dropdown-list { background:white; border:1.5px solid var(--azul); border-radius:12px; max-height:260px; overflow-y:auto; position:absolute; width:100%; z-index:999; display:none; box-shadow:0 4px 16px rgba(0,0,0,0.12); }
+  .dropdown-item { padding:8px 12px; cursor:pointer; font-size:12px; border-bottom:1px solid var(--borde); display:flex; justify-content:space-between; align-items:center; color:#000; }
+  .dropdown-item:hover { background:rgba(22,100,192,0.06); }
+  .dropdown-item .precio { font-size:11px; font-weight:700; color:var(--verde); }
+  .resumen-grid { display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:8px; margin-bottom:12px; }
+  .resumen-card { background:#f8fafc; border-radius:14px; padding:10px 8px; text-align:center; border:1px solid var(--borde); }
+  .resumen-card .num { font-size:20px; font-weight:800; color:var(--azul); }
+  .resumen-card .lbl { font-size:8.5px; color:var(--texto-gris); text-transform:uppercase; }
+  .resumen-card.rojo .num { color:var(--rojo); }
+  .resumen-card.verde .num { color:var(--verde); }
+  .resumen-card.naranja .num { color:var(--naranja); }
+  .resumen-card.morado .num { color:var(--morado); }
+  .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:200; align-items:flex-end; }
+  .modal-overlay.visible { display:flex; }
+  .modal { background:white; max-height:92vh; border-radius:28px 28px 0 0; overflow:auto; padding:18px 16px 30px; width:100%; max-width:700px; margin:0 auto; }
+  .modal.modal-ancho { max-width:800px; }
+  .modal .modal-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+  .modal .modal-header h2 { font-size:16px; }
+  .btn-cerrar-modal { background:none; border:none; font-size:24px; cursor:pointer; color:var(--texto-gris); }
+  #toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#1a2634; color:white; padding:8px 20px; border-radius:40px; opacity:0; transition:0.3s; pointer-events:none; z-index:10000; font-size:12px; font-weight:500; max-width:90%; text-align:center; }
+  #toast.show { opacity:1; }
+  .empty-state { text-align:center; color:var(--texto-gris); font-size:12px; padding:20px 0; }
+  .empty-state-grande { text-align:center; padding:30px 20px; color:var(--texto-gris); font-size:12px; }
+  .empty-state-grande .icono { font-size:40px; display:block; margin-bottom:8px; opacity:0.5; }
+  .badge-linea { display:inline-block; padding:2px 8px; border-radius:20px; font-size:9px; font-weight:700; }
+  .badge-linea.l1 { background:#dbeafe; color:#1e40af; }
+  .badge-linea.l2 { background:var(--morado-claro); color:var(--morado); }
+  .badge-estado { display:inline-block; padding:3px 10px; border-radius:20px; font-size:9px; font-weight:700; text-transform:uppercase; white-space:nowrap; }
+  .badge-estado.pendiente { background:#fef3c7; color:#92400e; }
+  .badge-estado.aprobada { background:#dbeafe; color:#1e40af; }
+  .badge-estado.enviada { background:#ede9fe; color:#5b21b6; }
+  .badge-estado.recibida { background:#d1fae5; color:#065f46; }
+  .badge-estado.rechazada { background:#fee2e2; color:#991b1b; }
+  .badge-estado.cancelada { background:#e5e7eb; color:#4b5563; }
+  .urgencia-grupo { display:flex; gap:8px; flex-wrap:wrap; }
+  .urgencia-opcion { flex:1; min-width:90px; padding:10px 8px; border:2px solid var(--borde); border-radius:12px; text-align:center; cursor:pointer; font-size:11px; font-weight:600; color:var(--texto-gris); background:white; }
+  .urgencia-opcion.activo { border-color:var(--azul); background:#eff6ff; color:var(--azul); }
+  .urgencia-opcion .icono-urg { font-size:18px; display:block; margin-bottom:2px; }
+  .urgencia-opcion[data-urg="URGENTE"].activo { border-color:var(--rojo); background:#fef2f2; color:var(--rojo); }
+  .urgencia-opcion[data-urg="ALTA"].activo { border-color:var(--naranja); background:#fffbeb; color:var(--naranja); }
+  .info-panel { background:linear-gradient(135deg,#eff6ff 0%,#dbeafe 100%); border:1px solid #bfdbfe; border-radius:16px; padding:14px 16px; margin-bottom:14px; }
+  .info-panel .titulo { font-size:10px; text-transform:uppercase; letter-spacing:1px; color:#1e40af; font-weight:700; margin-bottom:4px; }
+  .info-panel .nombre { font-size:15px; font-weight:800; color:#1e3a8a; margin-bottom:6px; }
+  .info-panel .disponible { display:flex; align-items:baseline; gap:6px; font-size:12px; color:#1e40af; flex-wrap:wrap; margin-top:4px; }
+  .info-panel .disponible strong { font-size:16px; font-weight:800; color:#065f46; }
+  .info-panel .disponible.agotado strong { color:var(--rojo); }
+  .linea-tabs { display:flex; gap:10px; margin-bottom:12px; }
+  .linea-tab { flex:1; padding:16px 10px; border:2px solid #cbd5e1; border-radius:12px; text-align:center; cursor:pointer; font-weight:700; font-size:14px; color:#334155; background:#f8fafc; transition:0.15s; user-select:none; }
+  .linea-tab:hover { border-color:var(--azul); background:#eff6ff; }
+  .linea-tab.activo { border-color:var(--azul); background:var(--azul); color:white; box-shadow:0 0 0 3px rgba(22,100,192,0.25); }
+  .linea-tab.activo .sub { color:white !important; }
+  .linea-tab.bloqueado { opacity:0.35; cursor:not-allowed; pointer-events:none; }
+  .linea-tab .sub { font-size:11px; font-weight:600; display:block; margin-top:4px; color:var(--texto-gris); }
+  .aviso-info { background:#fffbeb; border-left:4px solid var(--naranja); padding:10px 14px; border-radius:10px; font-size:11.5px; color:#78350f; margin-bottom:12px; line-height:1.5; }
+  .aviso-info strong { color:#92400e; }
+  .solicitud-card { background:white; border:1px solid var(--borde); border-radius:14px; padding:12px 14px; margin-bottom:8px; }
+  .solicitud-card .fila-top { display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:6px; flex-wrap:wrap; }
+  .solicitud-card .codigo { font-family:'Courier New',monospace; font-weight:800; font-size:13px; color:var(--azul); }
+  .solicitud-card .fila-info { display:flex; gap:12px; font-size:11px; color:var(--texto-gris); flex-wrap:wrap; }
+  .solicitud-card .fila-info strong { color:var(--texto-oscuro); }
+  .solicitud-card .acciones { display:flex; gap:6px; margin-top:8px; flex-wrap:wrap; }
+  .adjuntos-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(110px,1fr)); gap:8px; margin-top:8px; }
+  .adjunto-item { position:relative; background:#f8fafc; border:1.5px solid var(--borde); border-radius:10px; padding:8px; text-align:center; }
+  .adjunto-item img { width:100%; height:70px; object-fit:cover; border-radius:6px; }
+  .adjunto-item .pdf-icon { font-size:32px; color:var(--rojo); }
+  .adjunto-item .nombre { font-size:9px; color:var(--texto-gris); margin-top:4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .adjunto-item .btn-borrar { position:absolute; top:4px; right:4px; background:var(--rojo); color:white; border:none; border-radius:50%; width:18px; height:18px; font-size:11px; cursor:pointer; }
+  .input-file { display:none; }
+  .btn-file { display:inline-flex; align-items:center; gap:6px; background:white; border:2px dashed var(--azul-claro); color:var(--azul); padding:10px 16px; border-radius:10px; cursor:pointer; font-size:12px; font-weight:600; width:100%; justify-content:center; }
+  .btn-file:hover { background:#f0f5ff; border-color:var(--azul); }
+  .tab-badge { display:inline-block; background:var(--rojo); color:white; font-size:9px; font-weight:800; padding:1px 6px; border-radius:10px; margin-left:4px; min-width:16px; text-align:center; }
+  .cuenta-info-box { background:#f0f5ff; border-left:3px solid var(--azul); border-radius:8px; padding:8px 12px; margin-top:8px; font-size:11px; color:var(--texto-gris); }
+  .cuenta-info-box strong { color:var(--texto-oscuro); }
+  .articulo-fila { display:grid; grid-template-columns:1fr auto auto; gap:10px; align-items:center; padding:10px 14px; background:white; border:1px solid var(--borde); border-radius:10px; margin-bottom:6px; }
+  .articulo-fila .nombre { font-weight:600; font-size:12.5px; }
+  .articulo-fila .cant { font-weight:700; font-size:13px; color:var(--azul); text-align:center; white-space:nowrap; }
+  .articulo-fila .monto { font-weight:700; font-size:12.5px; color:var(--texto-oscuro); text-align:right; white-space:nowrap; }
+  .aud-filtros { display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:8px; margin-bottom:14px; }
+  .aud-filtros input, .aud-filtros select { padding:8px 10px; font-size:12px; border-radius:10px; }
+  .aud-resumen { display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:10px; margin-bottom:16px; }
+  .aud-resumen-card { background:white; border:1px solid var(--borde); border-radius:14px; padding:12px; }
+  .aud-resumen-card .titulo { font-size:10px; text-transform:uppercase; letter-spacing:1px; color:var(--texto-gris); font-weight:700; margin-bottom:6px; }
+  .aud-resumen-card .num { font-size:22px; font-weight:800; color:var(--azul); line-height:1; }
+  .aud-resumen-card .detalle { font-size:10px; color:var(--texto-gris); margin-top:4px; }
+  .aud-arbol { border:1px solid var(--borde); border-radius:14px; overflow:hidden; }
+  .aud-item { border-bottom:1px solid var(--borde); }
+  .aud-item:last-child { border-bottom:none; }
+  .aud-dir { background:#f8fafc; padding:12px 16px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:0.15s; }
+  .aud-dir:hover { background:#eff6ff; }
+  .aud-dir.expandido { background:#dbeafe; }
+  .aud-dir .nombre { font-weight:700; font-size:13px; color:#1e3a8a; display:flex; align-items:center; gap:8px; }
+  .aud-dir .chev { font-size:14px; color:#1e40af; transition:0.2s; }
+  .aud-dir.expandido .chev { transform:rotate(90deg); }
+  .aud-dir .stats { font-size:11px; color:var(--texto-gris); font-weight:600; }
+  .aud-depto { background:white; padding:10px 16px 10px 32px; cursor:pointer; border-top:1px solid #f1f5f9; display:flex; justify-content:space-between; align-items:center; transition:0.15s; }
+  .aud-depto:hover { background:#f0f5ff; }
+  .aud-depto .nombre { font-weight:600; font-size:12px; color:#334155; display:flex; align-items:center; gap:8px; }
+  .aud-depto .chev { font-size:12px; color:#64748b; transition:0.2s; }
+  .aud-depto.expandido .chev { transform:rotate(90deg); }
+  .aud-depto .stats { font-size:10px; color:var(--texto-gris); }
+  .aud-area { background:#fafbfc; padding:10px 16px 10px 48px; cursor:pointer; border-top:1px solid #f1f5f9; transition:0.15s; }
+  .aud-area:hover { background:#eff6ff; }
+  .aud-area .nombre { font-weight:600; font-size:12px; color:#475569; }
+  .aud-area .stats { font-size:10px; color:var(--texto-gris); margin-left:8px; }
+  .aud-sol-lista { background:white; padding:8px 16px 12px 64px; border-top:1px solid #f1f5f9; }
+  .aud-sol-item { display:grid; grid-template-columns:1fr auto auto; gap:12px; align-items:center; padding:8px 12px; background:#f8fafc; border:1px solid var(--borde); border-radius:8px; margin-bottom:6px; cursor:pointer; transition:0.15s; }
+  .aud-sol-item:hover { background:#eff6ff; border-color:var(--azul-claro); }
+  .aud-sol-item .cod { font-family:'Courier New',monospace; font-weight:700; font-size:11px; color:var(--azul); }
+  .aud-sol-item .info { font-size:11px; color:var(--texto-gris); }
+  .aud-sol-item .monto { font-weight:700; font-size:12px; text-align:right; }
+  .timeline-aud { position:relative; padding-left:32px; margin-top:16px; }
+  .timeline-aud::before { content:""; position:absolute; left:14px; top:0; bottom:0; width:2px; background:#dbeafe; }
+  .timeline-aud-item { position:relative; padding:12px 14px; background:#f8fafc; border:1px solid var(--borde); border-radius:10px; margin-bottom:10px; }
+  .timeline-aud-item::before { content:""; position:absolute; left:-24px; top:16px; width:14px; height:14px; border-radius:50%; background:var(--azul); border:3px solid white; box-shadow:0 0 0 2px var(--azul); }
+  .timeline-aud-item.solicitud::before { background:var(--naranja); box-shadow:0 0 0 2px var(--naranja); }
+  .timeline-aud-item.aprobacion::before { background:#3b82f6; box-shadow:0 0 0 2px #3b82f6; }
+  .timeline-aud-item.recepcion::before { background:var(--verde); box-shadow:0 0 0 2px var(--verde); }
+  .timeline-aud-item.salida::before { background:var(--rojo); box-shadow:0 0 0 2px var(--rojo); }
+  .timeline-aud-item .tl-titulo { font-weight:700; font-size:13px; color:var(--texto-oscuro); margin-bottom:4px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; }
+  .timeline-aud-item .tl-fecha { font-size:10.5px; color:var(--texto-gris); margin-bottom:6px; }
+  .timeline-aud-item .tl-detalle { font-size:11.5px; color:var(--texto-oscuro); }
+  .timeline-aud-item .tl-monto { font-weight:700; color:var(--azul); font-size:12px; }
+  .foto-salida-thumb { height:50px; border-radius:6px; border:2px solid var(--verde); box-shadow:0 2px 4px rgba(0,0,0,0.1); }
+  .solo-admin.nav-tab, .solo-operador.nav-tab, .solo-solicitante.nav-tab, .solo-admin.section, .solo-operador.section, .solo-solicitante.section { display:none !important; }
+  body.rol-admin .nav-tab.solo-admin { display:block !important; }
+  body.rol-admin .section.solo-admin.active { display:block !important; }
+  body.rol-operador .nav-tab.solo-operador { display:block !important; }
+  body.rol-operador .section.solo-operador.active { display:block !important; }
+  body.rol-solicitante .nav-tab.solo-solicitante { display:block !important; }
+  body.rol-solicitante .section.solo-solicitante.active { display:block !important; }
+  @media (max-width:700px) {
+    .resumen-grid { grid-template-columns:1fr 1fr; }
+    .row-2 { grid-template-columns:1fr; }
+    .nav-tab { font-size:9px; padding:8px 2px; min-width:70px; }
+    .nav-tab .icono { font-size:14px; }
+    .nav-tab .label { font-size:7.5px; }
+    .aud-resumen, .aud-filtros { grid-template-columns:1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="login-overlay" id="login-overlay">
+  <div class="login-card">
+    <img src="https://i.ibb.co/Z6qxBJQZ/Logo-general-1.png" alt="Municipalidad de Las Condes">
+    <h1>Licitación 2345-8-LP26</h1>
+    <p>Servicio de Banquetería para Diferentes Actividades</p>
+    <div class="login-error" id="login-error">⛔ Revisa tu correo y contraseña</div>
+    <input type="email" id="login-email" placeholder="tu.correo@lascondes.cl" autocomplete="username" autofocus>
+    <input type="password" id="login-password" placeholder="Contraseña" autocomplete="current-password">
+    <button id="login-btn" onclick="intentarLogin()">Ingresar</button>
+    <div class="login-hint">🔒 Ingresa con tu cuenta autorizada<br><small>El sistema registra quién opera cada movimiento</small></div>
+  </div>
+</div>
+
+<div class="header">
+  <div class="header-top">
+    <div class="logo-muni">
+      <img src="https://i.ibb.co/Z6qxBJQZ/Logo-general-1.png" alt="Logo">
+      <div class="logo-texto">MUNICIPALIDAD DE LAS CONDES<small>Licitación 2345-8-LP26 · Banquetería</small></div>
+    </div>
+    <div class="header-titulo">🍽️ ID 2345-8-LP26</div>
+    <div style="display:flex; flex-direction:column; align-items:flex-end; gap:3px;">
+      <span id="bienvenida-texto" style="color:white; font-size:10.5px; font-weight:600;">Bienvenido</span>
+      <div style="display:flex; gap:6px; align-items:center;">
+        <span class="badge-rol" id="badge-rol">—</span>
+        <button onclick="cerrarSesion()" style="background:rgba(255,255,255,0.15); border:none; color:white; font-size:10px; font-weight:700; padding:4px 10px; border-radius:20px; cursor:pointer;">Salir</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="nav-tabs">
+  <div class="nav-tab solo-solicitante solo-admin" data-tab="tab-mi-evento" onclick="cambiarTab('tab-mi-evento')"><span class="icono">🍽️</span><span class="label">EVENTO</span></div>
+  <div class="nav-tab solo-admin" data-tab="tab-eventos" onclick="cambiarTab('tab-eventos')"><span class="icono">📋</span><span class="label">EVENTOS<span class="tab-badge" id="badge-evt-pend" style="display:none;">0</span></span></div>
+  <div class="nav-tab solo-operador solo-admin" data-tab="tab-servicio" onclick="cambiarTab('tab-servicio')"><span class="icono">📥</span><span class="label">SERVICIO</span></div>
+  <div class="nav-tab solo-operador solo-admin" data-tab="tab-entrega" onclick="cambiarTab('tab-entrega')"><span class="icono">📤</span><span class="label">ENTREGA</span></div>
+  <div class="nav-tab solo-operador solo-admin" data-tab="tab-consumo" onclick="cambiarTab('tab-consumo')"><span class="icono">📊</span><span class="label">CONSUMO</span></div>
+  <div class="nav-tab solo-admin" data-tab="tab-cuentas" onclick="cambiarTab('tab-cuentas')"><span class="icono">💰</span><span class="label">CUENTAS</span></div>
+  <div class="nav-tab solo-admin" data-tab="tab-finanzas" onclick="cambiarTab('tab-finanzas')"><span class="icono">💼</span><span class="label">FINANZAS</span></div>
+  <div class="nav-tab solo-admin" data-tab="tab-reportes" onclick="cambiarTab('tab-reportes')"><span class="icono">📈</span><span class="label">REPORTES</span></div>
+  <div class="nav-tab solo-admin" data-tab="tab-auditoria" onclick="cambiarTab('tab-auditoria')"><span class="icono">🔍</span><span class="label">AUDITORÍA</span></div>
+</div>
+
+<div class="section solo-solicitante solo-admin" id="tab-mi-evento">
+  <div class="section-label">🍽️ NUEVO EVENTO DE BANQUETERÍA</div>
+  <div class="aviso-info">ℹ️ <strong>Paso 1:</strong> Selecciona Dirección → Departamento → Área. El sistema mostrará las líneas disponibles y validará el tope del presupuesto.</div>
+  <div class="row-2">
+    <div class="field"><label class="required">Fecha del evento</label><input type="date" id="evt-fecha"></div>
+    <div class="field"><label>Hora del evento</label><input type="time" id="evt-hora"></div>
+  </div>
+  <div class="field"><label>Nombre del evento</label><input type="text" id="evt-nombre" placeholder="Ej: Capacitación vecinos, Aniversario, Jornada..."></div>
+  <div class="field"><label>Lugar del evento</label><input type="text" id="evt-lugar" placeholder="Ej: Salón Municipal, Av. Apoquindo 3400..."></div>
+  <div class="field"><label class="required">Dirección</label><select id="evt-depto-padre" onchange="evtCambiarDireccion()"><option value="">— Selecciona —</option></select></div>
+  <div class="field"><label>Departamento</label><select id="evt-depto" onchange="evtCambiarDepto()"><option value="">— Primero elige dirección —</option></select></div>
+  <div class="field"><label class="required">Área</label><select id="evt-subdepto" onchange="evtCambiarArea()"><option value="">— Primero elige departamento —</option></select></div>
+  <div id="evt-info-panel" class="info-panel" style="display:none;">
+    <div class="titulo">Área seleccionada</div>
+    <div class="nombre" id="evt-info-nombre">—</div>
+    <div class="disponible" id="evt-info-l1" style="display:none;">L1 (Banquetería y Cóctel): <strong id="evt-disponible-l1">$0</strong></div>
+    <div class="disponible" id="evt-info-l2" style="display:none;">L2 (Coffee Break): <strong id="evt-disponible-l2">$0</strong></div>
+  </div>
+  <div id="evt-trabajo" style="display:none;">
+    <div class="field">
+      <label>Selecciona línea</label>
+      <div class="linea-tabs" id="evt-linea-tabs">
+        <div class="linea-tab" id="evt-linea-l1" data-linea="1" onclick="evtElegirLinea(1)">L1 · Banquetería y Cóctel<span class="sub" id="evt-l1-sub">—</span></div>
+        <div class="linea-tab" id="evt-linea-l2" data-linea="2" onclick="evtElegirLinea(2)">L2 · Coffee Break<span class="sub" id="evt-l2-sub">—</span></div>
+      </div>
+    </div>
+    <div class="field" id="evt-busqueda-wrap" style="display:none;">
+      <label class="required">Buscar menú</label>
+      <div class="custom-dropdown">
+        <input type="text" id="evt-prod-trigger" class="dropdown-input" placeholder="Escribe para buscar..." oninput="filtrarDropdownMiEvento(this.value)" onclick="filtrarDropdownMiEvento(this.value)" onfocus="filtrarDropdownMiEvento(this.value)">
+        <div class="dropdown-list" id="evt-prod-list"></div>
+      </div>
+    </div>
+    <div id="evt-prod-sel" style="display:none; background:#f0f5ff; border-radius:12px; padding:10px 14px; margin-bottom:12px; border:1px solid var(--azul-claro);">
+      <div style="font-size:14px; font-weight:700; color:var(--azul);" id="evt-prod-nombre">Menú</div>
+      <div style="font-size:12px; color:var(--texto-gris);" id="evt-prod-info">—</div>
+      <div class="row-2" style="margin-top:8px;">
+        <div class="field" style="margin-bottom:0;"><label>N° asistentes</label><input type="number" id="evt-cantidad" min="1" placeholder="0"></div>
+        <div class="field" style="margin-bottom:0; display:flex; align-items:flex-end;"><button class="btn-verde" onclick="agregarAlCarritoMiEvento()">+ Agregar</button></div>
+      </div>
+    </div>
+    <div class="field"><label>Carrito — L1 (<span id="evt-cart-l1-count">0</span>) · Total: <strong id="evt-cart-l1-total">$0</strong></label><div id="evt-cart-l1"></div></div>
+    <div class="field"><label>Carrito — L2 (<span id="evt-cart-l2-count">0</span>) · Total: <strong id="evt-cart-l2-total">$0</strong></label><div id="evt-cart-l2"></div></div>
+    <div class="field"><label>Total evento: <strong id="evt-total-general" style="color:var(--verde); font-size:14px;">$0</strong></label></div>
+    <div class="field">
+      <label class="required">Urgencia</label>
+      <div class="urgencia-grupo">
+        <div class="urgencia-opcion activo" data-urg="NORMAL" onclick="elegirUrgencia('NORMAL')"><span class="icono-urg">🟢</span>Normal</div>
+        <div class="urgencia-opcion" data-urg="ALTA" onclick="elegirUrgencia('ALTA')"><span class="icono-urg">🟡</span>Alta</div>
+        <div class="urgencia-opcion" data-urg="URGENTE" onclick="elegirUrgencia('URGENTE')"><span class="icono-urg">🔴</span>Urgente</div>
+      </div>
+    </div>
+    <div class="field"><label>Observación (opcional)</label><textarea id="evt-obs" rows="2"></textarea></div>
+    <div class="field">
+      <label>📎 Adjuntos (opcional) — PDF/JPG/PNG, máx 5 MB c/u</label>
+      <label for="evt-file-input" class="btn-file">➕ Subir archivo</label>
+      <input type="file" id="evt-file-input" class="input-file" accept=".pdf,.jpg,.jpeg,.png,.webp" multiple onchange="subirAdjuntoEvento(event)">
+      <div class="adjuntos-grid" id="evt-adjuntos-grid"></div>
+    </div>
+    <button class="btn-primario" onclick="enviarEvento()">📨 ENVIAR EVENTO</button>
+    <div id="evt-mensaje" class="aviso-info" style="display:none; margin-top:14px;"></div>
+  </div>
+  <div style="margin-top:20px;">
+    <div class="section-label">📋 MIS EVENTOS</div>
+    <div id="mis-eventos-container"></div>
+  </div>
+</div>
+
+<div class="section solo-admin" id="tab-eventos">
+  <div class="section-label">📋 GESTIÓN DE EVENTOS</div>
+  <div class="filtros">
+    <input type="text" id="evtadmin-filtro" placeholder="🔍 Buscar..." oninput="renderEventosAdmin()">
+    <select id="evtadmin-estado" onchange="renderEventosAdmin()">
+      <option value="PENDIENTE" selected>Pendientes</option>
+      <option value="">Todos</option>
+      <option value="APROBADA">Aprobados</option>
+      <option value="RECIBIDA">Servidos</option>
+      <option value="RECHAZADA">Rechazados</option>
+      <option value="CANCELADA">Cancelados</option>
+    </select>
+  </div>
+  <div class="tabla-container"><table><thead><tr><th>Código</th><th>Dirección</th><th>Solicitante</th><th>Fecha evento</th><th style="text-align:right;">Monto</th><th style="text-align:center;">Estado</th><th style="text-align:center;">Acciones</th></tr></thead><tbody id="evtadmin-tbody"></tbody></table></div>
+  <div style="font-size:10px; color:var(--texto-gris); margin-top:6px; text-align:right;" id="evtadmin-total"></div>
+</div>
+
+<div class="section solo-operador solo-admin" id="tab-servicio">
+  <div class="section-label">📥 REGISTRO DE SERVICIO PRESTADO</div>
+  <div class="resumen-grid">
+    <div class="resumen-card"><div class="num" id="res-rec-hoy">0</div><div class="lbl">Servicios hoy</div></div>
+    <div class="resumen-card verde"><div class="num" id="res-rec-unidades">0</div><div class="lbl">Asistentes</div></div>
+    <div class="resumen-card naranja"><div class="num" id="res-rec-monto">$0</div><div class="lbl">Monto hoy</div></div>
+    <div class="resumen-card rojo"><div class="num" id="res-stock-critico">0</div><div class="lbl">Alertas</div></div>
+  </div>
+  <div style="background:#f8fafc; border:1px solid var(--borde); border-radius:14px; padding:14px 16px; margin-bottom:14px;">
+    <div style="font-size:10px; text-transform:uppercase; letter-spacing:1px; color:var(--texto-gris); font-weight:700; margin-bottom:8px;">🏭 Proveedor adjudicado</div>
+    <div style="font-size:14px; font-weight:700;">ANDREA CAROLINA VIDAL MATUS</div>
+    <div style="font-size:11px; color:var(--texto-gris); padding:2px 0;"><strong>RUT:</strong> 16.175.345-9</div>
+    <div style="font-size:11px; color:var(--texto-gris); padding:2px 0;"><strong>Dirección:</strong> Av. Apoquindo N°7750, Local 3, Las Condes</div>
+    <div style="font-size:11px; color:var(--texto-gris); padding:2px 0;"><strong>Contacto:</strong> lavegana7750@gmail.com</div>
+  </div>
+  <div class="field">
+    <label>Vincular a evento (opcional)</label>
+    <select id="rec-evento-vinculo" onchange="alVincularEvento()"><option value="">— Servicio sin vincular —</option></select>
+    <div id="rec-vinculo-info" style="display:none; font-size:11px; background:#f0fdf4; border-left:3px solid var(--verde); padding:8px 12px; border-radius:8px; margin-top:6px;"></div>
+  </div>
+  <div id="rec-wrap-campos">
+    <div class="field"><label class="required">Dirección</label><select id="rec-depto-padre" onchange="recCambiarDireccion()"><option value="">— Selecciona —</option></select></div>
+    <div class="field"><label>Departamento</label><select id="rec-depto" onchange="recCambiarDepto()"><option value="">— Primero elige dirección —</option></select></div>
+    <div class="field"><label class="required">Área</label><select id="rec-subdepto" onchange="recCambiarArea()"><option value="">— Primero elige departamento —</option></select></div>
+  </div>
+  <div id="rec-linea-panel" style="display:none;">
+    <div class="field">
+      <label>Selecciona línea</label>
+      <div class="linea-tabs" id="rec-linea-tabs">
+        <div class="linea-tab" id="rec-linea-l1" data-linea="1" onclick="recElegirLinea(1)">L1 · Banquetería y Cóctel<span class="sub" id="rec-l1-sub">—</span></div>
+        <div class="linea-tab" id="rec-linea-l2" data-linea="2" onclick="recElegirLinea(2)">L2 · Coffee Break<span class="sub" id="rec-l2-sub">—</span></div>
+      </div>
+      <div id="rec-cuenta-info" class="cuenta-info-box" style="display:none;"></div>
+    </div>
+  </div>
+  <div class="field" id="rec-wrap-busqueda" style="display:none;">
+    <label class="required">Buscar menú</label>
+    <div class="custom-dropdown">
+      <input type="text" id="rec-prod-trigger" class="dropdown-input" placeholder="Escribe para buscar..." oninput="filtrarDropdownServicio(this.value)" onclick="filtrarDropdownServicio(this.value)" onfocus="filtrarDropdownServicio(this.value)">
+      <div class="dropdown-list" id="rec-prod-list"></div>
+    </div>
+  </div>
+  <div id="rec-prod-sel" style="display:none; background:#f0f5ff; border-radius:12px; padding:10px 14px; margin-bottom:12px; border:1px solid var(--azul-claro);">
+    <div style="font-size:14px; font-weight:700; color:var(--azul);" id="rec-prod-nombre">—</div>
+    <div style="font-size:12px; color:var(--texto-gris);" id="rec-prod-precio">—</div>
+    <div class="row-2" style="margin-top:8px;">
+      <div class="field" style="margin-bottom:0;"><label>N° asistentes</label><input type="number" id="rec-cantidad" min="1"></div>
+      <div class="field" style="margin-bottom:0; display:flex; align-items:flex-end;"><button class="btn-verde" onclick="agregarAlCarritoServicio()">+ Agregar</button></div>
+    </div>
+  </div>
+  <div class="field"><label>Carrito (<span id="rec-carrito-count">0</span>)</label><div id="rec-carrito-container"></div></div>
+  <div class="field"><label>Total:</label><div id="rec-total-estimado" style="font-size:14px;">$0</div></div>
+  <div class="row-2">
+    <div class="field"><label>N° Boleta</label><input type="text" id="rec-guia"></div>
+    <div class="field"><label>N° Factura</label><input type="text" id="rec-factura"></div>
+  </div>
+  <div class="field"><label>Observación</label><textarea id="rec-obs" rows="2"></textarea></div>
+  <button class="btn-primario" onclick="registrarServicio()">✅ Registrar Servicio</button>
+  <div id="rec-mensaje" class="aviso-info" style="display:none; margin-top:12px;"></div>
+</div>
+
+<div class="section solo-operador solo-admin" id="tab-entrega">
+  <div class="section-label">📤 ENTREGA CONFORME DEL SERVICIO</div>
+  <div class="resumen-grid">
+    <div class="resumen-card"><div class="num" id="res-sal-hoy">0</div><div class="lbl">Entregas hoy</div></div>
+    <div class="resumen-card rojo"><div class="num" id="res-sal-unidades">0</div><div class="lbl">Asistentes</div></div>
+    <div class="resumen-card verde"><div class="num" id="res-sal-prods">0</div><div class="lbl">Menús</div></div>
+    <div class="resumen-card naranja"><div class="num" id="res-stock-critico2">0</div><div class="lbl">Alertas</div></div>
+  </div>
+  <div class="field">
+    <label class="required">Dirección</label>
+    <select id="sal-depto-padre" onchange="salCambiarDireccion()"><option value="">— Selecciona —</option></select>
+  </div>
+  <div id="sal-wrap-recepciones" style="display:none;">
+    <div class="field">
+      <label class="required">Servicio a entregar</label>
+      <select id="sal-recepcion-sel" onchange="salCargarServicio()"><option value="">— Selecciona un servicio —</option></select>
+    </div>
+  </div>
+  <div id="sal-detalle" style="display:none;">
+    <div id="sal-info-recepcion" class="cuenta-info-box" style="margin-bottom:12px;"></div>
+    <div class="aviso-info" style="background:#fef3c7;border-left-color:#e08e0b;">
+      📷 <strong>Fotos obligatorias:</strong> debes subir 1 foto JPG (máx 3 MB) por cada menú servido antes de registrar la entrega conforme.
+    </div>
+    <div id="sal-bloque-l1" style="display:none; margin-bottom:16px;">
+      <div style="font-size:11px; font-weight:700; text-transform:uppercase; color:var(--texto-gris); border-left:3px solid var(--azul); padding-left:8px; margin-bottom:8px;">🍽️ MENÚS L1 · BANQUETERÍA Y CÓCTEL</div>
+      <div id="sal-lista-l1"></div>
+      <div style="text-align:right; font-weight:700; margin-top:6px; color:var(--azul);" id="sal-total-l1"></div>
+    </div>
+    <div id="sal-bloque-l2" style="display:none; margin-bottom:16px;">
+      <div style="font-size:11px; font-weight:700; text-transform:uppercase; color:var(--texto-gris); border-left:3px solid var(--morado); padding-left:8px; margin-bottom:8px;">☕ MENÚS L2 · COFFEE BREAK</div>
+      <div id="sal-lista-l2"></div>
+      <div style="text-align:right; font-weight:700; margin-top:6px; color:var(--morado);" id="sal-total-l2"></div>
+    </div>
+    <div class="field"><label class="required">Nombre receptor</label><input type="text" id="sal-receptor" placeholder="Ej: Juan Pérez"></div>
+    <div class="field"><label class="required">RUT receptor</label><input type="text" id="sal-receptor-rut" placeholder="Ej: 12.345.678-9"></div>
+    <div class="field"><label>Correo (opcional)</label><input type="email" id="sal-receptor-email" placeholder="Ej: juan@lascondes.cl"></div>
+    <div class="field"><label>Observación (opcional)</label><textarea id="sal-obs" rows="2"></textarea></div>
+    <button class="btn-primario" onclick="registrarEntrega()">✅ Registrar Entrega</button>
+  </div>
+  <div id="sal-mensaje" class="aviso-info" style="display:none; margin-top:12px;"></div>
+</div>
+
+<div class="section solo-operador solo-admin" id="tab-consumo">
+  <div class="section-label">📊 CONSUMO ACUMULADO</div>
+  <div class="filtros">
+    <input type="text" id="stock-filtro-nombre" placeholder="🔍 Buscar..." oninput="renderConsumo()">
+    <select id="stock-filtro-linea" onchange="renderConsumo()"><option value="">Todas</option><option value="1">L1 · Banquetería</option><option value="2">L2 · Coffee Break</option></select>
+    <select id="stock-filtro-stock" onchange="renderConsumo()"><option value="">Todos</option><option value="usado">Con consumo</option><option value="sin">Sin consumo</option></select>
+  </div>
+  <div class="tabla-container"><table><thead><tr><th>Menú</th><th>L</th><th style="text-align:right;">Precio unit.</th><th style="text-align:right;">Asistentes servidos</th><th style="text-align:right;">Monto consumido</th></tr></thead><tbody id="stock-tbody"></tbody></table></div>
+  <div style="font-size:10px; color:var(--texto-gris); margin-top:6px; text-align:right;" id="stock-total"></div>
+</div>
+
+<div class="section solo-admin" id="tab-cuentas">
+  <div class="section-label">💰 CUENTAS Y PRESUPUESTO</div>
+  <div class="filtros"><input type="text" id="cuentas-filtro" placeholder="🔍 Buscar..." oninput="renderCuentas()"></div>
+  <div class="tabla-container"><table><thead><tr><th>Dirección</th><th>Depto</th><th>Área</th><th>L</th><th style="text-align:right;">Asignado</th><th style="text-align:right;">Reservado</th><th style="text-align:right;">Consumido</th><th style="text-align:right;">Disponible</th></tr></thead><tbody id="cuentas-tbody"></tbody></table></div>
+  <div style="font-size:10px; color:var(--texto-gris); margin-top:6px; text-align:right;" id="cuentas-total"></div>
+</div>
+
+<div class="section solo-admin" id="tab-finanzas">
+  <div class="section-label">💼 ESTADO FINANCIERO DE LA LICITACIÓN</div>
+  <div class="aviso-info">ℹ️ Resumen financiero completo: qué se ha <strong>servido</strong>, qué se ha <strong>entregado conforme</strong>, qué está <strong>pendiente</strong> y qué queda <strong>por servir</strong>.</div>
+  <div class="filtros" style="margin-bottom:14px;">
+    <input type="date" id="fin-fecha-desde" onchange="renderFinanzas()" title="Desde">
+    <input type="date" id="fin-fecha-hasta" onchange="renderFinanzas()" title="Hasta">
+    <select id="fin-filtro-direccion" onchange="renderFinanzas()"><option value="">Todas las direcciones</option></select>
+    <select id="fin-filtro-linea" onchange="renderFinanzas()"><option value="">Todas las líneas</option><option value="1">L1 · Banquetería</option><option value="2">L2 · Coffee Break</option></select>
+    <button class="btn-pequeno gris" onclick="limpiarFiltrosFinanzas()" style="padding:8px 14px;">🔄 Limpiar</button>
+    <button class="btn-pequeno" onclick="exportarExcelFinanzas()" style="padding:8px 14px;background:#7c3aed;color:white;">💼 Excel</button>
+  </div>
+  <div class="resumen-grid" style="grid-template-columns:1fr 1fr 1fr 1fr;">
+    <div class="resumen-card" style="background:white;border-left:4px solid var(--verde);">
+      <div class="num" id="fin-num-rec" style="color:var(--verde);">$0</div>
+      <div class="lbl">🍽️ Servido</div>
+      <div style="font-size:10px;color:var(--texto-gris);margin-top:4px;" id="fin-uds-rec">0 asistentes</div>
+    </div>
+    <div class="resumen-card" style="background:white;border-left:4px solid var(--rojo);">
+      <div class="num" id="fin-num-ent" style="color:var(--rojo);">$0</div>
+      <div class="lbl">📤 Entregado conforme</div>
+      <div style="font-size:10px;color:var(--texto-gris);margin-top:4px;" id="fin-uds-ent">0 asistentes</div>
+    </div>
+    <div class="resumen-card" style="background:white;border-left:4px solid var(--naranja);">
+      <div class="num" id="fin-num-pend" style="color:var(--naranja);">$0</div>
+      <div class="lbl">⏳ Pendiente entrega</div>
+      <div style="font-size:10px;color:var(--texto-gris);margin-top:4px;" id="fin-uds-pend">0 asistentes</div>
+    </div>
+    <div class="resumen-card" style="background:white;border-left:4px solid var(--azul);">
+      <div class="num" id="fin-num-bod" style="color:var(--azul);">$0</div>
+      <div class="lbl">📦 Por servir</div>
+      <div style="font-size:10px;color:var(--texto-gris);margin-top:4px;" id="fin-uds-bod">0 asistentes</div>
+    </div>
+  </div>
+  <div class="section-label" style="margin-top:20px;">📊 Resumen financiero</div>
+  <div class="tabla-container" style="background:white;">
+    <table><thead><tr><th>Concepto</th><th style="text-align:right;">Asistentes</th><th style="text-align:right;">Neto</th><th style="text-align:right;">IVA</th><th style="text-align:right;">Bruto</th></tr></thead><tbody id="fin-resumen-tbody"></tbody></table>
+  </div>
+  <div class="section-label" style="margin-top:20px;">📦 Detalle por menú</div>
+  <div class="filtros"><input type="text" id="fin-prod-filtro" placeholder="🔍 Buscar menú..." oninput="renderDetalleProductosFin()"></div>
+  <div class="tabla-container" style="background:white;">
+    <table><thead><tr><th>Menú</th><th>L</th><th style="text-align:right;">Servido</th><th style="text-align:right;">Entregado</th><th style="text-align:right;">Pendiente</th><th style="text-align:right;">Por servir</th><th style="text-align:right;">Monto servido</th><th style="text-align:right;">Monto entregado</th><th style="text-align:right;">Monto pendiente</th></tr></thead><tbody id="fin-prod-tbody"></tbody></table>
+  </div>
+  <div style="font-size:10px;color:var(--texto-gris);margin-top:6px;text-align:right;" id="fin-prod-total"></div>
+</div>
+
+<div class="section solo-admin" id="tab-reportes">
+  <div class="section-label">📈 REPORTES</div>
+  <div class="field">
+    <label>📥 Descargar Excel</label>
+    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+      <button class="btn-verde" style="flex:1; min-width:140px;" onclick="exportarExcelConsumo()">📊 Consumo</button>
+      <button class="btn-verde" style="flex:1; min-width:140px;" onclick="exportarExcelRecepciones()">🍽️ Servicios</button>
+      <button class="btn-verde" style="flex:1; min-width:140px;" onclick="exportarExcelSalidas()">📤 Entregas</button>
+      <button class="btn-verde" style="flex:1; min-width:140px;" onclick="exportarExcelCuentas()">💰 Cuentas</button>
+      <button class="btn-verde" style="flex:1; min-width:140px;" onclick="exportarExcelEventos()">📋 Eventos</button>
+    </div>
+  </div>
+  <div class="field">
+    <label>👁️ Ver detalle en pantalla</label>
+    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+      <button class="btn-primario" style="flex:1; min-width:140px;" onclick="verReporte('consumo')">📊 Consumo</button>
+      <button class="btn-primario" style="flex:1; min-width:140px;" onclick="verReporte('recepciones')">🍽️ Servicios</button>
+      <button class="btn-primario" style="flex:1; min-width:140px;" onclick="verReporte('salidas')">📤 Entregas</button>
+      <button class="btn-primario" style="flex:1; min-width:140px;" onclick="verReporte('cuentas')">💰 Cuentas</button>
+      <button class="btn-primario" style="flex:1; min-width:140px;" onclick="verReporte('eventos')">📋 Eventos</button>
+    </div>
+  </div>
+  <div class="resumen-grid">
+    <div class="resumen-card"><div class="num" id="rep-total-productos">0</div><div class="lbl">Menús</div></div>
+    <div class="resumen-card verde"><div class="num" id="rep-total-unidades">0</div><div class="lbl">Asistentes</div></div>
+    <div class="resumen-card naranja"><div class="num" id="rep-valor-stock">$0</div><div class="lbl">Monto servido</div></div>
+    <div class="resumen-card morado"><div class="num" id="rep-total-cuentas">0</div><div class="lbl">Cuentas</div></div>
+  </div>
+  <div id="rep-detalle" style="display:none; margin-top:20px;">
+    <div class="section-label" id="rep-detalle-titulo">Detalle</div>
+    <div class="filtros"><input type="text" id="rep-detalle-filtro" placeholder="🔍 Buscar..." oninput="filtrarReporte()"></div>
+    <div class="tabla-container"><table><thead id="rep-detalle-thead"></thead><tbody id="rep-detalle-tbody"></tbody></table></div>
+    <div style="font-size:10px; color:var(--texto-gris); margin-top:6px; text-align:right;" id="rep-detalle-total"></div>
+  </div>
+</div>
+
+<div class="section solo-admin" id="tab-auditoria">
+  <div class="section-label">🔍 AUDITORÍA Y TRAZABILIDAD</div>
+  <div class="aud-resumen" id="aud-resumen">
+    <div class="aud-resumen-card"><div class="titulo">📝 Eventos</div><div class="num" id="aud-num-sol">0</div><div class="detalle" id="aud-det-sol">—</div></div>
+    <div class="aud-resumen-card"><div class="titulo">🍽️ Servicios</div><div class="num" id="aud-num-rec" style="color:var(--verde);">0</div><div class="detalle" id="aud-det-rec">—</div></div>
+    <div class="aud-resumen-card"><div class="titulo">📤 Entregas</div><div class="num" id="aud-num-sal" style="color:var(--rojo);">0</div><div class="detalle" id="aud-det-sal">—</div></div>
+    <div class="aud-resumen-card"><div class="titulo">⏳ Pendientes</div><div class="num" id="aud-num-pend" style="color:var(--naranja);">0</div><div class="detalle" id="aud-det-pend">—</div></div>
+  </div>
+  <div class="aud-filtros">
+    <input type="text" id="aud-filtro-texto" placeholder="🔍 Buscar código, solicitante, menú..." oninput="renderAuditoriaArbol()">
+    <select id="aud-filtro-estado" onchange="renderAuditoriaArbol()"><option value="">Todos los estados</option><option value="PENDIENTE">Pendiente</option><option value="APROBADA">Aprobado</option><option value="RECIBIDA">Servido</option><option value="RECHAZADA">Rechazado</option><option value="CANCELADA">Cancelado</option></select>
+    <select id="aud-filtro-fecha" onchange="renderAuditoriaArbol()"><option value="">Todo el histórico</option><option value="7">Últimos 7 días</option><option value="30">Últimos 30 días</option><option value="90">Últimos 90 días</option></select>
+    <select id="aud-filtro-urgencia" onchange="renderAuditoriaArbol()"><option value="">Todas las urgencias</option><option value="NORMAL">Normal</option><option value="ALTA">Alta</option><option value="URGENTE">Urgente</option></select>
+  </div>
+  <div class="aud-arbol" id="aud-arbol"></div>
+</div>
+
+<div class="modal-overlay" id="modal-detalle-evento">
+  <div class="modal modal-ancho">
+    <div class="modal-header"><h2 id="modal-evt-titulo">📋 Evento</h2><button class="btn-cerrar-modal" onclick="cerrarModalEvento()">✕</button></div>
+    <div id="modal-evt-contenido"></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-trazabilidad">
+  <div class="modal modal-ancho">
+    <div class="modal-header"><h2 id="modal-traz-titulo">🔍 Trazabilidad</h2><button class="btn-cerrar-modal" onclick="cerrarModalTraz()">✕</button></div>
+    <div id="modal-traz-contenido"></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<footer style="text-align:center; padding:24px 16px 20px; color:var(--texto-gris); font-size:10px; line-height:1.6;">
+  <div style="font-weight:700; color:var(--texto-oscuro); font-size:11px;">Licitación 2345-8-LP26 · Municipalidad de Las Condes</div>
+  <div style="opacity:0.85;">Sistema de Gestión de Servicio de Banquetería para Diferentes Actividades</div>
+  <div style="margin-top:10px; padding-top:10px; border-top:1px dashed var(--borde); opacity:0.55; letter-spacing:1.2px; font-size:9px;">Desarrollado por NVG · 2026</div>
+</footer>
+
+<script>
+// ============================================================
+// CONFIGURACIÓN
+// ============================================================
+const SUPABASE_URL = 'https://wxgboogoygogxrftsire.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_TMSNvBHNfonWB8kfEkiZDg_LvGpcYdG';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const IVA = 0.19;
+const STORAGE_ADJ = 'lb-adjuntos';
+const STORAGE_FOTOS = 'lb-salidas-fotos';
+
+const PROVEEDOR_OFICIAL = {
+  razon_social: 'ANDREA CAROLINA VIDAL MATUS',
+  rut: '16.175.345-9',
+  direccion: 'Av. Apoquindo N°7750, Local 3, Las Condes',
+  email: 'lavegana7750@gmail.com'
+};
+
+const FIRMAS_OFICIALES = {
+  'nvera@lascondes.cl': { nombre: 'Nelson Vera G.', cargo: 'Supervisor del Contrato' },
+  'pureta@lascondes.cl': { nombre: 'Pablo Ureta M.', cargo: 'Supervisor del Contrato' },
+  'operador@lascondes.cl': { nombre: 'Operador de Bodega', cargo: 'Funcionario' }
+};
+
+// ============================================================
+// ESTADO GLOBAL
+// ============================================================
+let rolActual = null;
+let nombreUsuario = '';
+let nombreCompleto = '';
+let productos = [];
+let cuentas = [];
+let recepciones = [];
+let recepcionItems = [];
+let entregas = [];
+let entregaItems = [];
+let eventos = [];
+let eventoItems = [];
+let eventoAdjuntos = [];
+let carritoRecepcion = [];
+let carritoEvento = [];
+let adjuntosTemporales = [];
+let productoSeleccionadoRec = null;
+let productoSeleccionadoEvt = null;
+let urgenciaEvento = 'NORMAL';
+let lineaSeleccionadaEvt = null;
+let lineaSeleccionadaRec = null;
+let subdeptoActualEvt = { l1: null, l2: null };
+let subdeptoActualRec = { l1: null, l2: null };
+let ultimaRecepcion = null;
+let ultimaEntrega = null;
+let eventoActual = null;
+let logoImageData = null;
+let recepcionSeleccionadaEntrega = null;
+let reporteActual = null;
+let reporteDatos = [];
+let auditoriaExpandidos = { dirs: new Set(), deptos: new Set(), areas: new Set() };
+let fotosEntregaTemp = {};
+let fotosRecepcionTemp = {};
+
+// ============================================================
+// HELPERS
+// ============================================================
+function formatearFecha(iso) {
+  if (!iso) return '—';
+  const d = new Date(iso);
+  return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+}
+function fechaActual() { const d = new Date(); return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`; }
+function esHoy(f) { return f && f.startsWith(fechaActual()); }
+function formatearCLP(n) { return '$' + Math.round(Number(n)||0).toLocaleString('es-CL'); }
+function precioBruto(n) { return Math.round((Number(n)||0) * (1 + IVA)); }
+function mostrarToast(msg, dur) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(t._timeout);
+  t._timeout = setTimeout(() => t.classList.remove('show'), dur || 4000);
+}
+function escaparHtml(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function esAdmin() { return rolActual === 'ADMINISTRADOR'; }
+function esOperador() { return rolActual === 'OPERADOR'; }
+function esSolicitante() { return rolActual === 'SOLICITANTE'; }
+function claseEstado(e) { return {'PENDIENTE':'pendiente','APROBADA':'aprobada','ENVIADA':'enviada','RECIBIDA':'recibida','RECHAZADA':'rechazada','CANCELADA':'cancelada'}[e]||'pendiente'; }
+function iconoEstado(e) { return {'PENDIENTE':'🟡','APROBADA':'🔵','ENVIADA':'🟣','RECIBIDA':'🟢','RECHAZADA':'🔴','CANCELADA':'⚫'}[e]||'⚪'; }
+function obtenerFirma(email) { return FIRMAS_OFICIALES[email] || { nombre: email, cargo: 'Funcionario' }; }
+function precargarLogoPDF() {
+  const img = new Image(); img.crossOrigin = 'Anonymous';
+  img.onload = () => { try { const c = document.createElement('canvas'); c.width = img.width; c.height = img.height; c.getContext('2d').drawImage(img,0,0); logoImageData = c.toDataURL('image/png'); } catch(e){} };
+  img.src = 'https://i.ibb.co/Z6qxBJQZ/Logo-general-1.png';
+}
+
+// ============================================================
+// LOGIN
+// ============================================================
+async function aplicarSesion(session) {
+  const email = (session.user.email || '').toLowerCase();
+  const { data: perfil } = await sb.from('lc_perfiles').select('nombre, rol').eq('id', session.user.id).single();
+  if (perfil) { rolActual = perfil.rol; nombreCompleto = perfil.nombre || email; }
+  else { rolActual = 'OPERADOR'; nombreCompleto = email; }
+  nombreUsuario = email;
+}
+async function intentarLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const pass = document.getElementById('login-password').value;
+  const btn = document.getElementById('login-btn');
+  const error = document.getElementById('login-error');
+  if (!email || !pass) { error.textContent = '⛔ Ingresa correo y contraseña'; error.style.display = 'block'; return; }
+  btn.disabled = true; btn.textContent = 'Ingresando...'; error.style.display = 'none';
+  const { data, error: errLogin } = await sb.auth.signInWithPassword({ email, password: pass });
+  btn.disabled = false; btn.textContent = 'Ingresar';
+  if (errLogin || !data.session) { error.textContent = '⛔ ' + (errLogin?.message || 'Error'); error.style.display = 'block'; return; }
+  await aplicarSesion(data.session);
+  document.getElementById('login-overlay').style.display = 'none';
+  iniciarApp();
+}
+async function cerrarSesion() { if (!confirm('¿Cerrar sesión?')) return; await sb.auth.signOut(); location.reload(); }
+document.getElementById('login-password').addEventListener('keypress', e => { if (e.key === 'Enter') intentarLogin(); });
+(async function restaurarSesion() {
+  const { data } = await sb.auth.getSession();
+  if (data.session) { await aplicarSesion(data.session); document.getElementById('login-overlay').style.display = 'none'; iniciarApp(); }
+})();
+
+// ============================================================
+// INICIAR APP
+// ============================================================
+async function iniciarApp() {
+  document.body.classList.remove('rol-admin','rol-operador','rol-solicitante');
+  if (esAdmin()) document.body.classList.add('rol-admin');
+  else if (esOperador()) document.body.classList.add('rol-operador');
+  else document.body.classList.add('rol-solicitante');
+  const badge = document.getElementById('badge-rol');
+  if (esAdmin()) { badge.className = 'badge-rol admin'; badge.textContent = '👑 ADMIN'; }
+  else if (esOperador()) { badge.className = 'badge-rol operador'; badge.textContent = '👤 OPERADOR'; }
+  else { badge.className = 'badge-rol solicitante'; badge.textContent = '🍽️ SOLICITANTE'; }
+  document.getElementById('bienvenida-texto').textContent = `Bienvenido, ${nombreCompleto}`;
+  mostrarToast('⏳ Cargando...');
+  precargarLogoPDF();
+  const ok = await cargarTodo();
+  if (!ok) { mostrarToast('❌ Error al cargar'); return; }
+  poblarSelectoresDireccion();
+  if (esSolicitante() || esAdmin()) cambiarTab('tab-mi-evento');
+  else cambiarTab('tab-servicio');
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.custom-dropdown')) document.querySelectorAll('.dropdown-list').forEach(l => l.style.display = 'none');
+  });
+  mostrarToast(`✅ ${productos.length} menús · ${cuentas.length} cuentas`);
+}
+
+async function cargarTodo() {
+  try {
+    const [rP, rC, rRec, rRecI, rEnt, rEntI, rEvt, rEvtI, rEvtA] = await Promise.all([
+      sb.from('lb_productos').select('*').eq('activo', true).order('linea').order('nombre'),
+      sb.from('lb_cuentas').select('*').eq('activo', true).order('direccion').order('linea'),
+      sb.from('lb_recepciones').select('*').order('fecha', { ascending: false }).limit(500),
+      sb.from('lb_recepcion_items').select('*').limit(2000),
+      sb.from('lb_entregas').select('*').order('fecha', { ascending: false }).limit(500),
+      sb.from('lb_entrega_items').select('*').limit(2000),
+      sb.from('lb_eventos').select('*').order('fecha_solicitud', { ascending: false }).limit(500),
+      sb.from('lb_evento_items').select('*').limit(2000),
+      sb.from('lb_evento_adjuntos').select('*').limit(2000)
+    ]);
+    if (rP.error) throw rP.error;
+    productos = rP.data || [];
+    cuentas = rC.data || [];
+    recepciones = (rRec.data || []).map(r => ({...r, fecha_fmt: formatearFecha(r.fecha)}));
+    recepcionItems = rRecI.data || [];
+    entregas = (rEnt.data || []).map(s => ({...s, fecha_fmt: formatearFecha(s.fecha)}));
+    entregaItems = rEntI.data || [];
+    eventos = (rEvt.data || []).map(s => ({...s, fecha_fmt: formatearFecha(s.fecha_solicitud)}));
+    eventoItems = rEvtI.data || [];
+    eventoAdjuntos = rEvtA.data || [];
+    return true;
+  } catch(e) { console.error(e); return false; }
+}
+
+function obtenerDirecciones() {
+  return [...new Set(cuentas.map(c => c.direccion).filter(Boolean))].sort();
+}
+function poblarSelectoresDireccion() {
+  const dirs = obtenerDirecciones();
+  const opt = '<option value="">— Selecciona —</option>' + dirs.map(d => `<option value="${escaparHtml(d)}">${escaparHtml(d)}</option>`).join('');
+  ['evt-depto-padre','rec-depto-padre','sal-depto-padre'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = opt;
+  });
+}
+
+// ============================================================
+// CASCADA GENÉRICA
+// ============================================================
+function cambiarDireccion(prefijo) {
+  const direccion = document.getElementById(`${prefijo}-depto-padre`).value;
+  const selDepto = document.getElementById(`${prefijo}-depto`);
+  const selArea = document.getElementById(`${prefijo}-subdepto`);
+  const panelLinea = document.getElementById(`${prefijo}-linea-panel`);
+  const wrapBusqueda = document.getElementById(`${prefijo}-busqueda-wrap`);
+  selArea.innerHTML = '<option value="">— Primero elige departamento —</option>';
+  if (panelLinea) panelLinea.style.display = 'none';
+  if (wrapBusqueda) wrapBusqueda.style.display = 'none';
+  if (!direccion) {
+    selDepto.innerHTML = '<option value="">— Primero elige dirección —</option>';
+    selDepto.disabled = false;
+    return;
+  }
+  const filtradas = cuentas.filter(c => c.direccion === direccion);
+  const deptos = [...new Set(filtradas.map(c => c.departamento_padre).filter(Boolean))].sort();
+  if (deptos.length === 0) {
+    selDepto.innerHTML = '<option value="">— No aplica —</option>';
+    selDepto.disabled = true;
+    poblarAreas(prefijo, direccion, null);
+  } else {
+    selDepto.disabled = false;
+    selDepto.innerHTML = '<option value="">— Selecciona —</option>' + deptos.map(d => `<option value="${escaparHtml(d)}">${escaparHtml(d)}</option>`).join('');
+  }
+}
+function cambiarDepto(prefijo) {
+  const direccion = document.getElementById(`${prefijo}-depto-padre`).value;
+  const depto = document.getElementById(`${prefijo}-depto`).value;
+  const panelLinea = document.getElementById(`${prefijo}-linea-panel`);
+  const wrapBusqueda = document.getElementById(`${prefijo}-busqueda-wrap`);
+  if (panelLinea) panelLinea.style.display = 'none';
+  if (wrapBusqueda) wrapBusqueda.style.display = 'none';
+  if (!direccion) return;
+  poblarAreas(prefijo, direccion, depto || null);
+}
+function poblarAreas(prefijo, direccion, depto) {
+  const selArea = document.getElementById(`${prefijo}-subdepto`);
+  let filtradas = cuentas.filter(c => c.direccion === direccion);
+  if (depto) filtradas = filtradas.filter(c => c.departamento_padre === depto);
+  const areas = [...new Set(filtradas.map(c => c.subdepartamento).filter(Boolean))].sort();
+  selArea.innerHTML = '<option value="">— Selecciona área —</option>' + areas.map(a => `<option value="${escaparHtml(a)}">${escaparHtml(a)}</option>`).join('');
+}
+function cambiarArea(prefijo) {
+  const direccion = document.getElementById(`${prefijo}-depto-padre`).value;
+  const depto = document.getElementById(`${prefijo}-depto`).value || null;
+  const area = document.getElementById(`${prefijo}-subdepto`).value;
+  const panelLinea = document.getElementById(`${prefijo}-linea-panel`);
+  const wrapBusqueda = document.getElementById(`${prefijo}-busqueda-wrap`);
+  if (!direccion || !area) {
+    if (panelLinea) panelLinea.style.display = 'none';
+    if (wrapBusqueda) wrapBusqueda.style.display = 'none';
+    return;
+  }
+  const filtradas = cuentas.filter(c =>
+    c.direccion === direccion &&
+    c.subdepartamento === area &&
+    ((!depto && !c.departamento_padre) || (depto && c.departamento_padre === depto))
+  );
+  const cL1 = filtradas.find(c => c.linea === 1);
+  const cL2 = filtradas.find(c => c.linea === 2);
+  if (prefijo === 'evt') subdeptoActualEvt = { l1: cL1, l2: cL2 };
+  if (prefijo === 'rec') subdeptoActualRec = { l1: cL1, l2: cL2 };
+  if (panelLinea) panelLinea.style.display = 'block';
+  const btnL1 = document.getElementById(`${prefijo}-linea-l1`);
+  const btnL2 = document.getElementById(`${prefijo}-linea-l2`);
+  const subL1 = document.getElementById(`${prefijo}-l1-sub`);
+  const subL2 = document.getElementById(`${prefijo}-l2-sub`);
+  const dL1 = cL1 ? calcularDisponibleCuenta(cL1.id) : 0;
+  const dL2 = cL2 ? calcularDisponibleCuenta(cL2.id) : 0;
+  btnL1.classList.remove('bloqueado');
+  btnL2.classList.remove('bloqueado');
+  if (!cL1) btnL1.classList.add('bloqueado');
+  if (!cL2) btnL2.classList.add('bloqueado');
+  subL1.textContent = cL1 ? formatearCLP(dL1) : 'No disponible';
+  subL2.textContent = cL2 ? formatearCLP(dL2) : 'No disponible';
+  if (cL1) elegirLinea(prefijo, 1);
+  else if (cL2) elegirLinea(prefijo, 2);
+}
+function elegirLinea(prefijo, linea) {
+  document.querySelectorAll(`#${prefijo}-linea-tabs .linea-tab`).forEach(b => {
+    b.classList.toggle('activo', parseInt(b.dataset.linea) === linea);
+  });
+  if (prefijo === 'evt') lineaSeleccionadaEvt = linea;
+  if (prefijo === 'rec') lineaSeleccionadaRec = linea;
+  const wrap = document.getElementById(`${prefijo}-busqueda-wrap`);
+  if (wrap) wrap.style.display = 'block';
+  const cuentaInfo = document.getElementById(`${prefijo}-cuenta-info`);
+  if (cuentaInfo) {
+    const cuentasLoc = prefijo === 'rec' ? subdeptoActualRec : subdeptoActualEvt;
+    const c = linea === 1 ? cuentasLoc.l1 : cuentasLoc.l2;
+    if (c) {
+      const disp = calcularDisponibleCuenta(c.id);
+      const cons = calcularConsumidoCuenta(c.id);
+      const res = calcularReservadoCuenta(c.id);
+      cuentaInfo.style.display = 'block';
+      cuentaInfo.innerHTML = `💰 Cuenta <strong>${escaparHtml(c.nombre || c.codigo)}</strong> · Asignado: <strong>${formatearCLP(c.monto_asignado)}</strong> · Reservado: <strong>${formatearCLP(res)}</strong> · Consumido: <strong>${formatearCLP(cons)}</strong> · Disponible: <strong style="color:${disp>0?'var(--verde)':'var(--rojo)'};">${formatearCLP(disp)}</strong>`;
+    }
+  }
+  const trigger = document.getElementById(`${prefijo}-prod-trigger`);
+  if (trigger) trigger.value = '';
+  const sel = document.getElementById(`${prefijo}-prod-sel`);
+  if (sel) sel.style.display = 'none';
+}
+
+// ============================================================
+// CÁLCULOS
+// ============================================================
+function calcularConsumidoCuenta(cuentaId) {
+  const items = recepcionItems.filter(ri => ri.cuenta_id === cuentaId);
+  const totalNeto = items.reduce((s, ri) => s + Number(ri.subtotal || 0), 0);
+  return precioBruto(totalNeto);
+}
+function calcularReservadoCuenta(cuentaId) {
+  const ss = eventos.filter(s => (s.cuenta_l1_id === cuentaId || s.cuenta_l2_id === cuentaId) && ['PENDIENTE','APROBADA','ENVIADA'].includes(s.estado));
+  return ss.reduce((s, x) => s + Number(x.monto_estimado_bruto || 0), 0);
+}
+function calcularDisponibleCuenta(cuentaId) {
+  const c = cuentas.find(x => x.id === cuentaId);
+  if (!c) return 0;
+  return Number(c.monto_asignado) - calcularConsumidoCuenta(cuentaId) - calcularReservadoCuenta(cuentaId);
+}
+
+// ============================================================
+// MI EVENTO
+// ============================================================
+function evtCambiarDireccion() { cambiarDireccion('evt'); }
+function evtCambiarDepto() { cambiarDepto('evt'); }
+function evtCambiarArea() {
+  cambiarArea('evt');
+  const cL1 = subdeptoActualEvt.l1;
+  const cL2 = subdeptoActualEvt.l2;
+  const dir = document.getElementById('evt-depto-padre').value;
+  const depto = document.getElementById('evt-depto').value;
+  const area = document.getElementById('evt-subdepto').value;
+  const nombre = [dir, depto, area].filter(Boolean).join(' · ');
+  document.getElementById('evt-info-nombre').textContent = nombre;
+  const dL1 = cL1 ? calcularDisponibleCuenta(cL1.id) : 0;
+  const dL2 = cL2 ? calcularDisponibleCuenta(cL2.id) : 0;
+  document.getElementById('evt-info-l1').style.display = cL1 ? 'flex' : 'none';
+  document.getElementById('evt-info-l2').style.display = cL2 ? 'flex' : 'none';
+  if (cL1) document.getElementById('evt-disponible-l1').textContent = formatearCLP(dL1);
+  if (cL2) document.getElementById('evt-disponible-l2').textContent = formatearCLP(dL2);
+  document.getElementById('evt-info-panel').style.display = 'block';
+  document.getElementById('evt-trabajo').style.display = 'block';
+}
+function evtElegirLinea(l) { elegirLinea('evt', l); }
+
+function filtrarDropdownMiEvento(texto) {
+  const list = document.getElementById('evt-prod-list');
+  list.style.display = 'block';
+  list.innerHTML = '';
+  const t = (texto||'').toLowerCase().trim();
+  const lista = productos.filter(p => p.linea === lineaSeleccionadaEvt && (!t || p.nombre.toLowerCase().includes(t))).slice(0, 50);
+  if (!lista.length) { list.innerHTML = '<div class="dropdown-item">Sin resultados</div>'; return; }
+  lista.forEach(p => {
+    const div = document.createElement('div');
+    div.className = 'dropdown-item';
+    div.innerHTML = `<span>${escaparHtml(p.nombre)}</span><span class="precio">${formatearCLP(precioBruto(p.precio_neto))}</span>`;
+    div.onclick = () => { document.getElementById('evt-prod-trigger').value = p.nombre; list.style.display = 'none'; seleccionarProductoMiEvento(p); };
+    list.appendChild(div);
+  });
+}
+function seleccionarProductoMiEvento(p) {
+  productoSeleccionadoEvt = p;
+  document.getElementById('evt-prod-sel').style.display = 'block';
+  document.getElementById('evt-prod-nombre').textContent = p.nombre;
+  document.getElementById('evt-prod-info').innerHTML = `Precio por persona (IVA inc.): <strong>${formatearCLP(precioBruto(p.precio_neto))}</strong>`;
+  document.getElementById('evt-cantidad').value = '';
+  document.getElementById('evt-cantidad').focus();
+}
+function agregarAlCarritoMiEvento() {
+  if (!productoSeleccionadoEvt) { mostrarToast('❌ Selecciona un menú'); return; }
+  const cant = parseInt(document.getElementById('evt-cantidad').value);
+  if (isNaN(cant) || cant <= 0) { mostrarToast('❌ N° de asistentes inválido'); return; }
+  const cuenta = productoSeleccionadoEvt.linea === 1 ? subdeptoActualEvt.l1 : subdeptoActualEvt.l2;
+  if (!cuenta) { mostrarToast('❌ No hay cuenta'); return; }
+  const disp = calcularDisponibleCuenta(cuenta.id);
+  const totalL = carritoEvento.filter(x => x.linea === productoSeleccionadoEvt.linea).reduce((s, x) => s + precioBruto(x.precio_neto) * x.cantidad, 0);
+  const nSub = precioBruto(productoSeleccionadoEvt.precio_neto) * cant;
+  if (totalL + nSub > disp) { mostrarToast(`⛔ Excede disponible L${productoSeleccionadoEvt.linea}: ${formatearCLP(disp)}`, 6000); return; }
+  const ex = carritoEvento.find(p => p.producto_id === productoSeleccionadoEvt.id);
+  if (ex) ex.cantidad += cant;
+  else carritoEvento.push({ producto_id: productoSeleccionadoEvt.id, nombre: productoSeleccionadoEvt.nombre, linea: productoSeleccionadoEvt.linea, precio_neto: Number(productoSeleccionadoEvt.precio_neto), cantidad: cant });
+  renderCarritoMiEvento();
+  productoSeleccionadoEvt = null;
+  document.getElementById('evt-prod-trigger').value = '';
+  document.getElementById('evt-cantidad').value = '';
+  document.getElementById('evt-prod-sel').style.display = 'none';
+  mostrarToast(`✅ ${cant} asistentes agregados`);
+}
+function eliminarDelCarritoMiEvento(idx) {
+  if (!confirm('¿Eliminar?')) return;
+  carritoEvento.splice(idx, 1);
+  renderCarritoMiEvento();
+}
+function renderCarritoMiEvento() {
+  const l1 = carritoEvento.filter(p => p.linea === 1);
+  const l2 = carritoEvento.filter(p => p.linea === 2);
+  document.getElementById('evt-cart-l1-count').textContent = l1.length;
+  document.getElementById('evt-cart-l2-count').textContent = l2.length;
+  const renderItems = (items) => items.length ? items.map(p => {
+    const idx = carritoEvento.indexOf(p);
+    const sub = precioBruto(p.precio_neto) * p.cantidad;
+    return `<div class="producto-agregado">
+      <div class="info"><div class="nombre">${escaparHtml(p.nombre)}</div><div class="detalle">${formatearCLP(precioBruto(p.precio_neto))} × ${p.cantidad} = <strong>${formatearCLP(sub)}</strong></div></div>
+      <div class="cantidad">${p.cantidad}</div>
+      <button class="btn-eliminar-prod" onclick="eliminarDelCarritoMiEvento(${idx})">✕</button>
+    </div>`;
+  }).join('') : '<div class="empty-state">Sin menús</div>';
+  document.getElementById('evt-cart-l1').innerHTML = renderItems(l1);
+  document.getElementById('evt-cart-l2').innerHTML = renderItems(l2);
+  const tL1 = l1.reduce((s, p) => s + precioBruto(p.precio_neto) * p.cantidad, 0);
+  const tL2 = l2.reduce((s, p) => s + precioBruto(p.precio_neto) * p.cantidad, 0);
+  document.getElementById('evt-cart-l1-total').textContent = formatearCLP(tL1);
+  document.getElementById('evt-cart-l2-total').textContent = formatearCLP(tL2);
+  document.getElementById('evt-total-general').textContent = formatearCLP(tL1 + tL2);
+}
+function elegirUrgencia(u) {
+  urgenciaEvento = u;
+  document.querySelectorAll('.urgencia-opcion').forEach(o => o.classList.toggle('activo', o.dataset.urg === u));
+}
+async function subirAdjuntoEvento(event) {
+  const files = event.target.files;
+  if (!files || !files.length) return;
+  for (const file of files) {
+    if (file.size > 5*1024*1024) { mostrarToast(`❌ ${file.name} > 5 MB`); continue; }
+    try {
+      const ext = file.name.split('.').pop();
+      const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${ext}`;
+      const path = `eventos/temp/${fileName}`;
+      const { error } = await sb.storage.from(STORAGE_ADJ).upload(path, file);
+      if (error) throw error;
+      const { data: urlData } = sb.storage.from(STORAGE_ADJ).getPublicUrl(path);
+      adjuntosTemporales.push({ url: urlData.publicUrl, nombre: file.name, tipo: file.type, size: file.size });
+      renderAdjuntosEvento();
+    } catch(e) { mostrarToast('❌ ' + (e.message||'Error')); }
+  }
+  event.target.value = '';
+}
+function renderAdjuntosEvento() {
+  const grid = document.getElementById('evt-adjuntos-grid');
+  if (!adjuntosTemporales.length) { grid.innerHTML = ''; return; }
+  grid.innerHTML = adjuntosTemporales.map((a, i) => {
+    const esImg = a.tipo && a.tipo.startsWith('image/');
+    return `<div class="adjunto-item">
+      ${esImg ? `<img src="${a.url}">` : `<div class="pdf-icon">📄</div>`}
+      <div class="nombre" title="${escaparHtml(a.nombre)}">${escaparHtml(a.nombre)}</div>
+      <button class="btn-borrar" onclick="eliminarAdjuntoTemporal(${i})">✕</button>
+    </div>`;
+  }).join('');
+}
+function eliminarAdjuntoTemporal(idx) { adjuntosTemporales.splice(idx, 1); renderAdjuntosEvento(); }
+
+async function enviarEvento() {
+  const dir = document.getElementById('evt-depto-padre').value;
+  const depto = document.getElementById('evt-depto').value || null;
+  const area = document.getElementById('evt-subdepto').value;
+  const fechaEvt = document.getElementById('evt-fecha').value;
+  if (!dir || !area) { mostrarToast('❌ Completa Dirección / Área'); return; }
+  if (!fechaEvt) { mostrarToast('❌ Ingresa la fecha del evento'); return; }
+  if (!carritoEvento.length) { mostrarToast('❌ Agrega menús'); return; }
+  const obs = document.getElementById('evt-obs').value.trim();
+  const totalNeto = carritoEvento.reduce((s, p) => s + p.precio_neto * p.cantidad, 0);
+  const totalBruto = carritoEvento.reduce((s, p) => s + precioBruto(p.precio_neto) * p.cantidad, 0);
+  if (!confirm(`¿Enviar evento por ${formatearCLP(totalBruto)}?`)) return;
+  const btn = event.target; btn.disabled = true; btn.textContent = '⏳ Enviando...';
+  try {
+    const { data: evtData, error: e1 } = await sb.from('lb_eventos').insert({
+      nombre_evento: document.getElementById('evt-nombre').value.trim() || null,
+      fecha_evento: fechaEvt,
+      hora_evento: document.getElementById('evt-hora').value || null,
+      lugar_evento: document.getElementById('evt-lugar').value.trim() || null,
+      departamento: dir, departamento_padre: dir,
+      subdepartamento_padre: depto, subdepartamento: area,
+      solicitante_email: nombreUsuario, solicitante_nombre: nombreCompleto,
+      estado: 'PENDIENTE', monto_estimado: totalNeto, monto_estimado_bruto: totalBruto,
+      urgencia: urgenciaEvento, observacion: obs || null,
+      cuenta_l1_id: subdeptoActualEvt.l1?.id || null,
+      cuenta_l2_id: subdeptoActualEvt.l2?.id || null
+    }).select().single();
+    if (e1) throw e1;
+    const items = carritoEvento.map(p => ({
+      evento_id: evtData.id, producto_id: p.producto_id, cantidad: p.cantidad,
+      precio_estimado: p.precio_neto, precio_estimado_bruto: precioBruto(p.precio_neto),
+      subtotal_bruto: precioBruto(p.precio_neto) * p.cantidad, linea: p.linea
+    }));
+    const { error: e2 } = await sb.from('lb_evento_items').insert(items);
+    if (e2) throw e2;
+    if (adjuntosTemporales.length) {
+      const adj = adjuntosTemporales.map(a => ({
+        evento_id: evtData.id, archivo_url: a.url, archivo_nombre: a.nombre,
+        archivo_tipo: a.tipo, archivo_size: a.size, subido_por: nombreUsuario
+      }));
+      await sb.from('lb_evento_adjuntos').insert(adj);
+    }
+    mostrarToast(`✅ ${evtData.codigo} enviado`);
+    const msg = document.getElementById('evt-mensaje');
+    msg.style.display = 'block';
+    msg.innerHTML = `✅ Evento <strong>${evtData.codigo}</strong> enviado. Total: <strong>${formatearCLP(totalBruto)}</strong>`;
+    msg.scrollIntoView({ behavior: 'smooth' });
+    await cargarTodo();
+    nuevoEventoForm();
+    renderMisEventos();
+    actualizarBadgePendientes();
+  } catch(e) { console.error(e); mostrarToast('❌ ' + (e.message || 'Error')); }
+  btn.disabled = false; btn.textContent = '📨 ENVIAR EVENTO';
+}
+function nuevoEventoForm() {
+  carritoEvento = [];
+  adjuntosTemporales = [];
+  urgenciaEvento = 'NORMAL';
+  renderCarritoMiEvento();
+  renderAdjuntosEvento();
+  elegirUrgencia('NORMAL');
+  document.getElementById('evt-obs').value = '';
+  document.getElementById('evt-fecha').value = '';
+  document.getElementById('evt-hora').value = '';
+  document.getElementById('evt-nombre').value = '';
+  document.getElementById('evt-lugar').value = '';
+  document.getElementById('evt-depto-padre').value = '';
+  document.getElementById('evt-depto').value = '';
+  document.getElementById('evt-depto').disabled = false;
+  document.getElementById('evt-depto').innerHTML = '<option value="">— Primero elige dirección —</option>';
+  document.getElementById('evt-subdepto').value = '';
+  document.getElementById('evt-subdepto').innerHTML = '<option value="">— Primero elige departamento —</option>';
+  document.getElementById('evt-prod-trigger').value = '';
+  document.getElementById('evt-cantidad').value = '';
+  document.getElementById('evt-prod-sel').style.display = 'none';
+  document.getElementById('evt-prod-nombre').textContent = 'Menú';
+  document.getElementById('evt-prod-info').textContent = '—';
+  document.getElementById('evt-adjuntos-grid').innerHTML = '';
+  document.getElementById('evt-file-input').value = '';
+  document.getElementById('evt-info-panel').style.display = 'none';
+  document.getElementById('evt-trabajo').style.display = 'none';
+  const buscador = document.getElementById('evt-busqueda-wrap');
+  if (buscador) buscador.style.display = 'none';
+  lineaSeleccionadaEvt = null;
+  subdeptoActualEvt = { l1: null, l2: null };
+  productoSeleccionadoEvt = null;
+  const msg = document.getElementById('evt-mensaje');
+  if (msg) msg.style.display = 'none';
+}
+
+function renderMisEventos() {
+  const cont = document.getElementById('mis-eventos-container');
+  if (!cont) return;
+  const mias = eventos.filter(s => s.solicitante_email === nombreUsuario);
+  if (!mias.length) { cont.innerHTML = '<div class="empty-state-grande"><span class="icono">📭</span>Sin eventos</div>'; return; }
+  cont.innerHTML = mias.map(s => {
+    const items = eventoItems.filter(i => i.evento_id === s.id);
+    const adj = eventoAdjuntos.filter(a => a.evento_id === s.id);
+    const puede = s.estado === 'PENDIENTE';
+    const label = s.subdepartamento_padre ? `${s.subdepartamento_padre} / ${s.subdepartamento}` : s.subdepartamento;
+    const fEvt = s.fecha_evento ? new Date(s.fecha_evento + 'T00:00:00').toLocaleDateString('es-CL') : '—';
+    return `<div class="solicitud-card">
+      <div class="fila-top"><span class="codigo">${escaparHtml(s.codigo)}</span><span class="badge-estado ${claseEstado(s.estado)}">${iconoEstado(s.estado)} ${s.estado}</span></div>
+      <div class="fila-info">
+        <span>🍽️ <strong>${escaparHtml(s.nombre_evento || 'Evento sin nombre')}</strong></span>
+        <span>📅 ${fEvt}</span>
+        <span>📍 ${escaparHtml(s.lugar_evento || '—')}</span>
+        <span>📦 ${items.length} menús</span>
+        <span>💰 ${formatearCLP(s.monto_estimado_bruto||0)}</span>
+        ${adj.length ? `<span>📎 ${adj.length}</span>` : ''}
+      </div>
+      <div class="acciones">
+        <button class="btn-pequeno azul" onclick="verDetalleEvento('${s.id}')">👁️ Ver</button>
+        ${puede ? `<button class="btn-pequeno rojo" onclick="cancelarEvento('${s.id}')">✕ Cancelar</button>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+async function cancelarEvento(id) {
+  if (!confirm('¿Cancelar?')) return;
+  const { error } = await sb.from('lb_eventos').update({ estado: 'CANCELADA', motivo_rechazo: 'Cancelado por el solicitante' }).eq('id', id);
+  if (error) { mostrarToast('❌ ' + error.message); return; }
+  mostrarToast('✅ Cancelado');
+  await cargarTodo(); renderMisEventos(); actualizarBadgePendientes();
+}
+function verDetalleEvento(id) {
+  const s = eventos.find(x => x.id === id);
+  if (!s) return;
+  const items = eventoItems.filter(i => i.evento_id === id);
+  const adj = eventoAdjuntos.filter(a => a.evento_id === id);
+  eventoActual = s;
+  const l1 = items.filter(i => i.linea === 1);
+  const l2 = items.filter(i => i.linea === 2);
+  const renderItems = (arr) => arr.map(it => {
+    const p = productos.find(x => x.id === it.producto_id);
+    const pb = it.precio_estimado_bruto || precioBruto(it.precio_estimado);
+    return `<div style="display:grid; grid-template-columns:1fr auto auto; gap:8px; padding:8px 12px; font-size:11.5px; border-bottom:1px solid #f1f5f9; align-items:center;">
+      <span>${escaparHtml(p?.nombre || 'N/E')}</span>
+      <span style="font-weight:700; color:var(--azul); text-align:center;">×${it.cantidad}</span>
+      <span style="font-weight:700; text-align:right;">${formatearCLP(pb * it.cantidad)}</span>
+    </div>`;
+  }).join('');
+  const subL1 = l1.reduce((s, it) => s + (it.precio_estimado_bruto || precioBruto(it.precio_estimado)) * it.cantidad, 0);
+  const subL2 = l2.reduce((s, it) => s + (it.precio_estimado_bruto || precioBruto(it.precio_estimado)) * it.cantidad, 0);
+  const totalBruto = subL1 + subL2;
+  const adjHTML = adj.length ? `<div style="margin-top:12px;"><div style="font-size:11px; font-weight:700; text-transform:uppercase; color:var(--texto-gris);">📎 Adjuntos (${adj.length})</div><div class="adjuntos-grid">${adj.map(a => {
+    const esImg = a.archivo_tipo && a.archivo_tipo.startsWith('image/');
+    return `<a href="${a.archivo_url}" target="_blank" class="adjunto-item" style="text-decoration:none;">${esImg ? `<img src="${a.archivo_url}">` : `<div class="pdf-icon">📄</div>`}<div class="nombre">${escaparHtml(a.archivo_nombre || 'archivo')}</div></a>`;
+  }).join('')}</div></div>` : '';
+  let acciones = '';
+  if (esAdmin() && s.estado === 'PENDIENTE') {
+    acciones = `<div style="display:flex; gap:8px; margin-top:14px; flex-wrap:wrap;">
+      <button class="btn-verde" style="flex:1;" onclick="aprobarEvento('${s.id}')">✅ Aprobar</button>
+      <button class="btn-primario" style="flex:1; background:var(--rojo);" onclick="rechazarEvento('${s.id}')">❌ Rechazar</button>
+      <button class="btn-primario" style="flex:1;" onclick="descargarPDFEvento('${s.id}')">📄 PDF</button>
+    </div>`;
+  } else if (esAdmin()) {
+    acciones = `<div style="display:flex; gap:8px; margin-top:14px;"><button class="btn-primario" onclick="descargarPDFEvento('${s.id}')">📄 PDF</button></div>`;
+  }
+  const labelSub = s.subdepartamento_padre ? `${s.subdepartamento_padre} / ${s.subdepartamento}` : (s.subdepartamento||'—');
+  const fEvt = s.fecha_evento ? new Date(s.fecha_evento + 'T00:00:00').toLocaleDateString('es-CL') : '—';
+  document.getElementById('modal-evt-titulo').textContent = `📋 ${s.codigo}`;
+  document.getElementById('modal-evt-contenido').innerHTML = `
+    <div style="background:#f8fafc; border-radius:12px; padding:12px; margin-bottom:10px;">
+      <div style="display:flex; justify-content:space-between; padding:5px 0; font-size:12px;"><span style="color:var(--texto-gris);">Estado</span><span><span class="badge-estado ${claseEstado(s.estado)}">${iconoEstado(s.estado)} ${s.estado}</span></span></div>
+      <div style="display:flex; justify-content:space-between; padding:5px 0; font-size:12px;"><span style="color:var(--texto-gris);">Nombre</span><span style="font-weight:600;">${escaparHtml(s.nombre_evento || '—')}</span></div>
+      <div style="display:flex; justify-content:space-between; padding:5px 0; font-size:12px;"><span style="color:var(--texto-gris);">Fecha evento</span><span style="font-weight:600;">${fEvt} ${s.hora_evento ? '· ' + s.hora_evento.substring(0,5) : ''}</span></div>
+      <div style="display:flex; justify-content:space-between; padding:5px 0; font-size:12px;"><span style="color:var(--texto-gris);">Lugar</span><span style="font-weight:600;">${escaparHtml(s.lugar_evento || '—')}</span></div>
+      <div style="display:flex; justify-content:space-between; padding:5px 0; font-size:12px;"><span style="color:var(--texto-gris);">Dirección</span><span style="font-weight:600;">${escaparHtml(s.departamento_padre||s.departamento)}</span></div>
+      <div style="display:flex; justify-content:space-between; padding:5px 0; font-size:12px;"><span style="color:var(--texto-gris);">Área</span><span style="font-weight:600;">${escaparHtml(labelSub)}</span></div>
+      <div style="display:flex; justify-content:space-between; padding:5px 0; font-size:12px;"><span style="color:var(--texto-gris);">Solicitante</span><span style="font-weight:600;">${escaparHtml(s.solicitante_nombre||s.solicitante_email)}</span></div>
+      <div style="display:flex; justify-content:space-between; padding:5px 0; font-size:12px;"><span style="color:var(--texto-gris);">Urgencia</span><span>${s.urgencia}</span></div>
+      <div style="display:flex; justify-content:space-between; padding:5px 0; font-size:13px; border-top:1px solid var(--borde); margin-top:6px;"><span><strong>Total (IVA inc.)</strong></span><span style="color:var(--azul); font-weight:700;">${formatearCLP(totalBruto)}</span></div>
+      ${s.observacion ? `<div style="padding:5px 0; font-size:12px; border-top:1px dotted var(--borde); margin-top:6px;"><div style="color:var(--texto-gris);">Observación</div><div>${escaparHtml(s.observacion)}</div></div>` : ''}
+      ${s.motivo_rechazo ? `<div style="padding:5px 0; font-size:12px; color:var(--rojo);"><strong>Motivo:</strong> ${escaparHtml(s.motivo_rechazo)}</div>` : ''}
+    </div>
+    ${l1.length ? `<div style="font-size:11px; font-weight:700; text-transform:uppercase; color:var(--azul); margin-top:12px;">🍽️ MENÚS L1 · BANQUETERÍA Y CÓCTEL (${l1.length})</div><div style="background:white; border:1px solid var(--borde); border-radius:10px; overflow:hidden; margin-top:6px;">${renderItems(l1)}<div style="padding:8px 12px; background:#eff6ff; font-weight:700; text-align:right; color:var(--azul);">Subtotal L1: ${formatearCLP(subL1)}</div></div>` : ''}
+    ${l2.length ? `<div style="font-size:11px; font-weight:700; text-transform:uppercase; color:var(--morado); margin-top:12px;">☕ MENÚS L2 · COFFEE BREAK (${l2.length})</div><div style="background:white; border:1px solid var(--borde); border-radius:10px; overflow:hidden; margin-top:6px;">${renderItems(l2)}<div style="padding:8px 12px; background:#f3e8ff; font-weight:700; text-align:right; color:var(--morado);">Subtotal L2: ${formatearCLP(subL2)}</div></div>` : ''}
+    ${adjHTML}
+    ${acciones}
+  `;
+  document.getElementById('modal-detalle-evento').classList.add('visible');
+}
+function cerrarModalEvento() { document.getElementById('modal-detalle-evento').classList.remove('visible'); eventoActual = null; }
+async function aprobarEvento(id) {
+  if (!confirm('¿Aprobar?')) return;
+  const firma = obtenerFirma(nombreUsuario);
+  const { error } = await sb.from('lb_eventos').update({
+    estado: 'APROBADA', fecha_aprobacion: new Date().toISOString(),
+    aprobado_por: nombreUsuario, aprobado_por_cargo: firma.cargo
+  }).eq('id', id);
+  if (error) { mostrarToast('❌ ' + error.message); return; }
+  mostrarToast('✅ Aprobado');
+  await cargarTodo(); cerrarModalEvento(); renderEventosAdmin(); actualizarBadgePendientes();
+}
+async function rechazarEvento(id) {
+  const motivo = prompt('Motivo:');
+  if (!motivo) return;
+  const { error } = await sb.from('lb_eventos').update({ estado: 'RECHAZADA', motivo_rechazo: motivo }).eq('id', id);
+  if (error) { mostrarToast('❌ ' + error.message); return; }
+  mostrarToast('✅ Rechazado');
+  await cargarTodo(); cerrarModalEvento(); renderEventosAdmin(); actualizarBadgePendientes();
+}
+function renderEventosAdmin() {
+  const tbody = document.getElementById('evtadmin-tbody');
+  if (!tbody) return;
+  const filtro = document.getElementById('evtadmin-filtro').value.toLowerCase().trim();
+  const estado = document.getElementById('evtadmin-estado').value;
+  let lista = eventos.filter(s => {
+    if (estado && s.estado !== estado) return false;
+    if (!estado && !['PENDIENTE','APROBADA','RECIBIDA','RECHAZADA','CANCELADA'].includes(s.estado)) return false;
+    if (filtro) { const txt = `${s.codigo} ${s.departamento_padre} ${s.subdepartamento} ${s.solicitante_nombre||''} ${s.nombre_evento||''}`.toLowerCase(); if (!txt.includes(filtro)) return false; }
+    return true;
+  });
+  actualizarBadgePendientes();
+  if (!lista.length) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:20px;color:var(--texto-gris);">Sin eventos</td></tr>'; document.getElementById('evtadmin-total').textContent = '0'; return; }
+  tbody.innerHTML = lista.map(s => {
+    const label = s.subdepartamento_padre ? `${s.subdepartamento_padre} / ${s.subdepartamento}` : (s.subdepartamento||'—');
+    const esPendiente = s.estado === 'PENDIENTE';
+    const fEvt = s.fecha_evento ? new Date(s.fecha_evento + 'T00:00:00').toLocaleDateString('es-CL') : '—';
+    const acciones = esPendiente
+      ? `<button class="btn-pequeno verde" onclick="aprobarEvento('${s.id}')">✅</button>
+         <button class="btn-pequeno rojo" onclick="rechazarEvento('${s.id}')" style="margin-left:3px;">❌</button>
+         <button class="btn-pequeno azul" onclick="verDetalleEvento('${s.id}')" style="margin-left:3px;">👁️</button>`
+      : `<button class="btn-pequeno azul" onclick="verDetalleEvento('${s.id}')">👁️</button>`;
+    return `<tr>
+      <td><strong style="font-family:'Courier New',monospace;">${escaparHtml(s.codigo)}</strong></td>
+      <td style="font-size:11px;">${escaparHtml(s.departamento_padre)}<br><span style="color:var(--texto-gris);font-size:10px;">${escaparHtml(label)}</span></td>
+      <td style="font-size:11px;">${escaparHtml(s.solicitante_nombre||s.solicitante_email)}</td>
+      <td style="font-size:11px;">${fEvt}</td>
+      <td style="text-align:right;font-size:11px;">${formatearCLP(s.monto_estimado_bruto||0)}</td>
+      <td style="text-align:center;"><span class="badge-estado ${claseEstado(s.estado)}">${iconoEstado(s.estado)} ${s.estado}</span></td>
+      <td style="text-align:center;white-space:nowrap;">${acciones}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('evtadmin-total').textContent = `${lista.length} eventos`;
+}
+function actualizarBadgePendientes() {
+  const p = eventos.filter(s => s.estado === 'PENDIENTE').length;
+  const b = document.getElementById('badge-evt-pend');
+  if (b) { b.textContent = p; b.style.display = p > 0 ? 'inline-block' : 'none'; }
+}
+
+// ============================================================
+// SERVICIO
+// ============================================================
+function recCambiarDireccion() { cambiarDireccion('rec'); }
+function recCambiarDepto() { cambiarDepto('rec'); }
+function recCambiarArea() { cambiarArea('rec'); }
+function recElegirLinea(l) { elegirLinea('rec', l); }
+function alVincularEvento() {
+  const id = document.getElementById('rec-evento-vinculo').value;
+  const info = document.getElementById('rec-vinculo-info');
+  const wrapCampos = document.getElementById('rec-wrap-campos');
+  const wrapBusqueda = document.getElementById('rec-wrap-busqueda');
+  const panelLinea = document.getElementById('rec-linea-panel');
+  const prodSel = document.getElementById('rec-prod-sel');
+  if (!id) {
+    info.style.display = 'none';
+    wrapCampos.style.display = 'block';
+    panelLinea.style.display = 'none';
+    wrapBusqueda.style.display = 'none';
+    carritoRecepcion = [];
+    fotosRecepcionTemp = {};
+    renderCarritoServicio();
+    return;
+  }
+  const s = eventos.find(x => x.id === id);
+  if (!s) return;
+  const label = s.subdepartamento_padre ? `${s.subdepartamento_padre} / ${s.subdepartamento}` : (s.subdepartamento||'—');
+  info.style.display = 'block';
+  info.innerHTML = `✅ <strong>${escaparHtml(s.codigo)}</strong> · ${escaparHtml(s.nombre_evento || 'Evento')} · ${escaparHtml(s.departamento_padre)} / ${escaparHtml(label)}`;
+  wrapCampos.style.display = 'none';
+  panelLinea.style.display = 'none';
+  wrapBusqueda.style.display = 'none';
+  prodSel.style.display = 'none';
+  const items = eventoItems.filter(i => i.evento_id === id);
+  carritoRecepcion = items.map(it => {
+    const p = productos.find(x => x.id === it.producto_id);
+    return { producto_id: it.producto_id, nombre: p?.nombre||'N/E', linea: it.linea||p?.linea||1, precio_neto: Number(it.precio_estimado), cantidad: Number(it.cantidad), bloqueado: true };
+  });
+  fotosRecepcionTemp = {};
+  renderCarritoServicio();
+}
+function poblarVinculoEvento() {
+  const sel = document.getElementById('rec-evento-vinculo');
+  if (!sel) return;
+  const d = eventos.filter(s => s.estado === 'APROBADA' || s.estado === 'ENVIADA');
+  sel.innerHTML = '<option value="">— Servicio sin vincular —</option>' + d.map(s => `<option value="${s.id}">${escaparHtml(s.codigo)} · ${escaparHtml(s.nombre_evento || s.departamento_padre)} · ${formatearCLP(s.monto_estimado_bruto||0)}</option>`).join('');
+}
+function filtrarDropdownServicio(texto) {
+  const list = document.getElementById('rec-prod-list');
+  list.style.display = 'block';
+  list.innerHTML = '';
+  const t = (texto||'').toLowerCase().trim();
+  const lista = productos.filter(p => p.linea === lineaSeleccionadaRec && (!t || p.nombre.toLowerCase().includes(t))).slice(0, 50);
+  if (!lista.length) { list.innerHTML = '<div class="dropdown-item">Sin resultados</div>'; return; }
+  lista.forEach(p => {
+    const div = document.createElement('div');
+    div.className = 'dropdown-item';
+    div.innerHTML = `<span>${escaparHtml(p.nombre)}</span><span class="precio">${formatearCLP(precioBruto(p.precio_neto))}</span>`;
+    div.onclick = () => { document.getElementById('rec-prod-trigger').value = p.nombre; list.style.display = 'none'; seleccionarProductoServicio(p); };
+    list.appendChild(div);
+  });
+}
+function seleccionarProductoServicio(p) {
+  productoSeleccionadoRec = p;
+  document.getElementById('rec-prod-sel').style.display = 'block';
+  document.getElementById('rec-prod-nombre').textContent = p.nombre;
+  document.getElementById('rec-prod-precio').innerHTML = `Precio por persona: <strong>${formatearCLP(precioBruto(p.precio_neto))}</strong> · L${p.linea}`;
+  document.getElementById('rec-cantidad').value = '';
+}
+function agregarAlCarritoServicio() {
+  if (!productoSeleccionadoRec) { mostrarToast('❌ Selecciona'); return; }
+  const c = parseInt(document.getElementById('rec-cantidad').value);
+  if (isNaN(c) || c <= 0) { mostrarToast('❌ N° asistentes inválido'); return; }
+  const ex = carritoRecepcion.find(p => p.producto_id === productoSeleccionadoRec.id);
+  if (ex) ex.cantidad += c;
+  else carritoRecepcion.push({ producto_id: productoSeleccionadoRec.id, nombre: productoSeleccionadoRec.nombre, linea: productoSeleccionadoRec.linea, precio_neto: Number(productoSeleccionadoRec.precio_neto), cantidad: c });
+  renderCarritoServicio();
+  productoSeleccionadoRec = null;
+  document.getElementById('rec-prod-trigger').value = '';
+  document.getElementById('rec-prod-sel').style.display = 'none';
+}
+function renderCarritoServicio() {
+  const cont = document.getElementById('rec-carrito-container');
+  document.getElementById('rec-carrito-count').textContent = carritoRecepcion.length;
+  if (!carritoRecepcion.length) {
+    cont.innerHTML = '<div class="empty-state">Sin menús</div>';
+    document.getElementById('rec-total-estimado').innerHTML = '$0';
+    return;
+  }
+  let totalL1 = 0, totalL2 = 0;
+  cont.innerHTML = carritoRecepcion.map((p, i) => {
+    const sub = precioBruto(p.precio_neto) * p.cantidad;
+    if (p.linea === 1) totalL1 += sub; else totalL2 += sub;
+    const bloq = p.bloqueado === true;
+    const fotoUrl = fotosRecepcionTemp[p.producto_id];
+    const fotoHTML = fotoUrl
+      ? `<div style="display:flex;gap:6px;align-items:center;justify-content:flex-end;"><img src="${fotoUrl}" class="foto-salida-thumb"><button class="btn-pequeno rojo" onclick="quitarFotoServicio('${p.producto_id}')" title="Quitar">✕</button></div>`
+      : `<button class="btn-pequeno morado" onclick="document.getElementById('foto-rec-${i}').click()">📷 Subir foto</button>`;
+    return `<div class="producto-agregado" style="flex-direction:column;align-items:stretch;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div class="info"><div class="nombre">${escaparHtml(p.nombre)} <span class="badge-linea l${p.linea}">L${p.linea}</span></div><div class="detalle">${formatearCLP(precioBruto(p.precio_neto))} × ${p.cantidad} = ${formatearCLP(sub)}</div></div>
+        <div class="cantidad">${p.cantidad}</div>
+        ${bloq ? '' : `<button class="btn-eliminar-prod" onclick="carritoRecepcion.splice(${i},1);renderCarritoServicio();">✕</button>`}
+      </div>
+      <div style="margin-top:6px;text-align:right;">
+        <input type="file" id="foto-rec-${i}" accept="image/jpeg" style="display:none;" onchange="subirFotoServicio(${i}, '${p.producto_id}', event)">
+        <div id="foto-rec-info-${i}">${fotoHTML}</div>
+      </div>
+    </div>`;
+  }).join('');
+  let html = '';
+  if (totalL1 > 0) html += `<div style="display:flex; justify-content:space-between; padding:4px 0;"><span>L1 · Banquetería y Cóctel:</span><strong style="color:var(--azul);">${formatearCLP(totalL1)}</strong></div>`;
+  if (totalL2 > 0) html += `<div style="display:flex; justify-content:space-between; padding:4px 0;"><span>L2 · Coffee Break:</span><strong style="color:var(--morado);">${formatearCLP(totalL2)}</strong></div>`;
+  html += `<div style="display:flex; justify-content:space-between; padding:6px 0; border-top:1px solid var(--borde); margin-top:4px; font-size:14px;"><span><strong>TOTAL:</strong></span><strong style="color:var(--verde);">${formatearCLP(totalL1 + totalL2)}</strong></div>`;
+  document.getElementById('rec-total-estimado').innerHTML = html;
+}
+async function subirFotoServicio(idx, productoId, event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  if (file.size > 3 * 1024 * 1024) { mostrarToast('❌ La foto excede los 3 MB'); event.target.value = ''; return; }
+  if (!file.type.startsWith('image/')) { mostrarToast('❌ Solo se aceptan imágenes JPG'); event.target.value = ''; return; }
+  const infoDiv = document.getElementById(`foto-rec-info-${idx}`);
+  if (infoDiv) infoDiv.innerHTML = '<span style="font-size:11px;color:var(--texto-gris);">⏳ Subiendo...</span>';
+  try {
+    const nombreArchivo = `${Date.now()}_${productoId.substring(0,8)}.jpg`;
+    const path = `recepciones/${nombreArchivo}`;
+    const { error } = await sb.storage.from(STORAGE_FOTOS).upload(path, file, { contentType: 'image/jpeg', upsert: false });
+    if (error) throw error;
+    const { data: urlData } = sb.storage.from(STORAGE_FOTOS).getPublicUrl(path);
+    fotosRecepcionTemp[productoId] = urlData.publicUrl;
+    renderCarritoServicio();
+    mostrarToast('✅ Foto subida');
+  } catch(e) { console.error(e); mostrarToast('❌ Error al subir: ' + (e.message || 'Error')); if (infoDiv) infoDiv.innerHTML = `<button class="btn-pequeno morado" onclick="document.getElementById('foto-rec-${idx}').click()">📷 Subir foto</button>`; }
+}
+function quitarFotoServicio(productoId) {
+  delete fotosRecepcionTemp[productoId];
+  renderCarritoServicio();
+}
+async function registrarServicio() {
+  const evtVinculo = document.getElementById('rec-evento-vinculo').value;
+  let cuentaL1, cuentaL2, deptoPadre;
+  let subdeptoPadre = null;
+  let subdeptoArea = null;
+  if (evtVinculo) {
+    const s = eventos.find(x => x.id === evtVinculo);
+    if (!s) { mostrarToast('❌ Evento no encontrado'); return; }
+    deptoPadre = s.departamento_padre || s.departamento;
+    subdeptoPadre = s.subdepartamento_padre;
+    subdeptoArea = s.subdepartamento;
+    cuentaL1 = cuentas.find(c => c.id === s.cuenta_l1_id) || null;
+    cuentaL2 = cuentas.find(c => c.id === s.cuenta_l2_id) || null;
+  } else {
+    deptoPadre = document.getElementById('rec-depto-padre').value;
+    subdeptoPadre = document.getElementById('rec-depto').value || null;
+    subdeptoArea = document.getElementById('rec-subdepto').value;
+    cuentaL1 = subdeptoActualRec.l1 || null;
+    cuentaL2 = subdeptoActualRec.l2 || null;
+  }
+  if (!deptoPadre) { mostrarToast('❌ Sin dirección'); return; }
+  if (!subdeptoArea) { mostrarToast('❌ Sin área'); return; }
+  if (!carritoRecepcion.length) { mostrarToast('❌ Sin menús'); return; }
+
+  const itemsSinFoto = carritoRecepcion.filter(p => !fotosRecepcionTemp[p.producto_id]);
+  if (itemsSinFoto.length > 0) {
+    const nombres = itemsSinFoto.map(p => p.nombre);
+    mostrarToast(`❌ Faltan fotos de ${itemsSinFoto.length} menú(es): ${nombres.join(', ')}`, 8000);
+    const idx = carritoRecepcion.findIndex(p => !fotosRecepcionTemp[p.producto_id]);
+    const elem = document.getElementById(`foto-rec-info-${idx}`);
+    if (elem) elem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
+  const itemsL1 = carritoRecepcion.filter(p => p.linea === 1);
+  const itemsL2 = carritoRecepcion.filter(p => p.linea === 2);
+  const totalL1 = itemsL1.reduce((s, p) => s + precioBruto(p.precio_neto) * p.cantidad, 0);
+  const totalL2 = itemsL2.reduce((s, p) => s + precioBruto(p.precio_neto) * p.cantidad, 0);
+  const totalBruto = totalL1 + totalL2;
+  const totalNeto = carritoRecepcion.reduce((s, p) => s + p.precio_neto * p.cantidad, 0);
+  if (itemsL1.length > 0) {
+    if (!cuentaL1) { mostrarToast('❌ No hay cuenta asignada para L1'); return; }
+    const dispL1 = calcularDisponibleCuenta(cuentaL1.id);
+    if (totalL1 > dispL1) { mostrarToast(`⛔ Excede disponible L1 · Banquetería. Cuenta ${cuentaL1.codigo} · Disponible: ${formatearCLP(dispL1)} · Intentado: ${formatearCLP(totalL1)}`, 8000); return; }
+  }
+  if (itemsL2.length > 0) {
+    if (!cuentaL2) { mostrarToast('❌ No hay cuenta asignada para L2'); return; }
+    const dispL2 = calcularDisponibleCuenta(cuentaL2.id);
+    if (totalL2 > dispL2) { mostrarToast(`⛔ Excede disponible L2 · Coffee Break. Cuenta ${cuentaL2.codigo} · Disponible: ${formatearCLP(dispL2)} · Intentado: ${formatearCLP(totalL2)}`, 8000); return; }
+  }
+  const btn = event.target; btn.disabled = true; btn.textContent = '⏳';
+  try {
+    const guia = document.getElementById('rec-guia').value.trim();
+    const factura = document.getElementById('rec-factura').value.trim();
+    const obs = document.getElementById('rec-obs').value.trim();
+    const firma = obtenerFirma(nombreUsuario);
+    const cuentaPrincipal = cuentaL1 || cuentaL2;
+    const { data: rec, error: e1 } = await sb.from('lb_recepciones').insert({
+      proveedor: PROVEEDOR_OFICIAL.razon_social,
+      proveedor_rut: PROVEEDOR_OFICIAL.rut,
+      numero_boleta: guia || null,
+      numero_factura: factura || null,
+      observacion: obs || null,
+      responsable: nombreUsuario,
+      monto_total: totalNeto,
+      monto_total_bruto: totalBruto,
+      iva_total: totalBruto - totalNeto,
+      cuenta_id: cuentaPrincipal?.id || null,
+      departamento: deptoPadre,
+      evento_id: evtVinculo || null,
+      recibido_por_nombre: firma.nombre,
+      recibido_por_cargo: firma.cargo,
+      despachada: false
+    }).select().single();
+    if (e1) throw e1;
+    const items = carritoRecepcion.map(p => {
+      const cuentaItem = p.linea === 1 ? cuentaL1 : cuentaL2;
+      return {
+        recepcion_id: rec.id,
+        producto_id: p.producto_id,
+        cantidad: p.cantidad,
+        precio_neto: p.precio_neto,
+        precio_bruto: precioBruto(p.precio_neto),
+        subtotal: p.precio_neto * p.cantidad,
+        subtotal_bruto: precioBruto(p.precio_neto) * p.cantidad,
+        iva: (precioBruto(p.precio_neto) - p.precio_neto) * p.cantidad,
+        cuenta_id: cuentaItem?.id || null,
+        foto_url: fotosRecepcionTemp[p.producto_id] || null
+      };
+    });
+    const { error: e2 } = await sb.from('lb_recepcion_items').insert(items);
+    if (e2) throw e2;
+    if (evtVinculo) {
+      await sb.from('lb_eventos').update({ estado: 'RECIBIDA', fecha_recepcion: new Date().toISOString(), recepcion_id: rec.id }).eq('id', evtVinculo);
+    }
+    ultimaRecepcion = {
+      id: rec.id, codigo: rec.codigo,
+      productos: carritoRecepcion.map(p => ({...p, subtotal_bruto: precioBruto(p.precio_neto)*p.cantidad, foto_url: fotosRecepcionTemp[p.producto_id] || null})),
+      proveedor: PROVEEDOR_OFICIAL.razon_social, proveedor_rut: PROVEEDOR_OFICIAL.rut,
+      guia, factura, obs, departamento: deptoPadre,
+      cuenta: cuentaPrincipal,
+      monto_total: totalNeto, monto_total_bruto: totalBruto,
+      monto_l1: totalL1, monto_l2: totalL2,
+      responsable: nombreUsuario, firma, fecha: formatearFecha(rec.fecha)
+    };
+    mostrarToast(`✅ Servicio ${rec.codigo} registrado`);
+    const msg = document.getElementById('rec-mensaje');
+    msg.style.display = 'block';
+    msg.innerHTML = `✅ Servicio <strong>${rec.codigo}</strong> registrado${totalL1 > 0 ? `<br>🍽️ L1 · Banquetería: <strong>${formatearCLP(totalL1)}</strong>` : ''}${totalL2 > 0 ? `<br>☕ L2 · Coffee Break: <strong>${formatearCLP(totalL2)}</strong>` : ''}<br>💰 Total: <strong>${formatearCLP(totalBruto)}</strong> <button class="btn-pequeno azul" onclick="descargarPDFServicio()" style="margin-left:10px;">📄 PDF con fotos</button>`;
+    msg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    carritoRecepcion = [];
+    fotosRecepcionTemp = {};
+    renderCarritoServicio();
+    document.getElementById('rec-guia').value = '';
+    document.getElementById('rec-factura').value = '';
+    document.getElementById('rec-obs').value = '';
+    document.getElementById('rec-evento-vinculo').value = '';
+    alVincularEvento();
+    await cargarTodo();
+    renderConsumo();
+    actualizarResumenes();
+  } catch(e) { console.error(e); mostrarToast('❌ ' + (e.message||'Error')); }
+  btn.disabled = false;
+  btn.textContent = '✅ Registrar Servicio';
+}
+
+// ============================================================
+// ENTREGA CON FOTOS
+// ============================================================
+function salCambiarDireccion() {
+  const direccion = document.getElementById('sal-depto-padre').value;
+  const wrapRecep = document.getElementById('sal-wrap-recepciones');
+  const selRecep = document.getElementById('sal-recepcion-sel');
+  const detalle = document.getElementById('sal-detalle');
+  const mensaje = document.getElementById('sal-mensaje');
+  if (detalle) detalle.style.display = 'none';
+  if (mensaje) mensaje.style.display = 'none';
+  recepcionSeleccionadaEntrega = null;
+  fotosEntregaTemp = {};
+  if (!direccion) { wrapRecep.style.display = 'none'; selRecep.innerHTML = '<option value="">— Selecciona un servicio —</option>'; return; }
+  const pendientes = recepciones.filter(r => !r.despachada && (r.departamento === direccion || r.departamento_padre === direccion));
+  wrapRecep.style.display = 'block';
+  if (!pendientes.length) { selRecep.innerHTML = '<option value="">— No hay servicios pendientes de entrega —</option>'; return; }
+  selRecep.innerHTML = '<option value="">— Selecciona un servicio —</option>' + pendientes.map(r => {
+    const totalItems = recepcionItems.filter(i => i.recepcion_id === r.id).reduce((s, i) => s + Number(i.cantidad||0), 0);
+    return `<option value="${r.id}">${escaparHtml(r.codigo)} · ${r.fecha_fmt} · ${totalItems} asistentes · ${formatearCLP(r.monto_total_bruto||0)}</option>`;
+  }).join('');
+}
+function salCargarServicio() {
+  const id = document.getElementById('sal-recepcion-sel').value;
+  const detalle = document.getElementById('sal-detalle');
+  const infoRecep = document.getElementById('sal-info-recepcion');
+  const bloqueL1 = document.getElementById('sal-bloque-l1');
+  const bloqueL2 = document.getElementById('sal-bloque-l2');
+  const listaL1 = document.getElementById('sal-lista-l1');
+  const listaL2 = document.getElementById('sal-lista-l2');
+  const totalL1 = document.getElementById('sal-total-l1');
+  const totalL2 = document.getElementById('sal-total-l2');
+  const mensaje = document.getElementById('sal-mensaje');
+  if (mensaje) mensaje.style.display = 'none';
+  if (!id) { detalle.style.display = 'none'; recepcionSeleccionadaEntrega = null; fotosEntregaTemp = {}; return; }
+  const r = recepciones.find(x => x.id === id);
+  if (!r) return;
+  recepcionSeleccionadaEntrega = r;
+  fotosEntregaTemp = {};
+  const items = recepcionItems.filter(i => i.recepcion_id === id);
+  const cuentasRecepcion = [...new Set(items.map(i => i.cuenta_id).filter(Boolean))].map(cid => cuentas.find(c => c.id === cid)).filter(Boolean);
+  const cuentasInfo = cuentasRecepcion.map(c => `💰 <strong>${escaparHtml(c.direccion)} · ${escaparHtml(c.subdepartamento)} · L${c.linea}</strong> (${escaparHtml(c.codigo)})`).join('<br>');
+  infoRecep.innerHTML = `<div style="font-weight:700; color:var(--azul); font-size:13px; margin-bottom:4px;">🍽️ Servicio ${escaparHtml(r.codigo)}</div><div>📅 Fecha: <strong>${r.fecha_fmt}</strong></div><div>🏭 Proveedor: <strong>${escaparHtml(r.proveedor||'N/E')}</strong></div>${r.numero_boleta ? `<div>📄 Boleta: <strong>${escaparHtml(r.numero_boleta)}</strong></div>` : ''}${cuentasInfo}<div>💵 Monto bruto: <strong>${formatearCLP(r.monto_total_bruto||0)}</strong></div>`;
+  const itemsL1 = [];
+  const itemsL2 = [];
+  items.forEach(it => {
+    const p = productos.find(x => x.id === it.producto_id);
+    if (!p) return;
+    const row = { item_id: it.id, producto_id: it.producto_id, nombre: p.nombre, cantidad: Number(it.cantidad), precio_neto: Number(it.precio_neto || p.precio_neto), subtotal_bruto: Number(it.subtotal_bruto || (Number(it.precio_neto || p.precio_neto) * 1.19 * Number(it.cantidad))) };
+    if (p.linea === 1) itemsL1.push(row); else itemsL2.push(row);
+  });
+  const renderFila = (x) => `
+    <div class="articulo-fila" style="grid-template-columns:1fr auto auto auto;gap:10px;">
+      <div class="nombre">${escaparHtml(x.nombre)}</div>
+      <div class="cant">${x.cantidad} pers.</div>
+      <div class="monto">${formatearCLP(x.subtotal_bruto)}</div>
+      <div style="text-align:right;">
+        <input type="file" id="foto-${x.item_id}" accept="image/jpeg" style="display:none;" onchange="subirFotoEntrega('${x.item_id}', event)">
+        <div id="foto-info-${x.item_id}">
+          <button class="btn-pequeno morado" onclick="document.getElementById('foto-${x.item_id}').click()">📷 Subir foto</button>
+        </div>
+      </div>
+    </div>
+  `;
+  if (itemsL1.length) { bloqueL1.style.display = 'block'; listaL1.innerHTML = itemsL1.map(renderFila).join(''); totalL1.textContent = 'Subtotal L1: ' + formatearCLP(itemsL1.reduce((s, x) => s + x.subtotal_bruto, 0)); } else bloqueL1.style.display = 'none';
+  if (itemsL2.length) { bloqueL2.style.display = 'block'; listaL2.innerHTML = itemsL2.map(renderFila).join(''); totalL2.textContent = 'Subtotal L2: ' + formatearCLP(itemsL2.reduce((s, x) => s + x.subtotal_bruto, 0)); } else bloqueL2.style.display = 'none';
+  detalle.style.display = 'block';
+}
+async function subirFotoEntrega(itemId, event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  if (file.size > 3 * 1024 * 1024) { mostrarToast('❌ La foto excede los 3 MB'); event.target.value = ''; return; }
+  if (!file.type.startsWith('image/')) { mostrarToast('❌ Solo se aceptan imágenes JPG'); event.target.value = ''; return; }
+  const infoDiv = document.getElementById(`foto-info-${itemId}`);
+  if (infoDiv) infoDiv.innerHTML = '<span style="font-size:11px;color:var(--texto-gris);">⏳ Subiendo...</span>';
+  try {
+    const nombreArchivo = `${Date.now()}_${itemId.substring(0,8)}.jpg`;
+    const path = `entregas/${nombreArchivo}`;
+    const { error } = await sb.storage.from(STORAGE_FOTOS).upload(path, file, { contentType: 'image/jpeg', upsert: false });
+    if (error) throw error;
+    const { data: urlData } = sb.storage.from(STORAGE_FOTOS).getPublicUrl(path);
+    fotosEntregaTemp[itemId] = urlData.publicUrl;
+    if (infoDiv) infoDiv.innerHTML = `<div style="display:flex;gap:6px;align-items:center;justify-content:flex-end;"><img src="${urlData.publicUrl}" class="foto-salida-thumb"><button class="btn-pequeno rojo" onclick="quitarFotoEntrega('${itemId}')" title="Quitar">✕</button></div>`;
+    mostrarToast('✅ Foto subida');
+  } catch(e) { console.error(e); mostrarToast('❌ Error al subir: ' + (e.message || 'Error')); if (infoDiv) infoDiv.innerHTML = `<button class="btn-pequeno morado" onclick="document.getElementById('foto-${itemId}').click()">📷 Subir foto</button>`; }
+}
+function quitarFotoEntrega(itemId) {
+  delete fotosEntregaTemp[itemId];
+  const infoDiv = document.getElementById(`foto-info-${itemId}`);
+  if (infoDiv) infoDiv.innerHTML = `<button class="btn-pequeno morado" onclick="document.getElementById('foto-${itemId}').click()">📷 Subir foto</button>`;
+}
+async function registrarEntrega() {
+  if (!recepcionSeleccionadaEntrega) { mostrarToast('❌ Selecciona un servicio'); return; }
+  const receptor = document.getElementById('sal-receptor').value.trim();
+  const receptorRut = document.getElementById('sal-receptor-rut').value.trim();
+  const receptorEmail = document.getElementById('sal-receptor-email').value.trim();
+  const obs = document.getElementById('sal-obs').value.trim();
+  if (!receptor) { mostrarToast('❌ Ingresa el nombre del receptor'); return; }
+  if (!receptorRut) { mostrarToast('❌ Ingresa el RUT del receptor'); return; }
+  const r = recepcionSeleccionadaEntrega;
+  const items = recepcionItems.filter(i => i.recepcion_id === r.id);
+  const itemsSinFoto = items.filter(it => !fotosEntregaTemp[it.id]);
+  if (itemsSinFoto.length > 0) {
+    const nombres = itemsSinFoto.map(it => { const p = productos.find(x => x.id === it.producto_id); return p?.nombre || 'N/E'; });
+    mostrarToast(`❌ Faltan fotos de ${itemsSinFoto.length} menú(es): ${nombres.join(', ')}`, 8000);
+    const primerId = itemsSinFoto[0].id;
+    const elem = document.getElementById(`foto-info-${primerId}`);
+    if (elem) elem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+  const btn = event.target; btn.disabled = true; btn.textContent = '⏳';
+  try {
+    const totalNeto = Number(r.monto_total || 0);
+    const totalBruto = Number(r.monto_total_bruto || 0);
+    const firma = obtenerFirma(nombreUsuario);
+    const { data: ent, error: e1 } = await sb.from('lb_entregas').insert({
+      departamento: r.departamento,
+      departamento_padre: r.departamento_padre || r.departamento,
+      subdepartamento_padre: r.subdepartamento_padre || null,
+      subdepartamento: r.subdepartamento || null,
+      receptor_nombre: receptor, receptor_rut: receptorRut, receptor_email: receptorEmail || null,
+      observacion: obs || null, responsable: nombreUsuario,
+      monto_total: totalNeto, monto_total_bruto: totalBruto, iva_total: totalBruto - totalNeto,
+      entregado_por_nombre: firma.nombre, entregado_por_cargo: firma.cargo,
+      recepcion_origen_id: r.id
+    }).select().single();
+    if (e1) throw e1;
+    const itemsInsert = items.map(it => ({
+      entrega_id: ent.id, producto_id: it.producto_id, cantidad: it.cantidad,
+      precio_neto: it.precio_neto, precio_bruto: it.precio_bruto,
+      subtotal: it.subtotal, subtotal_bruto: it.subtotal_bruto, iva: it.iva,
+      foto_url: fotosEntregaTemp[it.id] || null
+    }));
+    const { error: e2 } = await sb.from('lb_entrega_items').insert(itemsInsert);
+    if (e2) throw e2;
+    const { error: e3 } = await sb.from('lb_recepciones').update({ despachada: true, fecha_despacho: new Date().toISOString(), entrega_id: ent.id }).eq('id', r.id);
+    if (e3) throw e3;
+    ultimaEntrega = {
+      id: ent.id, codigo: ent.codigo,
+      productos: items.map(it => {
+        const p = productos.find(x => x.id === it.producto_id);
+        return { producto_id: it.producto_id, nombre: p?.nombre || 'N/E', linea: p?.linea || 1, cantidad: Number(it.cantidad), precio_neto: Number(it.precio_neto), precio_bruto: Number(it.precio_bruto), subtotal_bruto: Number(it.subtotal_bruto), foto_url: fotosEntregaTemp[it.id] || null };
+      }),
+      departamento: r.departamento, departamento_padre: r.departamento_padre || r.departamento,
+      subdepartamento_padre: r.subdepartamento_padre, subdepartamento: r.subdepartamento,
+      receptor, receptor_email: receptorEmail, receptor_rut: receptorRut, obs,
+      responsable: nombreUsuario, firma,
+      monto_total: totalNeto, monto_total_bruto: totalBruto,
+      fecha: formatearFecha(ent.fecha), recepcion_origen: r.codigo
+    };
+    mostrarToast(`✅ Entrega ${ent.codigo} registrada`);
+    const msg = document.getElementById('sal-mensaje');
+    msg.style.display = 'block';
+    msg.innerHTML = `✅ Entrega <strong>${ent.codigo}</strong> desde servicio <strong>${r.codigo}</strong> · ${formatearCLP(totalBruto)} <button class="btn-pequeno azul" onclick="descargarPDFEntrega()" style="margin-left:10px;">📄 PDF con fotos</button>`;
+    msg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    document.getElementById('sal-receptor').value = '';
+    document.getElementById('sal-receptor-rut').value = '';
+    document.getElementById('sal-receptor-email').value = '';
+    document.getElementById('sal-obs').value = '';
+    document.getElementById('sal-detalle').style.display = 'none';
+    document.getElementById('sal-recepcion-sel').innerHTML = '<option value="">— Selecciona un servicio —</option>';
+    fotosEntregaTemp = {};
+    recepcionSeleccionadaEntrega = null;
+    await cargarTodo();
+    renderConsumo();
+    actualizarResumenes();
+  } catch(e) { console.error(e); mostrarToast('❌ ' + (e.message||'Error')); }
+  btn.disabled = false; btn.textContent = '✅ Registrar Entrega';
+}
+
+// ============================================================
+// CONSUMO
+// ============================================================
+function renderConsumo() {
+  const tbody = document.getElementById('stock-tbody');
+  if (!tbody) return;
+  const fn = document.getElementById('stock-filtro-nombre').value.toLowerCase().trim();
+  const fl = document.getElementById('stock-filtro-linea').value;
+  const fs = document.getElementById('stock-filtro-stock').value;
+  let lista = productos.filter(p => {
+    if (fn && !p.nombre.toLowerCase().includes(fn)) return false;
+    if (fl && String(p.linea) !== fl) return false;
+    const consumido = recepcionItems.filter(ri => ri.producto_id === p.id).reduce((s, ri) => s + Number(ri.cantidad||0), 0);
+    if (fs === 'usado' && consumido === 0) return false;
+    if (fs === 'sin' && consumido > 0) return false;
+    return true;
+  });
+  if (!lista.length) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--texto-gris);">Sin menús</td></tr>'; document.getElementById('stock-total').textContent = '0'; return; }
+  let tu = 0, tv = 0;
+  tbody.innerHTML = lista.map(p => {
+    const consumido = recepcionItems.filter(ri => ri.producto_id === p.id).reduce((s, ri) => s + Number(ri.cantidad||0), 0);
+    const pb = precioBruto(p.precio_neto);
+    const val = consumido * pb;
+    tu += consumido; tv += val;
+    const color = consumido === 0 ? 'var(--texto-gris)' : 'var(--verde)';
+    return `<tr>
+      <td><strong>${escaparHtml(p.nombre)}</strong></td>
+      <td><span class="badge-linea l${p.linea}">L${p.linea}</span></td>
+      <td style="text-align:right;font-size:11px;">${formatearCLP(pb)}</td>
+      <td style="text-align:right;font-weight:700;color:${color};">${consumido}</td>
+      <td style="text-align:right;font-size:11px;">${formatearCLP(val)}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('stock-total').textContent = `${lista.length} menús · ${tu} asistentes · ${formatearCLP(tv)}`;
+}
+
+// ============================================================
+// CUENTAS
+// ============================================================
+function renderCuentas() {
+  const tbody = document.getElementById('cuentas-tbody');
+  if (!tbody) return;
+  const filtro = document.getElementById('cuentas-filtro').value.toLowerCase().trim();
+  let lista = cuentas.filter(c => !filtro || `${c.direccion} ${c.departamento_padre||''} ${c.subdepartamento} ${c.codigo}`.toLowerCase().includes(filtro));
+  if (!lista.length) { tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:20px;">Sin cuentas</td></tr>'; document.getElementById('cuentas-total').textContent = '0'; return; }
+  let ta = 0, tr = 0, tc = 0;
+  tbody.innerHTML = lista.map(c => {
+    const cons = calcularConsumidoCuenta(c.id);
+    const res = calcularReservadoCuenta(c.id);
+    const disp = Number(c.monto_asignado) - cons - res;
+    ta += Number(c.monto_asignado); tr += res; tc += cons;
+    return `<tr>
+      <td style="font-size:11px;">${escaparHtml(c.direccion)}</td>
+      <td style="font-size:11px;">${escaparHtml(c.departamento_padre || '—')}</td>
+      <td style="font-size:11px;">${escaparHtml(c.subdepartamento)}</td>
+      <td><span class="badge-linea l${c.linea}">L${c.linea}</span></td>
+      <td style="text-align:right;font-size:11px;">${formatearCLP(c.monto_asignado)}</td>
+      <td style="text-align:right;font-size:11px;color:var(--naranja);">${formatearCLP(res)}</td>
+      <td style="text-align:right;font-size:11px;color:var(--azul);">${formatearCLP(cons)}</td>
+      <td style="text-align:right;font-size:11px;font-weight:700;color:${disp>0?'var(--verde)':'var(--rojo)'};">${formatearCLP(disp)}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('cuentas-total').textContent = `${lista.length} cuentas · Asignado: ${formatearCLP(ta)} · Reservado: ${formatearCLP(tr)} · Consumido: ${formatearCLP(tc)}`;
+}
+
+// ============================================================
+// FINANZAS
+// ============================================================
+function poblarFiltrosFinanzas() {
+  const sel = document.getElementById('fin-filtro-direccion');
+  if (!sel) return;
+  const dirs = [...new Set(cuentas.map(c => c.direccion).filter(Boolean))].sort();
+  const cur = sel.value;
+  sel.innerHTML = '<option value="">Todas las direcciones</option>' + dirs.map(d => `<option value="${escaparHtml(d)}">${escaparHtml(d)}</option>`).join('');
+  sel.value = cur;
+}
+function limpiarFiltrosFinanzas() {
+  document.getElementById('fin-fecha-desde').value = '';
+  document.getElementById('fin-fecha-hasta').value = '';
+  document.getElementById('fin-filtro-direccion').value = '';
+  document.getElementById('fin-filtro-linea').value = '';
+  renderFinanzas();
+}
+function finPasaFiltro(fecha, direccion, linea) {
+  const desde = document.getElementById('fin-fecha-desde').value;
+  const hasta = document.getElementById('fin-fecha-hasta').value;
+  const dir = document.getElementById('fin-filtro-direccion').value;
+  const lin = document.getElementById('fin-filtro-linea').value;
+  if (desde && fecha) { const f = new Date(fecha).toISOString().substring(0, 10); if (f < desde) return false; }
+  if (hasta && fecha) { const f = new Date(fecha).toISOString().substring(0, 10); if (f > hasta) return false; }
+  if (dir && direccion !== dir) return false;
+  if (lin && String(linea) !== lin) return false;
+  return true;
+}
+function calcularFinanzas() {
+  let recUds = 0, recNeto = 0, recIva = 0, recBruto = 0;
+  recepciones.forEach(r => {
+    recepcionItems.filter(i => i.recepcion_id === r.id).forEach(it => {
+      const p = productos.find(x => x.id === it.producto_id);
+      const linea = p?.linea || 1;
+      if (!finPasaFiltro(r.fecha, r.departamento, linea)) return;
+      recUds += Number(it.cantidad || 0); recNeto += Number(it.subtotal || 0); recIva += Number(it.iva || 0); recBruto += Number(it.subtotal_bruto || 0);
+    });
+  });
+  let entUds = 0, entNeto = 0, entIva = 0, entBruto = 0;
+  entregas.forEach(s => {
+    entregaItems.filter(i => i.entrega_id === s.id).forEach(it => {
+      const p = productos.find(x => x.id === it.producto_id);
+      const linea = p?.linea || 1;
+      if (!finPasaFiltro(s.fecha, s.departamento, linea)) return;
+      entUds += Number(it.cantidad || 0); entNeto += Number(it.subtotal || 0); entIva += Number(it.iva || 0); entBruto += Number(it.subtotal_bruto || 0);
+    });
+  });
+  const porProducto = {};
+  recepcionItems.forEach(it => {
+    const r = recepciones.find(x => x.id === it.recepcion_id);
+    const p = productos.find(x => x.id === it.producto_id);
+    if (!r || !p) return;
+    if (!finPasaFiltro(r.fecha, r.departamento, p.linea)) return;
+    if (!porProducto[it.producto_id]) porProducto[it.producto_id] = { rec: 0, ent: 0, precioNeto: Number(it.precio_neto||0) };
+    porProducto[it.producto_id].rec += Number(it.cantidad || 0);
+  });
+  entregaItems.forEach(it => {
+    const s = entregas.find(x => x.id === it.entrega_id);
+    const p = productos.find(x => x.id === it.producto_id);
+    if (!s || !p) return;
+    if (!finPasaFiltro(s.fecha, s.departamento, p.linea)) return;
+    if (!porProducto[it.producto_id]) porProducto[it.producto_id] = { rec: 0, ent: 0, precioNeto: Number(it.precio_neto||0) };
+    porProducto[it.producto_id].ent += Number(it.cantidad || 0);
+  });
+  let pendUds = 0, pendNeto = 0, pendIva = 0, pendBruto = 0;
+  Object.values(porProducto).forEach(x => {
+    const pend = x.rec - x.ent;
+    if (pend > 0) { const n = x.precioNeto * pend; pendUds += pend; pendNeto += n; pendIva += n * IVA; pendBruto += n * (1 + IVA); }
+  });
+  return {
+    rec: { uds: recUds, neto: recNeto, iva: recIva, bruto: recBruto },
+    ent: { uds: entUds, neto: entNeto, iva: entIva, bruto: entBruto },
+    pend: { uds: pendUds, neto: Math.round(pendNeto), iva: Math.round(pendIva), bruto: Math.round(pendBruto) }
+  };
+}
+function renderFinanzas() {
+  poblarFiltrosFinanzas();
+  const ef = calcularFinanzas();
+  const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+  set('fin-num-rec', formatearCLP(ef.rec.bruto)); set('fin-uds-rec', ef.rec.uds + ' asistentes');
+  set('fin-num-ent', formatearCLP(ef.ent.bruto)); set('fin-uds-ent', ef.ent.uds + ' asistentes');
+  set('fin-num-pend', formatearCLP(ef.pend.bruto)); set('fin-uds-pend', ef.pend.uds + ' asistentes');
+  set('fin-num-bod', formatearCLP(ef.pend.bruto)); set('fin-uds-bod', ef.pend.uds + ' asistentes');
+  const tbody = document.getElementById('fin-resumen-tbody');
+  if (!tbody) return;
+  const fila = (icono, label, x, color) => `<tr><td><span style="font-weight:700;color:${color};">${icono} ${label}</span></td><td style="text-align:right;font-weight:700;">${x.uds}</td><td style="text-align:right;">${formatearCLP(x.neto)}</td><td style="text-align:right;">${formatearCLP(x.iva)}</td><td style="text-align:right;font-weight:700;">${formatearCLP(x.bruto)}</td></tr>`;
+  tbody.innerHTML = fila('🍽️', 'Servido', ef.rec, 'var(--verde)') + fila('📤', 'Entregado conforme', ef.ent, 'var(--rojo)') + fila('⏳', 'Pendiente de entrega', ef.pend, 'var(--naranja)') + fila('📦', 'Por servir', ef.pend, 'var(--azul)');
+  renderDetalleProductosFin();
+}
+function renderDetalleProductosFin() {
+  const tbody = document.getElementById('fin-prod-tbody');
+  if (!tbody) return;
+  const filtro = (document.getElementById('fin-prod-filtro')?.value || '').toLowerCase().trim();
+  const porProducto = {};
+  productos.forEach(p => { porProducto[p.id] = { nombre: p.nombre, linea: p.linea, rec: 0, ent: 0, precioNeto: Number(p.precio_neto||0) }; });
+  recepcionItems.forEach(it => {
+    const r = recepciones.find(x => x.id === it.recepcion_id);
+    const p = productos.find(x => x.id === it.producto_id);
+    if (!r || !p) return;
+    if (!finPasaFiltro(r.fecha, r.departamento, p.linea)) return;
+    if (porProducto[it.producto_id]) porProducto[it.producto_id].rec += Number(it.cantidad || 0);
+  });
+  entregaItems.forEach(it => {
+    const s = entregas.find(x => x.id === it.entrega_id);
+    const p = productos.find(x => x.id === it.producto_id);
+    if (!s || !p) return;
+    if (!finPasaFiltro(s.fecha, s.departamento, p.linea)) return;
+    if (porProducto[it.producto_id]) porProducto[it.producto_id].ent += Number(it.cantidad || 0);
+  });
+  let lista = Object.values(porProducto).filter(x => x.rec > 0 || x.ent > 0);
+  if (filtro) lista = lista.filter(x => x.nombre.toLowerCase().includes(filtro));
+  lista.sort((a, b) => a.nombre.localeCompare(b.nombre));
+  if (!lista.length) { tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:20px;color:var(--texto-gris);">Sin movimientos</td></tr>'; document.getElementById('fin-prod-total').textContent = '0 menús'; return; }
+  let totalBruto = 0, totalRec = 0, totalEnt = 0, totalPend = 0, totalBod = 0;
+  tbody.innerHTML = lista.map(x => {
+    const pend = x.rec - x.ent;
+    const bod = pend > 0 ? pend : 0;
+    const bruto = x.precioNeto * (1 + IVA);
+    const montoBruto = x.rec * bruto;
+    totalBruto += montoBruto; totalRec += x.rec; totalEnt += x.ent;
+    totalPend += pend > 0 ? pend : 0; totalBod += bod;
+    const colorPend = pend > 0 ? 'var(--naranja)' : 'var(--texto-gris)';
+    return `<tr>
+      <td><strong>${escaparHtml(x.nombre)}</strong></td>
+      <td><span class="badge-linea l${x.linea}">L${x.linea}</span></td>
+      <td style="text-align:right;">${x.rec}</td>
+      <td style="text-align:right;">${x.ent}</td>
+      <td style="text-align:right;color:${colorPend};font-weight:700;">${pend > 0 ? pend : 0}</td>
+      <td style="text-align:right;">${bod}</td>
+      <td style="text-align:right;font-weight:700;">${formatearCLP(montoBruto)}</td>
+      <td style="text-align:right;font-weight:700;">${formatearCLP(x.ent * bruto)}</td>
+      <td style="text-align:right;font-weight:700;color:${colorPend};">${formatearCLP(bod * bruto)}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('fin-prod-total').textContent = `${lista.length} menús · Serv: ${totalRec} · Entreg: ${totalEnt} · Pend: ${totalPend} · Por servir: ${totalBod} · Total: ${formatearCLP(totalBruto)}`;
+}
+
+// ============================================================
+// AUDITORÍA
+// ============================================================
+function renderAuditoria() { renderAuditoriaResumen(); renderAuditoriaArbol(); }
+function renderAuditoriaResumen() {
+  const totalSol = eventos.length;
+  const pend = eventos.filter(s => s.estado === 'PENDIENTE').length;
+  const aprob = eventos.filter(s => s.estado === 'APROBADA').length;
+  const recib = eventos.filter(s => s.estado === 'RECIBIDA').length;
+  const rech = eventos.filter(s => s.estado === 'RECHAZADA').length;
+  const canc = eventos.filter(s => s.estado === 'CANCELADA').length;
+  const totalRec = recepciones.length;
+  const montoRec = recepciones.reduce((s, r) => s + Number(r.monto_total_bruto||0), 0);
+  const totalEnt = entregas.length;
+  const montoEnt = entregas.reduce((s, x) => s + Number(x.monto_total_bruto||0), 0);
+  const numSol = document.getElementById('aud-num-sol');
+  if (!numSol) return;
+  numSol.textContent = totalSol;
+  document.getElementById('aud-det-sol').innerHTML = `🟡 ${pend} · 🔵 ${aprob} · 🟢 ${recib}<br>🔴 ${rech} · ⚫ ${canc}`;
+  document.getElementById('aud-num-rec').textContent = totalRec;
+  document.getElementById('aud-det-rec').textContent = 'Monto: ' + formatearCLP(montoRec);
+  document.getElementById('aud-num-sal').textContent = totalEnt;
+  document.getElementById('aud-det-sal').textContent = 'Monto: ' + formatearCLP(montoEnt);
+  document.getElementById('aud-num-pend').textContent = pend;
+  document.getElementById('aud-det-pend').textContent = pend > 0 ? 'Requieren atención' : 'Sin pendientes';
+}
+function renderAuditoriaArbol() {
+  const cont = document.getElementById('aud-arbol');
+  if (!cont) return;
+  const filtroTexto = (document.getElementById('aud-filtro-texto')?.value || '').toLowerCase().trim();
+  const filtroEstado = document.getElementById('aud-filtro-estado')?.value || '';
+  const filtroFecha = document.getElementById('aud-filtro-fecha')?.value || '';
+  const filtroUrg = document.getElementById('aud-filtro-urgencia')?.value || '';
+  const ahora = Date.now();
+  const dias = filtroFecha ? parseInt(filtroFecha) : 0;
+  const filtradas = eventos.filter(s => {
+    if (filtroEstado && s.estado !== filtroEstado) return false;
+    if (filtroUrg && s.urgencia !== filtroUrg) return false;
+    if (dias > 0) { const t = new Date(s.fecha_solicitud).getTime(); if (ahora - t > dias * 24 * 60 * 60 * 1000) return false; }
+    if (filtroTexto) { const its = eventoItems.filter(i => i.evento_id === s.id); const prods = its.map(it => productos.find(p => p.id === it.producto_id)?.nombre || '').join(' '); const txt = `${s.codigo} ${s.nombre_evento} ${s.departamento_padre} ${s.subdepartamento_padre} ${s.subdepartamento} ${s.solicitante_nombre} ${s.solicitante_email} ${prods}`.toLowerCase(); if (!txt.includes(filtroTexto)) return false; }
+    return true;
+  });
+  if (!filtradas.length) { cont.innerHTML = '<div class="empty-state-grande"><span class="icono">📭</span>Sin eventos que coincidan</div>'; return; }
+  const arbol = {};
+  filtradas.forEach(s => {
+    const dir = s.departamento_padre || s.departamento || 'Sin dirección';
+    const dep = s.subdepartamento_padre || '—';
+    const area = s.subdepartamento || '—';
+    if (!arbol[dir]) arbol[dir] = { total: 0, monto: 0, deptos: {} };
+    arbol[dir].total++; arbol[dir].monto += Number(s.monto_estimado_bruto || 0);
+    if (!arbol[dir].deptos[dep]) arbol[dir].deptos[dep] = { total: 0, monto: 0, areas: {} };
+    arbol[dir].deptos[dep].total++; arbol[dir].deptos[dep].monto += Number(s.monto_estimado_bruto || 0);
+    if (!arbol[dir].deptos[dep].areas[area]) arbol[dir].deptos[dep].areas[area] = [];
+    arbol[dir].deptos[dep].areas[area].push(s);
+  });
+  let html = '';
+  Object.keys(arbol).sort().forEach(dir => {
+    const infoDir = arbol[dir];
+    const expDir = auditoriaExpandidos.dirs.has(dir);
+    html += `<div class="aud-item"><div class="aud-dir ${expDir ? 'expandido' : ''}" onclick="toggleAudDir('${escaparHtml(dir)}')"><div class="nombre">🏢 ${escaparHtml(dir)}</div><div class="stats"><span class="chev">${expDir ? '▼' : '▶'}</span> ${infoDir.total} evt · ${formatearCLP(infoDir.monto)}</div></div><div style="display:${expDir ? 'block' : 'none'};">`;
+    Object.keys(infoDir.deptos).sort().forEach(dep => {
+      const infoDep = infoDir.deptos[dep];
+      const keyDep = dir + '||' + dep;
+      const expDep = auditoriaExpandidos.deptos.has(keyDep);
+      html += `<div class="aud-depto ${expDep ? 'expandido' : ''}" onclick="toggleAudDepto('${escaparHtml(dir)}', '${escaparHtml(dep)}')"><div class="nombre">📁 ${escaparHtml(dep)}</div><div class="stats"><span class="chev">${expDep ? '▼' : '▶'}</span> ${infoDep.total} evt · ${formatearCLP(infoDep.monto)}</div></div><div style="display:${expDep ? 'block' : 'none'};">`;
+      Object.keys(infoDep.areas).sort().forEach(area => {
+        const sols = infoDep.areas[area];
+        const montoArea = sols.reduce((s, x) => s + Number(x.monto_estimado_bruto||0), 0);
+        const keyArea = keyDep + '||' + area;
+        const expArea = auditoriaExpandidos.areas.has(keyArea);
+        html += `<div class="aud-area" onclick="toggleAudArea('${escaparHtml(dir)}','${escaparHtml(dep)}','${escaparHtml(area)}')"><span class="chev">${expArea ? '▼' : '▶'}</span><span class="nombre">🏷️ ${escaparHtml(area)}</span><span class="stats">${sols.length} evt · ${formatearCLP(montoArea)}</span></div><div style="display:${expArea ? 'block' : 'none'};"><div class="aud-sol-lista">`;
+        sols.forEach(s => {
+          html += `<div class="aud-sol-item" onclick="verTrazabilidad('${s.id}')"><div><div class="cod">${escaparHtml(s.codigo)}</div><div class="info">${escaparHtml(s.nombre_evento || s.solicitante_nombre || s.solicitante_email)} · ${s.fecha_fmt} · Urgencia: ${s.urgencia}</div></div><span class="badge-estado ${claseEstado(s.estado)}">${iconoEstado(s.estado)} ${s.estado}</span><div class="monto">${formatearCLP(s.monto_estimado_bruto||0)}</div></div>`;
+        });
+        html += `</div></div>`;
+      });
+      html += `</div>`;
+    });
+    html += `</div></div>`;
+  });
+  cont.innerHTML = html;
+}
+function toggleAudDir(dir) { if (auditoriaExpandidos.dirs.has(dir)) auditoriaExpandidos.dirs.delete(dir); else auditoriaExpandidos.dirs.add(dir); renderAuditoriaArbol(); }
+function toggleAudDepto(dir, dep) { const k = dir + '||' + dep; if (auditoriaExpandidos.deptos.has(k)) auditoriaExpandidos.deptos.delete(k); else auditoriaExpandidos.deptos.add(k); renderAuditoriaArbol(); }
+function toggleAudArea(dir, dep, area) { const k = dir + '||' + dep + '||' + area; if (auditoriaExpandidos.areas.has(k)) auditoriaExpandidos.areas.delete(k); else auditoriaExpandidos.areas.add(k); renderAuditoriaArbol(); }
+
+// ============================================================
+// TRAZABILIDAD
+// ============================================================
+function verTrazabilidad(solId) {
+  const s = eventos.find(x => x.id === solId);
+  if (!s) return;
+  const items = eventoItems.filter(i => i.solicitud_id === solId || i.evento_id === solId);
+  const recAsociada = recepciones.find(r => r.id === s.recepcion_id);
+  const recPorEvento = recepciones.filter(r => r.evento_id === solId);
+  const recFinal = recAsociada || recPorEvento[0];
+  const entAsociada = recFinal ? entregas.find(x => x.id === recFinal.entrega_id) : null;
+  const l1 = items.filter(i => i.linea === 1);
+  const l2 = items.filter(i => i.linea === 2);
+  const subL1 = l1.reduce((sum, it) => sum + (it.precio_estimado_bruto || precioBruto(it.precio_estimado)) * it.cantidad, 0);
+  const subL2 = l2.reduce((sum, it) => sum + (it.precio_estimado_bruto || precioBruto(it.precio_estimado)) * it.cantidad, 0);
+  const renderItems = (arr) => arr.map(it => {
+    const p = productos.find(x => x.id === it.producto_id);
+    const pb = it.precio_estimado_bruto || precioBruto(it.precio_estimado);
+    return `<div style="display:grid;grid-template-columns:1fr auto auto;gap:8px;padding:6px 12px;font-size:11.5px;border-bottom:1px solid #f1f5f9;align-items:center;"><span>${escaparHtml(p?.nombre || 'N/E')}</span><span style="font-weight:700;color:var(--azul);text-align:center;">×${it.cantidad}</span><span style="font-weight:700;text-align:right;">${formatearCLP(pb * it.cantidad)}</span></div>`;
+  }).join('');
+  const labelSub = s.subdepartamento_padre ? `${s.subdepartamento_padre} / ${s.subdepartamento}` : (s.subdepartamento||'—');
+  let html = `<div style="background:linear-gradient(135deg,#eff6ff 0%,#dbeafe 100%);border:1px solid #bfdbfe;border-radius:14px;padding:14px;margin-bottom:14px;"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;"><div><div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#1e40af;font-weight:700;">Evento</div><div style="font-size:18px;font-weight:800;color:#1e3a8a;font-family:'Courier New',monospace;">${escaparHtml(s.codigo)}</div></div><span class="badge-estado ${claseEstado(s.estado)}" style="font-size:11px;padding:5px 14px;">${iconoEstado(s.estado)} ${s.estado}</span></div><div style="margin-top:10px;font-size:12px;color:#1e40af;">🍽️ ${escaparHtml(s.nombre_evento || 'Evento')}<br>🏢 ${escaparHtml(s.departamento_padre||s.departamento)} · ${escaparHtml(labelSub)}<br>👤 ${escaparHtml(s.solicitante_nombre||s.solicitante_email)} · 📅 ${s.fecha_fmt} · Urgencia: ${s.urgencia}</div></div>`;
+  if (l1.length) html += `<div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--azul);margin-top:12px;">🍽️ MENÚS L1 · BANQUETERÍA Y CÓCTEL (${l1.length})</div><div style="background:white;border:1px solid var(--borde);border-radius:10px;overflow:hidden;margin-top:6px;">${renderItems(l1)}<div style="padding:8px 12px;background:#eff6ff;font-weight:700;text-align:right;color:var(--azul);">Subtotal L1: ${formatearCLP(subL1)}</div></div>`;
+  if (l2.length) html += `<div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--morado);margin-top:12px;">☕ MENÚS L2 · COFFEE BREAK (${l2.length})</div><div style="background:white;border:1px solid var(--borde);border-radius:10px;overflow:hidden;margin-top:6px;">${renderItems(l2)}<div style="padding:8px 12px;background:#f3e8ff;font-weight:700;text-align:right;color:var(--morado);">Subtotal L2: ${formatearCLP(subL2)}</div></div>`;
+  html += `<div class="section-label" style="margin-top:20px;">📅 LÍNEA DE TIEMPO</div><div class="timeline-aud">`;
+  html += `<div class="timeline-aud-item solicitud"><div class="tl-titulo">📝 Evento creado <span class="tl-monto">${formatearCLP(s.monto_estimado_bruto||0)}</span></div><div class="tl-fecha">📅 ${s.fecha_fmt} · 👤 ${escaparHtml(s.solicitante_nombre||s.solicitante_email)}</div><div class="tl-detalle">${items.length} menús · Urgencia: ${s.urgencia}</div></div>`;
+  if (s.estado === 'APROBADA' || s.estado === 'RECIBIDA') html += `<div class="timeline-aud-item aprobacion"><div class="tl-titulo">✅ Aprobado</div><div class="tl-fecha">📅 ${formatearFecha(s.fecha_aprobacion) || '—'}</div><div class="tl-detalle">👤 ${escaparHtml(s.aprobado_por || '—')} · ${escaparHtml(s.aprobado_por_cargo || '')}</div></div>`;
+  if (s.estado === 'RECHAZADA') html += `<div class="timeline-aud-item" style="border-left:4px solid var(--rojo);"><div class="tl-titulo" style="color:var(--rojo);">❌ Rechazado</div><div class="tl-detalle">${escaparHtml(s.motivo_rechazo || 'Sin motivo')}</div></div>`;
+  if (s.estado === 'CANCELADA') html += `<div class="timeline-aud-item"><div class="tl-titulo" style="color:var(--texto-gris);">⚫ Cancelado</div><div class="tl-detalle">${escaparHtml(s.motivo_rechazo || 'Cancelado')}</div></div>`;
+  if (recFinal) html += `<div class="timeline-aud-item recepcion"><div class="tl-titulo">🍽️ Servicio <span class="tl-monto">${formatearCLP(recFinal.monto_total_bruto||0)}</span></div><div class="tl-fecha">📅 ${recFinal.fecha_fmt} · Código: <strong>${escaparHtml(recFinal.codigo)}</strong></div><div class="tl-detalle">🏭 ${escaparHtml(recFinal.proveedor||'N/E')}<br>👤 ${escaparHtml(recFinal.responsable||'N/E')}${recFinal.numero_boleta ? `<br>📄 Boleta: ${escaparHtml(recFinal.numero_boleta)}` : ''}</div></div>`;
+  if (entAsociada) html += `<div class="timeline-aud-item salida"><div class="tl-titulo">📤 Entrega <span class="tl-monto">${formatearCLP(entAsociada.monto_total_bruto||0)}</span></div><div class="tl-fecha">📅 ${entAsociada.fecha_fmt} · Código: <strong>${escaparHtml(entAsociada.codigo)}</strong></div><div class="tl-detalle">👤 Receptor: ${escaparHtml(entAsociada.receptor_nombre||'N/E')}<br>🆔 RUT: ${escaparHtml(entAsociada.receptor_rut||'N/E')}</div></div>`;
+  html += `</div>`;
+  if (s.estado === 'RECIBIDA' && !entAsociada) html += `<div class="aviso-info" style="margin-top:14px;">ℹ️ Este evento fue <strong>servido</strong> pero aún <strong>no tiene entrega conforme</strong>.</div>`;
+  else if (s.estado === 'PENDIENTE') html += `<div class="aviso-info" style="margin-top:14px;">⏳ Este evento está <strong>pendiente de aprobación</strong>.</div>`;
+  document.getElementById('modal-traz-titulo').textContent = `🔍 ${s.codigo}`;
+  document.getElementById('modal-traz-contenido').innerHTML = html;
+  document.getElementById('modal-trazabilidad').classList.add('visible');
+}
+function cerrarModalTraz() { document.getElementById('modal-trazabilidad').classList.remove('visible'); }
+
+// ============================================================
+// PDF
+// ============================================================
+function generarPDFBase(config) {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+  const pw = doc.internal.pageSize.getWidth();
+  const ph = doc.internal.pageSize.getHeight();
+  const m = 16;
+  const azul = [22,100,192], azulOsc = [15,74,138];
+  const gris = [74,90,110], grisC = [245,247,252], borde = [226,232,240];
+  doc.setFillColor(...azul); doc.rect(0,0,pw,32,'F');
+  doc.setFillColor(...azulOsc); doc.rect(0,30.5,pw,1.5,'F');
+  if (logoImageData) { try { doc.addImage(logoImageData, 'PNG', m, 6, 20, 20); } catch(e){} }
+  const xT = logoImageData ? m+26 : m;
+  doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(13);
+  doc.text('MUNICIPALIDAD DE LAS CONDES', xT, 14);
+  doc.setFont('helvetica','normal'); doc.setFontSize(9);
+  doc.text('Licitación 2345-8-LP26 · Servicio de Banquetería', xT, 20);
+  doc.setFillColor(255,255,255); doc.roundedRect(pw-m-58, 8, 58, 16, 2, 2, 'F');
+  doc.setTextColor(...azul); doc.setFont('helvetica','bold'); doc.setFontSize(8);
+  doc.text(config.titulo, pw-m-29, 14, { align:'center' });
+  doc.setFontSize(13);
+  doc.text('N° ' + config.numero, pw-m-29, 21, { align:'center' });
+  let y = 42;
+  if (config.mostrarProveedor) {
+    doc.setFillColor(255,250,235); doc.setDrawColor(224,142,11);
+    doc.roundedRect(m, y, pw-m*2, 24, 2, 2, 'FD');
+    doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(146,64,14);
+    doc.text('PROVEEDOR:', m+5, y+6);
+    doc.setFont('helvetica','normal'); doc.setTextColor(20,30,45);
+    doc.text(PROVEEDOR_OFICIAL.razon_social + ' · RUT ' + PROVEEDOR_OFICIAL.rut, m+30, y+6);
+    doc.text('Domicilio: ' + PROVEEDOR_OFICIAL.direccion, m+5, y+12);
+    doc.text('Contacto: ' + PROVEEDOR_OFICIAL.email, m+5, y+18);
+    y += 30;
+  }
+  const filaH = 7;
+  const boxH = 6 + config.filas.length * filaH;
+  doc.setFillColor(...grisC); doc.setDrawColor(...borde);
+  doc.roundedRect(m, y, pw-m*2, boxH, 2, 2, 'FD');
+  let yd = y+8;
+  config.filas.forEach(([lb, v]) => {
+    doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(...gris);
+    doc.text(lb+':', m+5, yd);
+    doc.setFont('helvetica','normal'); doc.setTextColor(20,30,45);
+    const t = doc.splitTextToSize(String(v||''), pw-m*2-55);
+    doc.text(t[0], m+45, yd); yd += filaH;
+  });
+  y += boxH + 10;
+  doc.setDrawColor(...azul); doc.setLineWidth(0.8);
+  doc.line(m, y, m+3, y);
+  doc.setFont('helvetica','bold'); doc.setFontSize(10); doc.setTextColor(...azulOsc);
+  doc.text(config.tituloProd, m+6, y+1); y += 6;
+  const cCant = 22, cUnit = 30, cSub = 35;
+  const cProd = pw-m*2 - cCant - cUnit - cSub;
+  const enc = (yy) => {
+    doc.setFillColor(...azul); doc.rect(m, yy, pw-m*2, 8, 'F');
+    doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(9);
+    doc.text('Menú', m+4, yy+5.5);
+    doc.text('Asist.', m+cProd+cCant/2+2, yy+5.5, { align:'center' });
+    doc.text('P. Unit', m+cProd+cCant+cUnit/2+2, yy+5.5, { align:'center' });
+    doc.text('Subtotal', pw-m-cSub/2, yy+5.5, { align:'center' });
+    return yy+8;
+  };
+  y = enc(y);
+  doc.setFont('helvetica','normal'); doc.setFontSize(9);
+  let par = false, tb = 0, tn = 0, ti = 0;
+  config.productos.forEach(p => {
+    if (y > ph-55) { doc.addPage(); y = 16; y = enc(y); doc.setFont('helvetica','normal'); doc.setFontSize(9); }
+    const h = 8;
+    if (par) { doc.setFillColor(...grisC); doc.rect(m, y, pw-m*2, h, 'F'); }
+    doc.setDrawColor(...borde); doc.rect(m, y, pw-m*2, h);
+    doc.setTextColor(20,30,45);
+    const cn = Number(p.cantidad)||0;
+    const puB = p.precio_bruto != null ? Number(p.precio_bruto) : precioBruto(p.precio_neto);
+    const puN = p.precio_neto != null ? Number(p.precio_neto) : Math.round(puB/1.19);
+    const stB = p.subtotal_bruto != null ? Number(p.subtotal_bruto) : puB * cn;
+    const stN = puN * cn;
+    doc.text(String(p.nombre).substring(0,50), m+4, y+5.5);
+    doc.text(String(cn), m+cProd+cCant/2+2, y+5.5, { align:'center' });
+    doc.text(formatearCLP(puB), m+cProd+cCant+cUnit/2+2, y+5.5, { align:'center' });
+    doc.setFont('helvetica','bold');
+    doc.text(formatearCLP(stB), pw-m-cSub/2, y+5.5, { align:'center' });
+    doc.setFont('helvetica','normal');
+    tb += stB; tn += stN; ti += (stB - stN);
+    y += h; par = !par;
+  });
+  if (y > ph-55) { doc.addPage(); y = 16; }
+  const totH = config.desglose ? 27 : 9;
+  doc.setFillColor(230,240,255); doc.rect(m, y, pw-m*2, totH, 'F');
+  doc.setDrawColor(...azul); doc.setLineWidth(0.5);
+  doc.rect(m, y, pw-m*2, totH);
+  doc.setFont('helvetica','bold'); doc.setTextColor(...azulOsc);
+  if (config.desglose) {
+    doc.setFontSize(10);
+    doc.text('Subtotal Neto:', m+4, y+6); doc.text(formatearCLP(tn), pw-m-4, y+6, { align:'right' });
+    doc.text('IVA (19%):', m+4, y+13); doc.text(formatearCLP(ti), pw-m-4, y+13, { align:'right' });
+    doc.setFontSize(12);
+    doc.text('TOTAL (IVA inc.):', m+4, y+22); doc.text(formatearCLP(tb), pw-m-4, y+22, { align:'right' });
+  } else {
+    doc.setFontSize(12);
+    doc.text('TOTAL (IVA inc.):', m+4, y+6); doc.text(formatearCLP(tb), pw-m-4, y+6, { align:'right' });
+  }
+  y += totH + 8;
+  const yF = ph - 45;
+  if (y + 14 > yF) doc.addPage();
+  y = yF;
+  doc.setDrawColor(150,160,175); doc.setLineWidth(0.4);
+  if (config.firmaUnica) {
+    const wF = 80;
+    const x1 = (pw - wF) / 2;
+    doc.line(x1, y, x1 + wF, y);
+    doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(20,30,45);
+    doc.text(config.firmaUnica.cargo || '', pw/2, y + 5, { align:'center' });
+    doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(...gris);
+    doc.text(config.firmaUnica.institucion || '', pw/2, y + 10, { align:'center' });
+  }
+  const total = doc.internal.getNumberOfPages();
+  for (let i = 1; i <= total; i++) {
+    doc.setPage(i);
+    doc.setDrawColor(...borde); doc.setLineWidth(0.3);
+    doc.line(m, ph-16, pw-m, ph-16);
+    doc.setFont('helvetica','italic'); doc.setFontSize(7); doc.setTextColor(140,150,165);
+    doc.text('Licitación 2345-8-LP26 · Municipalidad de Las Condes', pw/2, ph-7, { align:'center' });
+    doc.text(`Página ${i} de ${total}`, pw-m, ph-7, { align:'right' });
+  }
+  return doc;
+}
+async function descargarPDFServicio() {
+  if (!ultimaRecepcion) return;
+  const r = ultimaRecepcion;
+  const c = r.cuenta || {};
+  const doc = generarPDFBase({
+    titulo: 'SERVICIO', numero: r.codigo,
+    filas: [['Fecha', r.fecha],['Dirección', c.direccion || '—'],['Departamento', c.departamento_padre || '—'],['Área', c.subdepartamento || '—'],['N° Boleta', r.guia||'N/E'],['N° Factura', r.factura||'N/E']],
+    productos: r.productos, tituloProd: 'MENÚS SERVIDOS', desglose: false,
+    firmaUnica: { cargo: 'Supervisor del Contrato', institucion: 'Municipalidad de Las Condes' }
+  });
+  const productosConFoto = r.productos.filter(p => p.foto_url);
+  if (productosConFoto.length > 0) {
+    doc.addPage();
+    const pw = doc.internal.pageSize.getWidth();
+    const ph = doc.internal.pageSize.getHeight();
+    const m = 16;
+    doc.setFillColor(22, 100, 192); doc.rect(0, 0, pw, 24, 'F');
+    doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(13);
+    doc.text('RESPALDO FOTOGRÁFICO', m, 12);
+    doc.setFont('helvetica','normal'); doc.setFontSize(9);
+    doc.text('Servicio N° ' + r.codigo + ' · ' + r.fecha, m, 19);
+    const imagenesData = await Promise.all(productosConFoto.map(async p => {
+      try {
+        const resp = await fetch(p.foto_url);
+        const blob = await resp.blob();
+        const dataUrl = await new Promise((resolve) => { const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.readAsDataURL(blob); });
+        return { ...p, dataUrl };
+      } catch(e) { return { ...p, dataUrl: null }; }
+    }));
+    const cols = 2;
+    const fotoW = (pw - m * 3) / 2;
+    const fotoH = fotoW * 0.75;
+    const gapY = 14;
+    let x = m; let y = 34; let colIdx = 0;
+    for (const foto of imagenesData) {
+      if (colIdx === cols) { colIdx = 0; x = m; y += fotoH + gapY + 8; }
+      if (y + fotoH + 12 > ph - 20) { doc.addPage(); y = 16; x = m; colIdx = 0; }
+      doc.setDrawColor(226, 232, 240); doc.setFillColor(245, 247, 252);
+      doc.roundedRect(x, y, fotoW, fotoH + 12, 2, 2, 'FD');
+      if (foto.dataUrl) { try { doc.addImage(foto.dataUrl, 'JPEG', x + 2, y + 2, fotoW - 4, fotoH - 4); } catch(e) {} }
+      else { doc.setFontSize(9); doc.setTextColor(150); doc.text('(Imagen no disponible)', x + fotoW/2, y + fotoH/2, { align: 'center' }); }
+      doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(26, 38, 52);
+      doc.text(foto.nombre.substring(0, 45), x + 3, y + fotoH + 4);
+      doc.setFont('helvetica','normal'); doc.setFontSize(7); doc.setTextColor(74, 90, 110);
+      doc.text(`${foto.cantidad} pers. · L${foto.linea}`, x + 3, y + fotoH + 9);
+      x += fotoW + m; colIdx++;
+    }
+  }
+  doc.save(`Servicio_${r.codigo}.pdf`);
+  mostrarToast('✅ PDF descargado con fotos');
+}
+async function descargarPDFEntrega() {
+  if (!ultimaEntrega) return;
+  const s = ultimaEntrega;
+  const doc = generarPDFBase({
+    titulo: 'ENTREGA', numero: s.codigo,
+    filas: [['Fecha', s.fecha],['Dirección', s.departamento_padre || '—'],['Departamento', s.subdepartamento_padre || '—'],['Área', s.subdepartamento || '—'],['Servicio origen', s.recepcion_origen || '—'],['Receptor', s.receptor],['RUT', s.receptor_rut || 'N/E'],['Email', s.receptor_email||'N/E']],
+    productos: s.productos, tituloProd: 'MENÚS ENTREGADOS', desglose: true,
+    firmaUnica: { cargo: 'Supervisor del Contrato', institucion: 'Municipalidad de Las Condes' }
+  });
+  const productosConFoto = s.productos.filter(p => p.foto_url);
+  if (productosConFoto.length > 0) {
+    doc.addPage();
+    const pw = doc.internal.pageSize.getWidth();
+    const ph = doc.internal.pageSize.getHeight();
+    const m = 16;
+    doc.setFillColor(22, 100, 192); doc.rect(0, 0, pw, 24, 'F');
+    doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(13);
+    doc.text('RESPALDO FOTOGRÁFICO', m, 12);
+    doc.setFont('helvetica','normal'); doc.setFontSize(9);
+    doc.text('Entrega N° ' + s.codigo + ' · ' + s.fecha, m, 19);
+    const imagenesData = await Promise.all(productosConFoto.map(async p => {
+      try {
+        const resp = await fetch(p.foto_url);
+        const blob = await resp.blob();
+        const dataUrl = await new Promise((resolve) => { const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.readAsDataURL(blob); });
+        return { ...p, dataUrl };
+      } catch(e) { return { ...p, dataUrl: null }; }
+    }));
+    const cols = 2;
+    const fotoW = (pw - m * 3) / 2;
+    const fotoH = fotoW * 0.75;
+    const gapY = 14;
+    let x = m; let y = 34; let colIdx = 0;
+    for (const foto of imagenesData) {
+      if (colIdx === cols) { colIdx = 0; x = m; y += fotoH + gapY + 8; }
+      if (y + fotoH + 12 > ph - 20) { doc.addPage(); y = 16; x = m; colIdx = 0; }
+      doc.setDrawColor(226, 232, 240); doc.setFillColor(245, 247, 252);
+      doc.roundedRect(x, y, fotoW, fotoH + 12, 2, 2, 'FD');
+      if (foto.dataUrl) { try { doc.addImage(foto.dataUrl, 'JPEG', x + 2, y + 2, fotoW - 4, fotoH - 4); } catch(e) {} }
+      else { doc.setFontSize(9); doc.setTextColor(150); doc.text('(Imagen no disponible)', x + fotoW/2, y + fotoH/2, { align: 'center' }); }
+      doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(26, 38, 52);
+      doc.text(foto.nombre.substring(0, 45), x + 3, y + fotoH + 4);
+      doc.setFont('helvetica','normal'); doc.setFontSize(7); doc.setTextColor(74, 90, 110);
+      doc.text(`${foto.cantidad} pers. · L${foto.linea}`, x + 3, y + fotoH + 9);
+      x += fotoW + m; colIdx++;
+    }
+  }
+  doc.save(`Entrega_${s.codigo}.pdf`);
+  mostrarToast('✅ PDF descargado con fotos');
+}
+function descargarPDFEvento(id) {
+  const s = eventos.find(x => x.id === id);
+  if (!s) return;
+  const items = eventoItems.filter(i => i.evento_id === id);
+  const l1 = items.filter(i => i.linea === 1);
+  const l2 = items.filter(i => i.linea === 2);
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+  const pw = doc.internal.pageSize.getWidth();
+  const ph = doc.internal.pageSize.getHeight();
+  const m = 16;
+  const azul = [22,100,192], azulOsc = [15,74,138];
+  const gris = [74,90,110], grisC = [245,247,252], borde = [226,232,240];
+  doc.setFillColor(...azul); doc.rect(0,0,pw,32,'F');
+  doc.setFillColor(...azulOsc); doc.rect(0,30.5,pw,1.5,'F');
+  if (logoImageData) { try { doc.addImage(logoImageData, 'PNG', m, 6, 20, 20); } catch(e){} }
+  const xT = logoImageData ? m+26 : m;
+  doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(13);
+  doc.text('MUNICIPALIDAD DE LAS CONDES', xT, 14);
+  doc.setFont('helvetica','normal'); doc.setFontSize(9);
+  doc.text('Licitación 2345-8-LP26 · Servicio de Banquetería', xT, 20);
+  doc.setFillColor(255,255,255); doc.roundedRect(pw-m-58, 8, 58, 16, 2, 2, 'F');
+  doc.setTextColor(...azul); doc.setFont('helvetica','bold'); doc.setFontSize(8);
+  doc.text('EVENTO', pw-m-29, 14, { align:'center' });
+  doc.setFontSize(13);
+  doc.text('N° ' + s.codigo, pw-m-29, 21, { align:'center' });
+  let y = 42;
+  doc.setFillColor(255,250,235); doc.setDrawColor(224,142,11);
+  doc.roundedRect(m, y, pw-m*2, 24, 2, 2, 'FD');
+  doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(146,64,14);
+  doc.text('PROVEEDOR:', m+5, y+6);
+  doc.setFont('helvetica','normal'); doc.setTextColor(20,30,45);
+  doc.text(PROVEEDOR_OFICIAL.razon_social + ' · RUT ' + PROVEEDOR_OFICIAL.rut, m+30, y+6);
+  doc.text('Domicilio: ' + PROVEEDOR_OFICIAL.direccion, m+5, y+12);
+  doc.text('Contacto: ' + PROVEEDOR_OFICIAL.email, m+5, y+18);
+  y += 30;
+  const filaH = 7;
+  const fEvt = s.fecha_evento ? new Date(s.fecha_evento + 'T00:00:00').toLocaleDateString('es-CL') : '—';
+  const filasInfo = [['Fecha evento', fEvt],['Hora', s.hora_evento ? s.hora_evento.substring(0,5) : '—'],['Nombre', s.nombre_evento || '—'],['Lugar', s.lugar_evento || '—'],['Dirección', s.departamento_padre || s.departamento || '—'],['Departamento', s.subdepartamento_padre || '—'],['Área', s.subdepartamento || '—'],['Solicitante', s.solicitante_nombre||s.solicitante_email],['Urgencia', s.urgencia],['Estado', s.estado]];
+  const boxH = 6 + filasInfo.length * filaH;
+  doc.setFillColor(...grisC); doc.setDrawColor(...borde);
+  doc.roundedRect(m, y, pw-m*2, boxH, 2, 2, 'FD');
+  let yd = y+8;
+  filasInfo.forEach(([lb, v]) => {
+    doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(...gris);
+    doc.text(lb+':', m+5, yd);
+    doc.setFont('helvetica','normal'); doc.setTextColor(20,30,45);
+    const t = doc.splitTextToSize(String(v||''), pw-m*2-55);
+    doc.text(t[0], m+45, yd); yd += filaH;
+  });
+  y += boxH + 10;
+  const cCant = 22, cUnit = 30, cSub = 35;
+  const cProd = pw-m*2 - cCant - cUnit - cSub;
+  const dibujarEncabezado = (yPos, color) => {
+    doc.setFillColor(...color); doc.rect(m, yPos, pw-m*2, 8, 'F');
+    doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(9);
+    doc.text('Menú', m+4, yPos+5.5);
+    doc.text('Asist.', m+cProd+cCant/2+2, yPos+5.5, { align:'center' });
+    doc.text('P. Unit', m+cProd+cCant+cUnit/2+2, yPos+5.5, { align:'center' });
+    doc.text('Subtotal', pw-m-cSub/2, yPos+5.5, { align:'center' });
+    return yPos+8;
+  };
+  const dibujarBloque = (titulo, colorTitulo, items) => {
+    if (!items.length) return;
+    doc.setDrawColor(...colorTitulo); doc.setLineWidth(1);
+    doc.line(m, y+1, m+3, y+1);
+    doc.setFont('helvetica','bold'); doc.setFontSize(10); doc.setTextColor(...colorTitulo);
+    doc.text(titulo, m+6, y+2);
+    y += 6;
+    y = dibujarEncabezado(y, colorTitulo);
+    doc.setFont('helvetica','normal'); doc.setFontSize(9);
+    let par = false, sub = 0;
+    items.forEach(it => {
+      if (y > ph-55) { doc.addPage(); y = 16; y = dibujarEncabezado(y, colorTitulo); doc.setFont('helvetica','normal'); doc.setFontSize(9); }
+      const p = productos.find(x => x.id === it.producto_id);
+      const pNeto = Number(it.precio_estimado||0);
+      const pBruto = Number(it.precio_estimado_bruto || precioBruto(pNeto));
+      const subB = pBruto * Number(it.cantidad);
+      sub += subB;
+      if (par) { doc.setFillColor(...grisC); doc.rect(m, y, pw-m*2, 8, 'F'); }
+      doc.setDrawColor(...borde); doc.rect(m, y, pw-m*2, 8);
+      doc.setTextColor(20,30,45);
+      doc.text(String(p?.nombre||'N/E').substring(0,50), m+4, y+5.5);
+      doc.text(String(it.cantidad), m+cProd+cCant/2+2, y+5.5, { align:'center' });
+      doc.text(formatearCLP(pBruto), m+cProd+cCant+cUnit/2+2, y+5.5, { align:'center' });
+      doc.setFont('helvetica','bold');
+      doc.text(formatearCLP(subB), pw-m-cSub/2, y+5.5, { align:'center' });
+      doc.setFont('helvetica','normal');
+      y += 8; par = !par;
+    });
+    doc.setFillColor(240, 248, 255);
+    doc.rect(m, y, pw-m*2, 8, 'F');
+    doc.setDrawColor(...borde); doc.rect(m, y, pw-m*2, 8);
+    doc.setFont('helvetica','bold'); doc.setTextColor(...colorTitulo);
+    doc.text('Subtotal ' + titulo.match(/L\d/)?.[0] + ':', m+4, y+5.5);
+    doc.text(formatearCLP(sub), pw-m-4, y+5.5, { align:'right' });
+    doc.setTextColor(20,30,45);
+    y += 12;
+  };
+  dibujarBloque('MENÚS L1 · BANQUETERÍA Y CÓCTEL', [30,64,175], l1);
+  dibujarBloque('MENÚS L2 · COFFEE BREAK', [124,58,237], l2);
+  const totalBruto = items.reduce((sum, it) => sum + (it.precio_estimado_bruto || precioBruto(it.precio_estimado)) * it.cantidad, 0);
+  const totalNeto = totalBruto / (1 + IVA);
+  const iva = totalBruto - totalNeto;
+  if (y > ph-55) { doc.addPage(); y = 16; }
+  doc.setFillColor(230,240,255); doc.rect(m, y, pw-m*2, 27, 'F');
+  doc.setDrawColor(...azul); doc.setLineWidth(0.5);
+  doc.rect(m, y, pw-m*2, 27);
+  doc.setFont('helvetica','bold'); doc.setTextColor(...azulOsc);
+  doc.setFontSize(10);
+  doc.text('Subtotal Neto:', m+4, y+6); doc.text(formatearCLP(totalNeto), pw-m-4, y+6, { align:'right' });
+  doc.text('IVA (19%):', m+4, y+13); doc.text(formatearCLP(iva), pw-m-4, y+13, { align:'right' });
+  doc.setFontSize(12);
+  doc.text('TOTAL (IVA inc.):', m+4, y+22); doc.text(formatearCLP(totalBruto), pw-m-4, y+22, { align:'right' });
+  y += 35;
+  const yF = ph - 45;
+  if (y + 14 > yF) doc.addPage();
+  y = yF;
+  doc.setDrawColor(150,160,175); doc.setLineWidth(0.4);
+  const wF = 80;
+  const x1 = (pw - wF) / 2;
+  doc.line(x1, y, x1 + wF, y);
+  doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(20,30,45);
+  doc.text('Supervisor del Contrato', pw/2, y + 5, { align:'center' });
+  doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(...gris);
+  doc.text('Municipalidad de Las Condes', pw/2, y + 10, { align:'center' });
+  const totalPages = doc.internal.getNumberOfPages();
+  for (let i = 1; i <= totalPages; i++) {
+    doc.setPage(i);
+    doc.setDrawColor(...borde); doc.setLineWidth(0.3);
+    doc.line(m, ph-16, pw-m, ph-16);
+    doc.setFont('helvetica','italic'); doc.setFontSize(7); doc.setTextColor(140,150,165);
+    doc.text('Licitación 2345-8-LP26 · Municipalidad de Las Condes', pw/2, ph-7, { align:'center' });
+    doc.text(`Página ${i} de ${totalPages}`, pw-m, ph-7, { align:'right' });
+  }
+  doc.save(`Evento_${s.codigo}.pdf`);
+  mostrarToast('✅ PDF descargado');
+}
+
+// ============================================================
+// EXCEL
+// ============================================================
+function hojaExcel(data, cols) {
+  const AZ = '1664C0', GR = 'F5F7FC', BO = 'E2E8F0', BL = 'FFFFFF';
+  const bf = { style: 'thin', color: { rgb: BO } };
+  const b = { top: bf, bottom: bf, left: bf, right: bf };
+  const eh = { font: { bold: true, color: { rgb: BL }, sz: 12, name: 'Century Gothic' }, fill: { patternType:'solid', fgColor:{rgb:AZ} }, alignment: { vertical:'center', horizontal:'center' }, border: b };
+  const filas = [cols.map(c => ({ v: c.label, t: 's', s: eh }))];
+  data.forEach((row, i) => {
+    const par = i % 2 === 1;
+    filas.push(cols.map(c => {
+      const val = row[c.key];
+      const money = c.money === true && typeof val === 'number';
+      return { v: val == null ? '' : val, t: typeof val === 'number' ? 'n' : 's', z: money ? '"$"#,##0' : undefined, s: { font: { sz:10, name:'Century Gothic', color:{rgb:'141E2D'} }, fill: { patternType:'solid', fgColor:{rgb: par?GR:BL} }, alignment: { vertical:'center', horizontal: c.align||'left', wrapText: false }, border: b } };
+    }));
+  });
+  const ws = XLSX.utils.aoa_to_sheet(filas);
+  ws['!cols'] = cols.map(c => ({ wch: c.width || 18 }));
+  ws['!rows'] = [{ hpt: 24 }];
+  if (data.length) { const l = String.fromCharCode(65 + cols.length - 1); ws['!autofilter'] = { ref: `A1:${l}${data.length+1}` }; }
+  return ws;
+}
+function exportarExcelConsumo() {
+  if (!productos.length) { mostrarToast('❌ Sin menús'); return; }
+  const data = productos.map(p => {
+    const consumido = recepcionItems.filter(ri => ri.producto_id === p.id).reduce((s, ri) => s + Number(ri.cantidad||0), 0);
+    const pB = precioBruto(p.precio_neto);
+    return { producto: p.nombre, linea: 'L' + p.linea, neto: Number(p.precio_neto), iva: pB - Number(p.precio_neto), bruto: pB, consumido: consumido, valor: consumido * pB };
+  });
+  const wb = XLSX.utils.book_new();
+  const ws = hojaExcel(data, [{ key:'producto', label:'Menú', width:55 }, { key:'linea', label:'L', width:6, align:'center' }, { key:'neto', label:'Neto', width:16, align:'right', money:true }, { key:'iva', label:'IVA', width:14, align:'right', money:true }, { key:'bruto', label:'Bruto', width:16, align:'right', money:true }, { key:'consumido', label:'Asistentes', width:12, align:'center' }, { key:'valor', label:'Monto servido', width:18, align:'right', money:true }]);
+  XLSX.utils.book_append_sheet(wb, ws, 'Consumo');
+  XLSX.writeFile(wb, `Consumo_${fechaActual()}.xlsx`);
+  mostrarToast('✅ Excel exportado');
+}
+function exportarExcelRecepciones() {
+  if (!recepciones.length) { mostrarToast('❌ Sin servicios'); return; }
+  const data = [];
+  recepciones.forEach(r => {
+    const items = recepcionItems.filter(i => i.recepcion_id === r.id);
+    items.forEach(it => {
+      const p = productos.find(x => x.id === it.producto_id);
+      data.push({ codigo: r.codigo, fecha: r.fecha_fmt, depto: r.departamento || '', proveedor: r.proveedor || '', boleta: r.numero_boleta || '', factura: r.numero_factura || '', linea: 'L' + (p?.linea || 1), producto: p?.nombre || 'N/E', cantidad: Number(it.cantidad || 0), neto: Number(it.subtotal || 0), iva: Number(it.iva || 0), bruto: Number(it.subtotal_bruto || 0), responsable: r.responsable || '' });
+    });
+  });
+  const wb = XLSX.utils.book_new();
+  const ws = hojaExcel(data, [{ key:'codigo', label:'Servicio', width:14, align:'center' }, { key:'fecha', label:'Fecha', width:18, align:'center' }, { key:'depto', label:'Dirección', width:30 }, { key:'proveedor', label:'Proveedor', width:30 }, { key:'boleta', label:'Boleta', width:12, align:'center' }, { key:'factura', label:'Factura', width:12, align:'center' }, { key:'linea', label:'L', width:6, align:'center' }, { key:'producto', label:'Menú', width:50 }, { key:'cantidad', label:'Asistentes', width:12, align:'center' }, { key:'neto', label:'Neto', width:14, align:'right', money:true }, { key:'iva', label:'IVA', width:12, align:'right', money:true }, { key:'bruto', label:'Bruto', width:14, align:'right', money:true }, { key:'responsable', label:'Responsable', width:28 }]);
+  XLSX.utils.book_append_sheet(wb, ws, 'Servicios');
+  XLSX.writeFile(wb, `Servicios_${fechaActual()}.xlsx`);
+  mostrarToast('✅ Excel exportado');
+}
+function exportarExcelSalidas() {
+  if (!entregas.length) { mostrarToast('❌ Sin entregas'); return; }
+  const data = [];
+  entregas.forEach(s => {
+    const items = entregaItems.filter(i => i.entrega_id === s.id);
+    items.forEach(it => {
+      const p = productos.find(x => x.id === it.producto_id);
+      data.push({ codigo: s.codigo, fecha: s.fecha_fmt, direccion: s.departamento_padre || s.departamento || '', depto: s.subdepartamento_padre || '', area: s.subdepartamento || '', receptor: s.receptor_nombre || '', rut: s.receptor_rut || '', email: s.receptor_email || '', linea: 'L' + (p?.linea || 1), producto: p?.nombre || 'N/E', cantidad: Number(it.cantidad || 0), neto: Number(it.subtotal || 0), iva: Number(it.iva || 0), bruto: Number(it.subtotal_bruto || 0), responsable: s.responsable || '' });
+    });
+  });
+  const wb = XLSX.utils.book_new();
+  const ws = hojaExcel(data, [{ key:'codigo', label:'Entrega', width:14, align:'center' }, { key:'fecha', label:'Fecha', width:18, align:'center' }, { key:'direccion', label:'Dirección', width:28 }, { key:'depto', label:'Departamento', width:28 }, { key:'area', label:'Área', width:28 }, { key:'receptor', label:'Receptor', width:25 }, { key:'rut', label:'RUT', width:14 }, { key:'email', label:'Email', width:25 }, { key:'linea', label:'L', width:6, align:'center' }, { key:'producto', label:'Menú', width:50 }, { key:'cantidad', label:'Asistentes', width:12, align:'center' }, { key:'neto', label:'Neto', width:14, align:'right', money:true }, { key:'iva', label:'IVA', width:12, align:'right', money:true }, { key:'bruto', label:'Bruto', width:14, align:'right', money:true }, { key:'responsable', label:'Responsable', width:25 }]);
+  XLSX.utils.book_append_sheet(wb, ws, 'Entregas');
+  XLSX.writeFile(wb, `Entregas_${fechaActual()}.xlsx`);
+  mostrarToast('✅ Excel exportado');
+}
+function exportarExcelCuentas() {
+  if (!cuentas.length) { mostrarToast('❌ Sin cuentas'); return; }
+  const data = cuentas.map(c => { const cons = calcularConsumidoCuenta(c.id); const res = calcularReservadoCuenta(c.id); return { direccion: c.direccion, depto: c.departamento_padre || '—', area: c.subdepartamento, linea: 'L' + c.linea, cuenta: c.codigo, asignado: Number(c.monto_asignado), reservado: res, consumido: cons, disponible: Number(c.monto_asignado) - cons - res }; });
+  const wb = XLSX.utils.book_new();
+  const ws = hojaExcel(data, [{ key:'direccion', label:'Dirección', width:32 }, { key:'depto', label:'Departamento', width:38 }, { key:'area', label:'Área', width:38 }, { key:'linea', label:'L', width:6, align:'center' }, { key:'cuenta', label:'Cuenta', width:14, align:'center' }, { key:'asignado', label:'Asignado', width:18, align:'right', money:true }, { key:'reservado', label:'Reservado', width:18, align:'right', money:true }, { key:'consumido', label:'Consumido', width:18, align:'right', money:true }, { key:'disponible', label:'Disponible', width:18, align:'right', money:true }]);
+  XLSX.utils.book_append_sheet(wb, ws, 'Cuentas');
+  XLSX.writeFile(wb, `Cuentas_${fechaActual()}.xlsx`);
+  mostrarToast('✅ Excel exportado');
+}
+function exportarExcelEventos() {
+  if (!eventos.length) { mostrarToast('❌ Sin eventos'); return; }
+  const data = [];
+  eventos.forEach(s => {
+    const items = eventoItems.filter(i => i.evento_id === s.id);
+    items.forEach(it => {
+      const p = productos.find(x => x.id === it.producto_id);
+      const pNeto = Number(it.precio_estimado || 0);
+      const pBruto = Number(it.precio_estimado_bruto || precioBruto(pNeto));
+      const cant = Number(it.cantidad || 0);
+      data.push({ codigo: s.codigo, fecha: s.fecha_fmt, nombre_evento: s.nombre_evento || '', fecha_evento: s.fecha_evento || '', lugar: s.lugar_evento || '', direccion: s.departamento_padre || s.departamento || '', depto: s.subdepartamento_padre || '', area: s.subdepartamento || '', solicitante: s.solicitante_nombre || s.solicitante_email || '', estado: s.estado, urgencia: s.urgencia || '', linea: 'L' + (it.linea || p?.linea || 1), producto: p?.nombre || 'N/E', cantidad: cant, neto: pNeto * cant, iva: (pBruto - pNeto) * cant, bruto: Number(it.subtotal_bruto || pBruto * cant) });
+    });
+  });
+  const wb = XLSX.utils.book_new();
+  const ws = hojaExcel(data, [{ key:'codigo', label:'Evento', width:14, align:'center' }, { key:'fecha', label:'Fecha solicitud', width:18, align:'center' }, { key:'nombre_evento', label:'Nombre', width:32 }, { key:'fecha_evento', label:'Fecha evento', width:14, align:'center' }, { key:'lugar', label:'Lugar', width:30 }, { key:'direccion', label:'Dirección', width:28 }, { key:'depto', label:'Departamento', width:28 }, { key:'area', label:'Área', width:28 }, { key:'solicitante', label:'Solicitante', width:28 }, { key:'estado', label:'Estado', width:14, align:'center' }, { key:'urgencia', label:'Urgencia', width:12, align:'center' }, { key:'linea', label:'L', width:6, align:'center' }, { key:'producto', label:'Menú', width:50 }, { key:'cantidad', label:'Asistentes', width:12, align:'center' }, { key:'neto', label:'Neto', width:14, align:'right', money:true }, { key:'iva', label:'IVA', width:12, align:'right', money:true }, { key:'bruto', label:'Bruto', width:14, align:'right', money:true }]);
+  XLSX.utils.book_append_sheet(wb, ws, 'Eventos');
+  XLSX.writeFile(wb, `Eventos_${fechaActual()}.xlsx`);
+  mostrarToast('✅ Excel exportado');
+}
+function exportarExcelFinanzas() {
+  const ef = calcularFinanzas();
+  const filtros = [];
+  const fd = document.getElementById('fin-fecha-desde').value;
+  const fh = document.getElementById('fin-fecha-hasta').value;
+  const dir = document.getElementById('fin-filtro-direccion').value;
+  const lin = document.getElementById('fin-filtro-linea').value;
+  if (fd) filtros.push('Desde: ' + fd);
+  if (fh) filtros.push('Hasta: ' + fh);
+  if (dir) filtros.push('Dirección: ' + dir);
+  if (lin) filtros.push('Línea: L' + lin);
+  const txtFiltros = filtros.length ? filtros.join(' · ') : 'Sin filtros (todo el histórico)';
+  const resumen = [
+    { concepto: '🍽️ Servido', uds: ef.rec.uds, neto: ef.rec.neto, iva: ef.rec.iva, bruto: ef.rec.bruto },
+    { concepto: '📤 Entregado conforme', uds: ef.ent.uds, neto: ef.ent.neto, iva: ef.ent.iva, bruto: ef.ent.bruto },
+    { concepto: '⏳ Pendiente de entrega', uds: ef.pend.uds, neto: ef.pend.neto, iva: ef.pend.iva, bruto: ef.pend.bruto },
+    { concepto: '📦 Por servir', uds: ef.pend.uds, neto: ef.pend.neto, iva: ef.pend.iva, bruto: ef.pend.bruto }
+  ];
+  const wb = XLSX.utils.book_new();
+  const wsResumen = hojaExcel(resumen, [{ key:'concepto', label:'Concepto', width:32 }, { key:'uds', label:'Asistentes', width:14, align:'right' }, { key:'neto', label:'Neto', width:16, align:'right', money:true }, { key:'iva', label:'IVA', width:14, align:'right', money:true }, { key:'bruto', label:'Bruto', width:16, align:'right', money:true }]);
+  XLSX.utils.sheet_add_aoa(wsResumen, [[{ v: 'Filtros aplicados:', t: 's', s: { font: { bold: true, sz: 10, name: 'Century Gothic' } } }, { v: txtFiltros, t: 's', s: { sz: 10, name: 'Century Gothic' } }]], { origin: 'A6' });
+  XLSX.utils.book_append_sheet(wb, wsResumen, 'Estado Financiero');
+  const porProducto = {};
+  productos.forEach(p => { porProducto[p.id] = { nombre: p.nombre, linea: p.linea, rec: 0, ent: 0, precioNeto: Number(p.precio_neto||0) }; });
+  recepcionItems.forEach(it => {
+    const r = recepciones.find(x => x.id === it.recepcion_id);
+    const p = productos.find(x => x.id === it.producto_id);
+    if (!r || !p) return;
+    if (!finPasaFiltro(r.fecha, r.departamento, p.linea)) return;
+    if (porProducto[it.producto_id]) porProducto[it.producto_id].rec += Number(it.cantidad || 0);
+  });
+  entregaItems.forEach(it => {
+    const s = entregas.find(x => x.id === it.entrega_id);
+    const p = productos.find(x => x.id === it.producto_id);
+    if (!s || !p) return;
+    if (!finPasaFiltro(s.fecha, s.departamento, p.linea)) return;
+    if (porProducto[it.producto_id]) porProducto[it.producto_id].ent += Number(it.cantidad || 0);
+  });
+  const detalle = Object.values(porProducto).filter(x => x.rec > 0 || x.ent > 0).sort((a,b) => a.nombre.localeCompare(b.nombre)).map(x => {
+    const pend = x.rec - x.ent;
+    const bod = pend > 0 ? pend : 0;
+    const bruto = x.precioNeto * (1 + IVA);
+    return { producto: x.nombre, linea: 'L' + x.linea, rec: x.rec, ent: x.ent, pend: pend > 0 ? pend : 0, bod: bod, recBruto: x.rec * bruto, entBruto: x.ent * bruto, pendBruto: (pend > 0 ? pend : 0) * bruto, bodBruto: bod * bruto };
+  });
+  const wsDetalle = hojaExcel(detalle, [{ key:'producto', label:'Menú', width:50 }, { key:'linea', label:'L', width:6, align:'center' }, { key:'rec', label:'Servido', width:14, align:'right' }, { key:'ent', label:'Entregado', width:14, align:'right' }, { key:'pend', label:'Pendiente', width:14, align:'right' }, { key:'bod', label:'Por servir', width:14, align:'right' }, { key:'recBruto', label:'Servido ($)', width:16, align:'right', money:true }, { key:'entBruto', label:'Entregado ($)', width:16, align:'right', money:true }, { key:'pendBruto', label:'Pendiente ($)', width:16, align:'right', money:true }]);
+  XLSX.utils.book_append_sheet(wb, wsDetalle, 'Detalle por menú');
+  XLSX.writeFile(wb, `EstadoFinanciero_${fechaActual()}.xlsx`);
+  mostrarToast('✅ Excel exportado');
+}
+
+// ============================================================
+// REPORTES VISTA PREVIA
+// ============================================================
+function renderReportes() {
+  const t = document.getElementById('rep-total-productos');
+  if (!t) return;
+  t.textContent = productos.length;
+  const tu = recepcionItems.reduce((s, ri) => s + Number(ri.cantidad||0), 0);
+  const tv = recepcionItems.reduce((s, ri) => {
+    const p = productos.find(x => x.id === ri.producto_id);
+    return s + Number(ri.cantidad||0) * precioBruto(p?.precio_neto||0);
+  }, 0);
+  document.getElementById('rep-total-unidades').textContent = tu;
+  document.getElementById('rep-valor-stock').textContent = formatearCLP(tv);
+  document.getElementById('rep-total-cuentas').textContent = cuentas.length;
+}
+function verReporte(tipo) {
+  reporteActual = tipo;
+  const cont = document.getElementById('rep-detalle');
+  const titulo = document.getElementById('rep-detalle-titulo');
+  const thead = document.getElementById('rep-detalle-thead');
+  const tbody = document.getElementById('rep-detalle-tbody');
+  const filtro = document.getElementById('rep-detalle-filtro');
+  filtro.value = '';
+  cont.style.display = 'block';
+  if (tipo === 'consumo') {
+    titulo.textContent = '📊 CONSUMO ACUMULADO';
+    thead.innerHTML = '<tr><th>Menú</th><th>L</th><th style="text-align:right;">Neto</th><th style="text-align:right;">IVA</th><th style="text-align:right;">Bruto</th><th style="text-align:right;">Asistentes</th><th style="text-align:right;">Monto servido</th></tr>';
+    reporteDatos = productos.map(p => {
+      const consumido = recepcionItems.filter(ri => ri.producto_id === p.id).reduce((s, ri) => s + Number(ri.cantidad||0), 0);
+      const pb = precioBruto(p.precio_neto);
+      return { tipo:'consumo', nombre: p.nombre, linea: 'L' + p.linea, neto: Number(p.precio_neto), iva: pb - Number(p.precio_neto), bruto: pb, consumido: consumido, valor: consumido * pb, txt: `${p.nombre} L${p.linea}` };
+    });
+  } else if (tipo === 'recepciones') {
+    titulo.textContent = '🍽️ SERVICIOS PRESTADOS';
+    thead.innerHTML = '<tr><th>Servicio</th><th>Fecha</th><th>Dirección</th><th>Proveedor</th><th>L</th><th>Menú</th><th style="text-align:right;">Asist.</th><th style="text-align:right;">Neto</th><th style="text-align:right;">Bruto</th></tr>';
+    reporteDatos = [];
+    recepciones.forEach(r => {
+      const its = recepcionItems.filter(i => i.recepcion_id === r.id);
+      its.forEach(it => {
+        const p = productos.find(x => x.id === it.producto_id);
+        reporteDatos.push({ tipo:'recepciones', codigo: r.codigo, fecha: r.fecha_fmt, depto: r.departamento || '', proveedor: r.proveedor || '', linea: 'L' + (p?.linea||1), producto: p?.nombre || 'N/E', cantidad: Number(it.cantidad||0), neto: Number(it.subtotal||0), bruto: Number(it.subtotal_bruto||0), txt: `${r.codigo} ${r.departamento} ${r.proveedor} ${p?.nombre||''}` });
+      });
+    });
+  } else if (tipo === 'salidas') {
+    titulo.textContent = '📤 ENTREGAS CONFORMES';
+    thead.innerHTML = '<tr><th>Entrega</th><th>Fecha</th><th>Dirección</th><th>Receptor</th><th>L</th><th>Menú</th><th style="text-align:right;">Asist.</th><th style="text-align:right;">Neto</th><th style="text-align:right;">Bruto</th></tr>';
+    reporteDatos = [];
+    entregas.forEach(s => {
+      const its = entregaItems.filter(i => i.entrega_id === s.id);
+      its.forEach(it => {
+        const p = productos.find(x => x.id === it.producto_id);
+        reporteDatos.push({ tipo:'salidas', codigo: s.codigo, fecha: s.fecha_fmt, depto: s.departamento || '', receptor: s.receptor_nombre || '', linea: 'L' + (p?.linea||1), producto: p?.nombre || 'N/E', cantidad: Number(it.cantidad||0), neto: Number(it.subtotal||0), bruto: Number(it.subtotal_bruto||0), txt: `${s.codigo} ${s.departamento} ${s.receptor_nombre} ${p?.nombre||''}` });
+      });
+    });
+  } else if (tipo === 'cuentas') {
+    titulo.textContent = '💰 CUENTAS Y PRESUPUESTO';
+    thead.innerHTML = '<tr><th>Dirección</th><th>Depto</th><th>Área</th><th>L</th><th>Cuenta</th><th style="text-align:right;">Asignado</th><th style="text-align:right;">Reservado</th><th style="text-align:right;">Consumido</th><th style="text-align:right;">Disponible</th></tr>';
+    reporteDatos = cuentas.map(c => { const cons = calcularConsumidoCuenta(c.id); const res = calcularReservadoCuenta(c.id); const disp = Number(c.monto_asignado) - cons - res; return { tipo: 'cuentas', direccion: c.direccion, depto: c.departamento_padre || '—', area: c.subdepartamento, linea: 'L' + c.linea, cuenta: c.codigo, asignado: Number(c.monto_asignado), reservado: res, consumido: cons, disponible: disp, txt: `${c.direccion} ${c.subdepartamento} L${c.linea}` }; });
+  } else if (tipo === 'eventos') {
+    titulo.textContent = '📋 EVENTOS';
+    thead.innerHTML = '<tr><th>Evento</th><th>Fecha</th><th>Dirección</th><th>Solicitante</th><th>Estado</th><th>L</th><th>Menú</th><th style="text-align:right;">Asist.</th><th style="text-align:right;">Neto</th><th style="text-align:right;">Bruto</th></tr>';
+    reporteDatos = [];
+    eventos.forEach(s => {
+      const its = eventoItems.filter(i => i.evento_id === s.id);
+      its.forEach(it => {
+        const p = productos.find(x => x.id === it.producto_id);
+        const pNeto = Number(it.precio_estimado||0);
+        const pBruto = Number(it.precio_estimado_bruto || precioBruto(pNeto));
+        reporteDatos.push({ tipo:'eventos', codigo: s.codigo, fecha: s.fecha_fmt, depto: s.departamento_padre || '', solicitante: s.solicitante_nombre||s.solicitante_email, estado: s.estado, linea: 'L' + (p?.linea||1), producto: p?.nombre || 'N/E', cantidad: Number(it.cantidad||0), neto: pNeto * Number(it.cantidad||0), bruto: pBruto * Number(it.cantidad||0), txt: `${s.codigo} ${s.departamento_padre} ${s.solicitante_nombre} ${s.estado} ${p?.nombre||''}` });
+      });
+    });
+  }
+  filtrarReporte();
+}
+function filtrarReporte() {
+  if (!reporteActual) return;
+  const filtro = document.getElementById('rep-detalle-filtro').value.toLowerCase().trim();
+  const tbody = document.getElementById('rep-detalle-tbody');
+  let lista = reporteDatos.filter(d => !filtro || (d.txt||'').toLowerCase().includes(filtro));
+  if (!lista.length) { tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;padding:20px;color:var(--texto-gris);">Sin datos</td></tr>'; document.getElementById('rep-detalle-total').textContent = '0'; return; }
+  if (reporteActual === 'consumo') {
+    let tu = 0, tv = 0;
+    tbody.innerHTML = lista.map(d => { tu += d.consumido; tv += d.valor; const color = d.consumido === 0 ? 'var(--texto-gris)' : 'var(--verde)'; return `<tr><td><strong>${escaparHtml(d.nombre)}</strong></td><td><span class="badge-linea l${d.linea.replace('L','')}">${d.linea}</span></td><td style="text-align:right;">${formatearCLP(d.neto)}</td><td style="text-align:right;">${formatearCLP(d.iva)}</td><td style="text-align:right;">${formatearCLP(d.bruto)}</td><td style="text-align:right;font-weight:700;color:${color};">${d.consumido}</td><td style="text-align:right;font-weight:700;">${formatearCLP(d.valor)}</td></tr>`; }).join('');
+    document.getElementById('rep-detalle-total').textContent = `${lista.length} menús · ${tu} asistentes · ${formatearCLP(tv)}`;
+  } else if (reporteActual === 'recepciones' || reporteActual === 'salidas') {
+    let tc = 0, tn = 0, tb = 0;
+    tbody.innerHTML = lista.map(d => { tc += d.cantidad; tn += d.neto; tb += d.bruto; const receptorOProv = d.receptor || d.proveedor || ''; return `<tr><td><strong>${escaparHtml(d.codigo)}</strong></td><td style="font-size:11px;">${d.fecha}</td><td style="font-size:11px;">${escaparHtml(d.depto)}</td><td style="font-size:11px;">${escaparHtml(receptorOProv)}</td><td><span class="badge-linea l${d.linea.replace('L','')}">${d.linea}</span></td><td style="font-size:11px;">${escaparHtml(d.producto)}</td><td style="text-align:right;">${d.cantidad}</td><td style="text-align:right;">${formatearCLP(d.neto)}</td><td style="text-align:right;font-weight:700;">${formatearCLP(d.bruto)}</td></tr>`; }).join('');
+    document.getElementById('rep-detalle-total').textContent = `${lista.length} líneas · ${tc} asistentes · Neto: ${formatearCLP(tn)} · Bruto: ${formatearCLP(tb)}`;
+  } else if (reporteActual === 'cuentas') {
+    let ta = 0, tr = 0, tc = 0;
+    tbody.innerHTML = lista.map(d => { ta += d.asignado; tr += d.reservado; tc += d.consumido; return `<tr><td style="font-size:11px;">${escaparHtml(d.direccion)}</td><td style="font-size:11px;">${escaparHtml(d.depto)}</td><td style="font-size:11px;">${escaparHtml(d.area)}</td><td><span class="badge-linea l${d.linea.replace('L','')}">${d.linea}</span></td><td style="font-size:11px;">${escaparHtml(d.cuenta)}</td><td style="text-align:right;">${formatearCLP(d.asignado)}</td><td style="text-align:right;color:var(--naranja);">${formatearCLP(d.reservado)}</td><td style="text-align:right;color:var(--azul);">${formatearCLP(d.consumido)}</td><td style="text-align:right;font-weight:700;color:${d.disponible>0?'var(--verde)':'var(--rojo)'};">${formatearCLP(d.disponible)}</td></tr>`; }).join('');
+    document.getElementById('rep-detalle-total').textContent = `${lista.length} cuentas · Asignado: ${formatearCLP(ta)} · Reservado: ${formatearCLP(tr)} · Consumido: ${formatearCLP(tc)}`;
+  } else if (reporteActual === 'eventos') {
+    let tc = 0, tn = 0, tb = 0;
+    tbody.innerHTML = lista.map(d => { tc += d.cantidad; tn += d.neto; tb += d.bruto; return `<tr><td><strong>${escaparHtml(d.codigo)}</strong></td><td style="font-size:11px;">${d.fecha}</td><td style="font-size:11px;">${escaparHtml(d.depto)}</td><td style="font-size:11px;">${escaparHtml(d.solicitante)}</td><td style="text-align:center;"><span class="badge-estado ${claseEstado(d.estado)}">${iconoEstado(d.estado)} ${d.estado}</span></td><td><span class="badge-linea l${d.linea.replace('L','')}">${d.linea}</span></td><td style="font-size:11px;">${escaparHtml(d.producto)}</td><td style="text-align:right;">${d.cantidad}</td><td style="text-align:right;">${formatearCLP(d.neto)}</td><td style="text-align:right;font-weight:700;">${formatearCLP(d.bruto)}</td></tr>`; }).join('');
+    document.getElementById('rep-detalle-total').textContent = `${lista.length} líneas · ${tc} asistentes · Neto: ${formatearCLP(tn)} · Bruto: ${formatearCLP(tb)}`;
+  }
+}
+function actualizarResumenes() {
+  const hoy = recepciones.filter(r => esHoy(r.fecha_fmt));
+  const rrh = document.getElementById('res-rec-hoy');
+  if (rrh) {
+    rrh.textContent = hoy.length;
+    document.getElementById('res-rec-unidades').textContent = hoy.reduce((s, r) => s + recepcionItems.filter(ri => ri.recepcion_id === r.id).reduce((a, x) => a + Number(x.cantidad||0), 0), 0);
+    document.getElementById('res-rec-monto').textContent = formatearCLP(hoy.reduce((s, r) => s + Number(r.monto_total_bruto||0), 0));
+    document.getElementById('res-stock-critico').textContent = 0;
+    document.getElementById('res-stock-critico2').textContent = 0;
+    const hEnt = entregas.filter(s => esHoy(s.fecha_fmt));
+    document.getElementById('res-sal-hoy').textContent = hEnt.length;
+    document.getElementById('res-sal-unidades').textContent = hEnt.reduce((s, x) => s + entregaItems.filter(si => si.entrega_id === x.id).reduce((a, y) => a + Number(y.cantidad||0), 0), 0);
+    document.getElementById('res-sal-prods').textContent = productos.length;
+  }
+  if (esAdmin()) renderReportes();
+}
+
+// ============================================================
+// CAMBIO DE PESTAÑA
+// ============================================================
+function cambiarTab(tabId) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  const sec = document.getElementById(tabId);
+  if (sec) sec.classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  const tab = document.querySelector(`.nav-tab[data-tab="${tabId}"]`);
+  if (tab) tab.classList.add('active');
+  if (tabId === 'tab-mi-evento') { renderMisEventos(); actualizarBadgePendientes(); }
+  if (tabId === 'tab-eventos' && esAdmin()) renderEventosAdmin();
+  if (tabId === 'tab-servicio') { poblarVinculoEvento(); actualizarResumenes(); }
+  if (tabId === 'tab-entrega') {
+    document.getElementById('sal-depto-padre').value = '';
+    document.getElementById('sal-wrap-recepciones').style.display = 'none';
+    document.getElementById('sal-detalle').style.display = 'none';
+    document.getElementById('sal-mensaje').style.display = 'none';
+    actualizarResumenes();
+  }
+  if (tabId === 'tab-consumo') renderConsumo();
+  if (tabId === 'tab-cuentas' && esAdmin()) renderCuentas();
+  if (tabId === 'tab-finanzas' && esAdmin()) renderFinanzas();
+  if (tabId === 'tab-reportes' && esAdmin()) renderReportes();
+  if (tabId === 'tab-auditoria' && esAdmin()) renderAuditoria();
+}
+
+// ============================================================
+// EXPONER FUNCIONES GLOBALES
+// ============================================================
+window.intentarLogin = intentarLogin;
+window.cerrarSesion = cerrarSesion;
+window.cambiarTab = cambiarTab;
+window.evtCambiarDireccion = evtCambiarDireccion;
+window.evtCambiarDepto = evtCambiarDepto;
+window.evtCambiarArea = evtCambiarArea;
+window.evtElegirLinea = evtElegirLinea;
+window.filtrarDropdownMiEvento = filtrarDropdownMiEvento;
+window.agregarAlCarritoMiEvento = agregarAlCarritoMiEvento;
+window.eliminarDelCarritoMiEvento = eliminarDelCarritoMiEvento;
+window.elegirUrgencia = elegirUrgencia;
+window.enviarEvento = enviarEvento;
+window.cancelarEvento = cancelarEvento;
+window.verDetalleEvento = verDetalleEvento;
+window.cerrarModalEvento = cerrarModalEvento;
+window.aprobarEvento = aprobarEvento;
+window.rechazarEvento = rechazarEvento;
+window.renderEventosAdmin = renderEventosAdmin;
+window.descargarPDFEvento = descargarPDFEvento;
+window.subirAdjuntoEvento = subirAdjuntoEvento;
+window.eliminarAdjuntoTemporal = eliminarAdjuntoTemporal;
+window.alVincularEvento = alVincularEvento;
+window.recCambiarDireccion = recCambiarDireccion;
+window.recCambiarDepto = recCambiarDepto;
+window.recCambiarArea = recCambiarArea;
+window.recElegirLinea = recElegirLinea;
+window.filtrarDropdownServicio = filtrarDropdownServicio;
+window.agregarAlCarritoServicio = agregarAlCarritoServicio;
+window.subirFotoServicio = subirFotoServicio;
+window.quitarFotoServicio = quitarFotoServicio;
+window.registrarServicio = registrarServicio;
+window.descargarPDFServicio = descargarPDFServicio;
+window.salCambiarDireccion = salCambiarDireccion;
+window.salCargarServicio = salCargarServicio;
+window.subirFotoEntrega = subirFotoEntrega;
+window.quitarFotoEntrega = quitarFotoEntrega;
+window.registrarEntrega = registrarEntrega;
+window.descargarPDFEntrega = descargarPDFEntrega;
+window.renderConsumo = renderConsumo;
+window.renderCuentas = renderCuentas;
+window.renderFinanzas = renderFinanzas;
+window.limpiarFiltrosFinanzas = limpiarFiltrosFinanzas;
+window.renderDetalleProductosFin = renderDetalleProductosFin;
+window.exportarExcelFinanzas = exportarExcelFinanzas;
+window.renderAuditoria = renderAuditoria;
+window.exportarExcelConsumo = exportarExcelConsumo;
+window.exportarExcelRecepciones = exportarExcelRecepciones;
+window.exportarExcelSalidas = exportarExcelSalidas;
+window.exportarExcelCuentas = exportarExcelCuentas;
+window.exportarExcelEventos = exportarExcelEventos;
+window.verReporte = verReporte;
+window.filtrarReporte = filtrarReporte;
+window.toggleAudDir = toggleAudDir;
+window.toggleAudDepto = toggleAudDepto;
+window.toggleAudArea = toggleAudArea;
+window.verTrazabilidad = verTrazabilidad;
+window.cerrarModalTraz = cerrarModalTraz;
+</script>
+</body>
+</html>
