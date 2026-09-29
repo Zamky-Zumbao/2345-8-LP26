@@ -105,7 +105,6 @@
   .badge-estado { display:inline-block; padding:3px 10px; border-radius:20px; font-size:9px; font-weight:700; text-transform:uppercase; white-space:nowrap; }
   .badge-estado.pendiente { background:#fef3c7; color:#92400e; }
   .badge-estado.aprobada { background:#dbeafe; color:#1e40af; }
-  .badge-estado.enviada { background:#ede9fe; color:#5b21b6; }
   .badge-estado.recibida { background:#d1fae5; color:#065f46; }
   .badge-estado.rechazada { background:#fee2e2; color:#991b1b; }
   .badge-estado.cancelada { background:#e5e7eb; color:#4b5563; }
@@ -120,7 +119,6 @@
   .info-panel .nombre { font-size:15px; font-weight:800; color:#1e3a8a; margin-bottom:6px; }
   .info-panel .disponible { display:flex; align-items:baseline; gap:6px; font-size:12px; color:#1e40af; flex-wrap:wrap; margin-top:4px; }
   .info-panel .disponible strong { font-size:16px; font-weight:800; color:#065f46; }
-  .info-panel .disponible.agotado strong { color:var(--rojo); }
   .linea-tabs { display:flex; gap:10px; margin-bottom:12px; }
   .linea-tab { flex:1; padding:16px 10px; border:2px solid #cbd5e1; border-radius:12px; text-align:center; cursor:pointer; font-weight:700; font-size:14px; color:#334155; background:#f8fafc; transition:0.15s; user-select:none; }
   .linea-tab:hover { border-color:var(--azul); background:#eff6ff; }
@@ -192,7 +190,6 @@
   .timeline-aud-item.solicitud::before { background:var(--naranja); box-shadow:0 0 0 2px var(--naranja); }
   .timeline-aud-item.aprobacion::before { background:#3b82f6; box-shadow:0 0 0 2px #3b82f6; }
   .timeline-aud-item.recepcion::before { background:var(--verde); box-shadow:0 0 0 2px var(--verde); }
-  .timeline-aud-item.salida::before { background:var(--rojo); box-shadow:0 0 0 2px var(--rojo); }
   .timeline-aud-item .tl-titulo { font-weight:700; font-size:13px; color:var(--texto-oscuro); margin-bottom:4px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; }
   .timeline-aud-item .tl-fecha { font-size:10.5px; color:var(--texto-gris); margin-bottom:6px; }
   .timeline-aud-item .tl-detalle { font-size:11.5px; color:var(--texto-oscuro); }
@@ -251,7 +248,6 @@
   <div class="nav-tab solo-solicitante solo-admin" data-tab="tab-mi-evento" onclick="cambiarTab('tab-mi-evento')"><span class="icono">🍽️</span><span class="label">EVENTO</span></div>
   <div class="nav-tab solo-admin" data-tab="tab-eventos" onclick="cambiarTab('tab-eventos')"><span class="icono">📋</span><span class="label">EVENTOS<span class="tab-badge" id="badge-evt-pend" style="display:none;">0</span></span></div>
   <div class="nav-tab solo-operador solo-admin" data-tab="tab-servicio" onclick="cambiarTab('tab-servicio')"><span class="icono">📥</span><span class="label">SERVICIO</span></div>
-  <div class="nav-tab solo-operador solo-admin" data-tab="tab-entrega" onclick="cambiarTab('tab-entrega')"><span class="icono">📤</span><span class="label">ENTREGA</span></div>
   <div class="nav-tab solo-operador solo-admin" data-tab="tab-consumo" onclick="cambiarTab('tab-consumo')"><span class="icono">📊</span><span class="label">CONSUMO</span></div>
   <div class="nav-tab solo-admin" data-tab="tab-cuentas" onclick="cambiarTab('tab-cuentas')"><span class="icono">💰</span><span class="label">CUENTAS</span></div>
   <div class="nav-tab solo-admin" data-tab="tab-finanzas" onclick="cambiarTab('tab-finanzas')"><span class="icono">💼</span><span class="label">FINANZAS</span></div>
@@ -335,7 +331,7 @@
       <option value="PENDIENTE" selected>Pendientes</option>
       <option value="">Todos</option>
       <option value="APROBADA">Aprobados</option>
-      <option value="RECIBIDA">Servidos</option>
+      <option value="RECIBIDA">Servidos y conformes</option>
       <option value="RECHAZADA">Rechazados</option>
       <option value="CANCELADA">Cancelados</option>
     </select>
@@ -345,12 +341,13 @@
 </div>
 
 <div class="section solo-operador solo-admin" id="tab-servicio">
-  <div class="section-label">📥 REGISTRO DE SERVICIO PRESTADO</div>
+  <div class="section-label">📥 VERIFICACIÓN EN TERRENO DEL SERVICIO</div>
+  <div class="aviso-info">ℹ️ Esta pestaña la usa el <strong>encargado municipal en terreno</strong> para verificar que el servicio prestado coincide con lo contratado. Genera el respaldo fotográfico y la firma conforme → es el respaldo para pagar al proveedor.</div>
   <div class="resumen-grid">
     <div class="resumen-card"><div class="num" id="res-rec-hoy">0</div><div class="lbl">Servicios hoy</div></div>
     <div class="resumen-card verde"><div class="num" id="res-rec-unidades">0</div><div class="lbl">Asistentes</div></div>
     <div class="resumen-card naranja"><div class="num" id="res-rec-monto">$0</div><div class="lbl">Monto hoy</div></div>
-    <div class="resumen-card rojo"><div class="num" id="res-stock-critico">0</div><div class="lbl">Alertas</div></div>
+    <div class="resumen-card morado"><div class="num" id="res-rec-prods">0</div><div class="lbl">Menús</div></div>
   </div>
   <div style="background:#f8fafc; border:1px solid var(--borde); border-radius:14px; padding:14px 16px; margin-bottom:14px;">
     <div style="font-size:10px; text-transform:uppercase; letter-spacing:1px; color:var(--texto-gris); font-weight:700; margin-bottom:8px;">🏭 Proveedor adjudicado</div>
@@ -360,7 +357,7 @@
     <div style="font-size:11px; color:var(--texto-gris); padding:2px 0;"><strong>Contacto:</strong> lavegana7750@gmail.com</div>
   </div>
   <div class="field">
-    <label>Vincular a evento (opcional)</label>
+    <label>Vincular a evento aprobado (opcional)</label>
     <select id="rec-evento-vinculo" onchange="alVincularEvento()"><option value="">— Servicio sin vincular —</option></select>
     <div id="rec-vinculo-info" style="display:none; font-size:11px; background:#f0fdf4; border-left:3px solid var(--verde); padding:8px 12px; border-radius:8px; margin-top:6px;"></div>
   </div>
@@ -401,50 +398,8 @@
     <div class="field"><label>N° Factura</label><input type="text" id="rec-factura"></div>
   </div>
   <div class="field"><label>Observación</label><textarea id="rec-obs" rows="2"></textarea></div>
-  <button class="btn-primario" onclick="registrarServicio()">✅ Registrar Servicio</button>
+  <button class="btn-primario" onclick="registrarServicio()">✅ Registrar Verificación Conforme</button>
   <div id="rec-mensaje" class="aviso-info" style="display:none; margin-top:12px;"></div>
-</div>
-
-<div class="section solo-operador solo-admin" id="tab-entrega">
-  <div class="section-label">📤 ENTREGA CONFORME DEL SERVICIO</div>
-  <div class="resumen-grid">
-    <div class="resumen-card"><div class="num" id="res-sal-hoy">0</div><div class="lbl">Entregas hoy</div></div>
-    <div class="resumen-card rojo"><div class="num" id="res-sal-unidades">0</div><div class="lbl">Asistentes</div></div>
-    <div class="resumen-card verde"><div class="num" id="res-sal-prods">0</div><div class="lbl">Menús</div></div>
-    <div class="resumen-card naranja"><div class="num" id="res-stock-critico2">0</div><div class="lbl">Alertas</div></div>
-  </div>
-  <div class="field">
-    <label class="required">Dirección</label>
-    <select id="sal-depto-padre" onchange="salCambiarDireccion()"><option value="">— Selecciona —</option></select>
-  </div>
-  <div id="sal-wrap-recepciones" style="display:none;">
-    <div class="field">
-      <label class="required">Servicio a entregar</label>
-      <select id="sal-recepcion-sel" onchange="salCargarServicio()"><option value="">— Selecciona un servicio —</option></select>
-    </div>
-  </div>
-  <div id="sal-detalle" style="display:none;">
-    <div id="sal-info-recepcion" class="cuenta-info-box" style="margin-bottom:12px;"></div>
-    <div class="aviso-info" style="background:#fef3c7;border-left-color:#e08e0b;">
-      📷 <strong>Fotos obligatorias:</strong> debes subir 1 foto JPG (máx 3 MB) por cada menú servido antes de registrar la entrega conforme.
-    </div>
-    <div id="sal-bloque-l1" style="display:none; margin-bottom:16px;">
-      <div style="font-size:11px; font-weight:700; text-transform:uppercase; color:var(--texto-gris); border-left:3px solid var(--azul); padding-left:8px; margin-bottom:8px;">🍽️ MENÚS L1 · BANQUETERÍA Y CÓCTEL</div>
-      <div id="sal-lista-l1"></div>
-      <div style="text-align:right; font-weight:700; margin-top:6px; color:var(--azul);" id="sal-total-l1"></div>
-    </div>
-    <div id="sal-bloque-l2" style="display:none; margin-bottom:16px;">
-      <div style="font-size:11px; font-weight:700; text-transform:uppercase; color:var(--texto-gris); border-left:3px solid var(--morado); padding-left:8px; margin-bottom:8px;">☕ MENÚS L2 · COFFEE BREAK</div>
-      <div id="sal-lista-l2"></div>
-      <div style="text-align:right; font-weight:700; margin-top:6px; color:var(--morado);" id="sal-total-l2"></div>
-    </div>
-    <div class="field"><label class="required">Nombre receptor</label><input type="text" id="sal-receptor" placeholder="Ej: Juan Pérez"></div>
-    <div class="field"><label class="required">RUT receptor</label><input type="text" id="sal-receptor-rut" placeholder="Ej: 12.345.678-9"></div>
-    <div class="field"><label>Correo (opcional)</label><input type="email" id="sal-receptor-email" placeholder="Ej: juan@lascondes.cl"></div>
-    <div class="field"><label>Observación (opcional)</label><textarea id="sal-obs" rows="2"></textarea></div>
-    <button class="btn-primario" onclick="registrarEntrega()">✅ Registrar Entrega</button>
-  </div>
-  <div id="sal-mensaje" class="aviso-info" style="display:none; margin-top:12px;"></div>
 </div>
 
 <div class="section solo-operador solo-admin" id="tab-consumo">
@@ -467,7 +422,7 @@
 
 <div class="section solo-admin" id="tab-finanzas">
   <div class="section-label">💼 ESTADO FINANCIERO DE LA LICITACIÓN</div>
-  <div class="aviso-info">ℹ️ Resumen financiero completo: qué se ha <strong>servido</strong>, qué se ha <strong>entregado conforme</strong>, qué está <strong>pendiente</strong> y qué queda <strong>por servir</strong>.</div>
+  <div class="aviso-info">ℹ️ Resumen financiero completo: qué se ha <strong>servido y verificado</strong>, qué está <strong>pendiente</strong> y cuánto queda <strong>disponible</strong> de la licitación.</div>
   <div class="filtros" style="margin-bottom:14px;">
     <input type="date" id="fin-fecha-desde" onchange="renderFinanzas()" title="Desde">
     <input type="date" id="fin-fecha-hasta" onchange="renderFinanzas()" title="Hasta">
@@ -476,26 +431,21 @@
     <button class="btn-pequeno gris" onclick="limpiarFiltrosFinanzas()" style="padding:8px 14px;">🔄 Limpiar</button>
     <button class="btn-pequeno" onclick="exportarExcelFinanzas()" style="padding:8px 14px;background:#7c3aed;color:white;">💼 Excel</button>
   </div>
-  <div class="resumen-grid" style="grid-template-columns:1fr 1fr 1fr 1fr;">
+  <div class="resumen-grid" style="grid-template-columns:1fr 1fr 1fr;">
     <div class="resumen-card" style="background:white;border-left:4px solid var(--verde);">
       <div class="num" id="fin-num-rec" style="color:var(--verde);">$0</div>
-      <div class="lbl">🍽️ Servido</div>
+      <div class="lbl">✅ Servido y conforme</div>
       <div style="font-size:10px;color:var(--texto-gris);margin-top:4px;" id="fin-uds-rec">0 asistentes</div>
-    </div>
-    <div class="resumen-card" style="background:white;border-left:4px solid var(--rojo);">
-      <div class="num" id="fin-num-ent" style="color:var(--rojo);">$0</div>
-      <div class="lbl">📤 Entregado conforme</div>
-      <div style="font-size:10px;color:var(--texto-gris);margin-top:4px;" id="fin-uds-ent">0 asistentes</div>
     </div>
     <div class="resumen-card" style="background:white;border-left:4px solid var(--naranja);">
       <div class="num" id="fin-num-pend" style="color:var(--naranja);">$0</div>
-      <div class="lbl">⏳ Pendiente entrega</div>
+      <div class="lbl">⏳ Pendiente de servir</div>
       <div style="font-size:10px;color:var(--texto-gris);margin-top:4px;" id="fin-uds-pend">0 asistentes</div>
     </div>
     <div class="resumen-card" style="background:white;border-left:4px solid var(--azul);">
-      <div class="num" id="fin-num-bod" style="color:var(--azul);">$0</div>
-      <div class="lbl">📦 Por servir</div>
-      <div style="font-size:10px;color:var(--texto-gris);margin-top:4px;" id="fin-uds-bod">0 asistentes</div>
+      <div class="num" id="fin-num-disp" style="color:var(--azul);">$0</div>
+      <div class="lbl">💰 Disponible</div>
+      <div style="font-size:10px;color:var(--texto-gris);margin-top:4px;" id="fin-uds-disp">—</div>
     </div>
   </div>
   <div class="section-label" style="margin-top:20px;">📊 Resumen financiero</div>
@@ -505,7 +455,7 @@
   <div class="section-label" style="margin-top:20px;">📦 Detalle por menú</div>
   <div class="filtros"><input type="text" id="fin-prod-filtro" placeholder="🔍 Buscar menú..." oninput="renderDetalleProductosFin()"></div>
   <div class="tabla-container" style="background:white;">
-    <table><thead><tr><th>Menú</th><th>L</th><th style="text-align:right;">Servido</th><th style="text-align:right;">Entregado</th><th style="text-align:right;">Pendiente</th><th style="text-align:right;">Por servir</th><th style="text-align:right;">Monto servido</th><th style="text-align:right;">Monto entregado</th><th style="text-align:right;">Monto pendiente</th></tr></thead><tbody id="fin-prod-tbody"></tbody></table>
+    <table><thead><tr><th>Menú</th><th>L</th><th style="text-align:right;">Servido</th><th style="text-align:right;">Pendiente</th><th style="text-align:right;">Monto servido</th><th style="text-align:right;">Monto pendiente</th></tr></thead><tbody id="fin-prod-tbody"></tbody></table>
   </div>
   <div style="font-size:10px;color:var(--texto-gris);margin-top:6px;text-align:right;" id="fin-prod-total"></div>
 </div>
@@ -517,7 +467,6 @@
     <div style="display:flex; gap:8px; flex-wrap:wrap;">
       <button class="btn-verde" style="flex:1; min-width:140px;" onclick="exportarExcelConsumo()">📊 Consumo</button>
       <button class="btn-verde" style="flex:1; min-width:140px;" onclick="exportarExcelRecepciones()">🍽️ Servicios</button>
-      <button class="btn-verde" style="flex:1; min-width:140px;" onclick="exportarExcelSalidas()">📤 Entregas</button>
       <button class="btn-verde" style="flex:1; min-width:140px;" onclick="exportarExcelCuentas()">💰 Cuentas</button>
       <button class="btn-verde" style="flex:1; min-width:140px;" onclick="exportarExcelEventos()">📋 Eventos</button>
     </div>
@@ -527,7 +476,6 @@
     <div style="display:flex; gap:8px; flex-wrap:wrap;">
       <button class="btn-primario" style="flex:1; min-width:140px;" onclick="verReporte('consumo')">📊 Consumo</button>
       <button class="btn-primario" style="flex:1; min-width:140px;" onclick="verReporte('recepciones')">🍽️ Servicios</button>
-      <button class="btn-primario" style="flex:1; min-width:140px;" onclick="verReporte('salidas')">📤 Entregas</button>
       <button class="btn-primario" style="flex:1; min-width:140px;" onclick="verReporte('cuentas')">💰 Cuentas</button>
       <button class="btn-primario" style="flex:1; min-width:140px;" onclick="verReporte('eventos')">📋 Eventos</button>
     </div>
@@ -550,13 +498,13 @@
   <div class="section-label">🔍 AUDITORÍA Y TRAZABILIDAD</div>
   <div class="aud-resumen" id="aud-resumen">
     <div class="aud-resumen-card"><div class="titulo">📝 Eventos</div><div class="num" id="aud-num-sol">0</div><div class="detalle" id="aud-det-sol">—</div></div>
-    <div class="aud-resumen-card"><div class="titulo">🍽️ Servicios</div><div class="num" id="aud-num-rec" style="color:var(--verde);">0</div><div class="detalle" id="aud-det-rec">—</div></div>
-    <div class="aud-resumen-card"><div class="titulo">📤 Entregas</div><div class="num" id="aud-num-sal" style="color:var(--rojo);">0</div><div class="detalle" id="aud-det-sal">—</div></div>
+    <div class="aud-resumen-card"><div class="titulo">🍽️ Servicios verificados</div><div class="num" id="aud-num-rec" style="color:var(--verde);">0</div><div class="detalle" id="aud-det-rec">—</div></div>
+    <div class="aud-resumen-card"><div class="titulo">💰 Monto verificado</div><div class="num" id="aud-num-monto" style="color:var(--azul); font-size:16px;">$0</div><div class="detalle" id="aud-det-monto">—</div></div>
     <div class="aud-resumen-card"><div class="titulo">⏳ Pendientes</div><div class="num" id="aud-num-pend" style="color:var(--naranja);">0</div><div class="detalle" id="aud-det-pend">—</div></div>
   </div>
   <div class="aud-filtros">
     <input type="text" id="aud-filtro-texto" placeholder="🔍 Buscar código, solicitante, menú..." oninput="renderAuditoriaArbol()">
-    <select id="aud-filtro-estado" onchange="renderAuditoriaArbol()"><option value="">Todos los estados</option><option value="PENDIENTE">Pendiente</option><option value="APROBADA">Aprobado</option><option value="RECIBIDA">Servido</option><option value="RECHAZADA">Rechazado</option><option value="CANCELADA">Cancelado</option></select>
+    <select id="aud-filtro-estado" onchange="renderAuditoriaArbol()"><option value="">Todos los estados</option><option value="PENDIENTE">Pendiente</option><option value="APROBADA">Aprobado</option><option value="RECIBIDA">Servido y conforme</option><option value="RECHAZADA">Rechazado</option><option value="CANCELADA">Cancelado</option></select>
     <select id="aud-filtro-fecha" onchange="renderAuditoriaArbol()"><option value="">Todo el histórico</option><option value="7">Últimos 7 días</option><option value="30">Últimos 30 días</option><option value="90">Últimos 90 días</option></select>
     <select id="aud-filtro-urgencia" onchange="renderAuditoriaArbol()"><option value="">Todas las urgencias</option><option value="NORMAL">Normal</option><option value="ALTA">Alta</option><option value="URGENTE">Urgente</option></select>
   </div>
@@ -619,8 +567,6 @@ let productos = [];
 let cuentas = [];
 let recepciones = [];
 let recepcionItems = [];
-let entregas = [];
-let entregaItems = [];
 let eventos = [];
 let eventoItems = [];
 let eventoAdjuntos = [];
@@ -635,14 +581,11 @@ let lineaSeleccionadaRec = null;
 let subdeptoActualEvt = { l1: null, l2: null };
 let subdeptoActualRec = { l1: null, l2: null };
 let ultimaRecepcion = null;
-let ultimaEntrega = null;
 let eventoActual = null;
 let logoImageData = null;
-let recepcionSeleccionadaEntrega = null;
 let reporteActual = null;
 let reporteDatos = [];
 let auditoriaExpandidos = { dirs: new Set(), deptos: new Set(), areas: new Set() };
-let fotosEntregaTemp = {};
 let fotosRecepcionTemp = {};
 
 // ============================================================
@@ -667,8 +610,9 @@ function escaparHtml(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</
 function esAdmin() { return rolActual === 'ADMINISTRADOR'; }
 function esOperador() { return rolActual === 'OPERADOR'; }
 function esSolicitante() { return rolActual === 'SOLICITANTE'; }
-function claseEstado(e) { return {'PENDIENTE':'pendiente','APROBADA':'aprobada','ENVIADA':'enviada','RECIBIDA':'recibida','RECHAZADA':'rechazada','CANCELADA':'cancelada'}[e]||'pendiente'; }
-function iconoEstado(e) { return {'PENDIENTE':'🟡','APROBADA':'🔵','ENVIADA':'🟣','RECIBIDA':'🟢','RECHAZADA':'🔴','CANCELADA':'⚫'}[e]||'⚪'; }
+function claseEstado(e) { return {'PENDIENTE':'pendiente','APROBADA':'aprobada','RECIBIDA':'recibida','RECHAZADA':'rechazada','CANCELADA':'cancelada'}[e]||'pendiente'; }
+function iconoEstado(e) { return {'PENDIENTE':'🟡','APROBADA':'🔵','RECIBIDA':'🟢','RECHAZADA':'🔴','CANCELADA':'⚫'}[e]||'⚪'; }
+function textoEstado(e) { return {'PENDIENTE':'PENDIENTE','APROBADA':'APROBADO','RECIBIDA':'SERVIDO Y CONFORME','RECHAZADA':'RECHAZADO','CANCELADA':'CANCELADO'}[e]||e; }
 function obtenerFirma(email) { return FIRMAS_OFICIALES[email] || { nombre: email, cargo: 'Funcionario' }; }
 function precargarLogoPDF() {
   const img = new Image(); img.crossOrigin = 'Anonymous';
@@ -735,13 +679,11 @@ async function iniciarApp() {
 
 async function cargarTodo() {
   try {
-    const [rP, rC, rRec, rRecI, rEnt, rEntI, rEvt, rEvtI, rEvtA] = await Promise.all([
+    const [rP, rC, rRec, rRecI, rEvt, rEvtI, rEvtA] = await Promise.all([
       sb.from('lb_productos').select('*').eq('activo', true).order('linea').order('nombre'),
       sb.from('lb_cuentas').select('*').eq('activo', true).order('direccion').order('linea'),
       sb.from('lb_recepciones').select('*').order('fecha', { ascending: false }).limit(500),
       sb.from('lb_recepcion_items').select('*').limit(2000),
-      sb.from('lb_entregas').select('*').order('fecha', { ascending: false }).limit(500),
-      sb.from('lb_entrega_items').select('*').limit(2000),
       sb.from('lb_eventos').select('*').order('fecha_solicitud', { ascending: false }).limit(500),
       sb.from('lb_evento_items').select('*').limit(2000),
       sb.from('lb_evento_adjuntos').select('*').limit(2000)
@@ -751,8 +693,6 @@ async function cargarTodo() {
     cuentas = rC.data || [];
     recepciones = (rRec.data || []).map(r => ({...r, fecha_fmt: formatearFecha(r.fecha)}));
     recepcionItems = rRecI.data || [];
-    entregas = (rEnt.data || []).map(s => ({...s, fecha_fmt: formatearFecha(s.fecha)}));
-    entregaItems = rEntI.data || [];
     eventos = (rEvt.data || []).map(s => ({...s, fecha_fmt: formatearFecha(s.fecha_solicitud)}));
     eventoItems = rEvtI.data || [];
     eventoAdjuntos = rEvtA.data || [];
@@ -766,7 +706,7 @@ function obtenerDirecciones() {
 function poblarSelectoresDireccion() {
   const dirs = obtenerDirecciones();
   const opt = '<option value="">— Selecciona —</option>' + dirs.map(d => `<option value="${escaparHtml(d)}">${escaparHtml(d)}</option>`).join('');
-  ['evt-depto-padre','rec-depto-padre','sal-depto-padre'].forEach(id => {
+  ['evt-depto-padre','rec-depto-padre'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.innerHTML = opt;
   });
@@ -888,7 +828,7 @@ function calcularConsumidoCuenta(cuentaId) {
   return precioBruto(totalNeto);
 }
 function calcularReservadoCuenta(cuentaId) {
-  const ss = eventos.filter(s => (s.cuenta_l1_id === cuentaId || s.cuenta_l2_id === cuentaId) && ['PENDIENTE','APROBADA','ENVIADA'].includes(s.estado));
+  const ss = eventos.filter(s => (s.cuenta_l1_id === cuentaId || s.cuenta_l2_id === cuentaId) && ['PENDIENTE','APROBADA'].includes(s.estado));
   return ss.reduce((s, x) => s + Number(x.monto_estimado_bruto || 0), 0);
 }
 function calcularDisponibleCuenta(cuentaId) {
@@ -1127,10 +1067,9 @@ function renderMisEventos() {
     const items = eventoItems.filter(i => i.evento_id === s.id);
     const adj = eventoAdjuntos.filter(a => a.evento_id === s.id);
     const puede = s.estado === 'PENDIENTE';
-    const label = s.subdepartamento_padre ? `${s.subdepartamento_padre} / ${s.subdepartamento}` : s.subdepartamento;
     const fEvt = s.fecha_evento ? new Date(s.fecha_evento + 'T00:00:00').toLocaleDateString('es-CL') : '—';
     return `<div class="solicitud-card">
-      <div class="fila-top"><span class="codigo">${escaparHtml(s.codigo)}</span><span class="badge-estado ${claseEstado(s.estado)}">${iconoEstado(s.estado)} ${s.estado}</span></div>
+      <div class="fila-top"><span class="codigo">${escaparHtml(s.codigo)}</span><span class="badge-estado ${claseEstado(s.estado)}">${iconoEstado(s.estado)} ${textoEstado(s.estado)}</span></div>
       <div class="fila-info">
         <span>🍽️ <strong>${escaparHtml(s.nombre_evento || 'Evento sin nombre')}</strong></span>
         <span>📅 ${fEvt}</span>
@@ -1192,7 +1131,7 @@ function verDetalleEvento(id) {
   document.getElementById('modal-evt-titulo').textContent = `📋 ${s.codigo}`;
   document.getElementById('modal-evt-contenido').innerHTML = `
     <div style="background:#f8fafc; border-radius:12px; padding:12px; margin-bottom:10px;">
-      <div style="display:flex; justify-content:space-between; padding:5px 0; font-size:12px;"><span style="color:var(--texto-gris);">Estado</span><span><span class="badge-estado ${claseEstado(s.estado)}">${iconoEstado(s.estado)} ${s.estado}</span></span></div>
+      <div style="display:flex; justify-content:space-between; padding:5px 0; font-size:12px;"><span style="color:var(--texto-gris);">Estado</span><span><span class="badge-estado ${claseEstado(s.estado)}">${iconoEstado(s.estado)} ${textoEstado(s.estado)}</span></span></div>
       <div style="display:flex; justify-content:space-between; padding:5px 0; font-size:12px;"><span style="color:var(--texto-gris);">Nombre</span><span style="font-weight:600;">${escaparHtml(s.nombre_evento || '—')}</span></div>
       <div style="display:flex; justify-content:space-between; padding:5px 0; font-size:12px;"><span style="color:var(--texto-gris);">Fecha evento</span><span style="font-weight:600;">${fEvt} ${s.hora_evento ? '· ' + s.hora_evento.substring(0,5) : ''}</span></div>
       <div style="display:flex; justify-content:space-between; padding:5px 0; font-size:12px;"><span style="color:var(--texto-gris);">Lugar</span><span style="font-weight:600;">${escaparHtml(s.lugar_evento || '—')}</span></div>
@@ -1259,7 +1198,7 @@ function renderEventosAdmin() {
       <td style="font-size:11px;">${escaparHtml(s.solicitante_nombre||s.solicitante_email)}</td>
       <td style="font-size:11px;">${fEvt}</td>
       <td style="text-align:right;font-size:11px;">${formatearCLP(s.monto_estimado_bruto||0)}</td>
-      <td style="text-align:center;"><span class="badge-estado ${claseEstado(s.estado)}">${iconoEstado(s.estado)} ${s.estado}</span></td>
+      <td style="text-align:center;"><span class="badge-estado ${claseEstado(s.estado)}">${iconoEstado(s.estado)} ${textoEstado(s.estado)}</span></td>
       <td style="text-align:center;white-space:nowrap;">${acciones}</td>
     </tr>`;
   }).join('');
@@ -1272,7 +1211,7 @@ function actualizarBadgePendientes() {
 }
 
 // ============================================================
-// SERVICIO
+// SERVICIO (verificación en terreno)
 // ============================================================
 function recCambiarDireccion() { cambiarDireccion('rec'); }
 function recCambiarDepto() { cambiarDepto('rec'); }
@@ -1315,7 +1254,7 @@ function alVincularEvento() {
 function poblarVinculoEvento() {
   const sel = document.getElementById('rec-evento-vinculo');
   if (!sel) return;
-  const d = eventos.filter(s => s.estado === 'APROBADA' || s.estado === 'ENVIADA');
+  const d = eventos.filter(s => s.estado === 'APROBADA');
   sel.innerHTML = '<option value="">— Servicio sin vincular —</option>' + d.map(s => `<option value="${s.id}">${escaparHtml(s.codigo)} · ${escaparHtml(s.nombre_evento || s.departamento_padre)} · ${formatearCLP(s.monto_estimado_bruto||0)}</option>`).join('');
 }
 function filtrarDropdownServicio(texto) {
@@ -1481,7 +1420,7 @@ async function registrarServicio() {
       evento_id: evtVinculo || null,
       recibido_por_nombre: firma.nombre,
       recibido_por_cargo: firma.cargo,
-      despachada: false
+      despachada: true
     }).select().single();
     if (e1) throw e1;
     const items = carritoRecepcion.map(p => {
@@ -1514,10 +1453,10 @@ async function registrarServicio() {
       monto_l1: totalL1, monto_l2: totalL2,
       responsable: nombreUsuario, firma, fecha: formatearFecha(rec.fecha)
     };
-    mostrarToast(`✅ Servicio ${rec.codigo} registrado`);
+    mostrarToast(`✅ Servicio ${rec.codigo} verificado`);
     const msg = document.getElementById('rec-mensaje');
     msg.style.display = 'block';
-    msg.innerHTML = `✅ Servicio <strong>${rec.codigo}</strong> registrado${totalL1 > 0 ? `<br>🍽️ L1 · Banquetería: <strong>${formatearCLP(totalL1)}</strong>` : ''}${totalL2 > 0 ? `<br>☕ L2 · Coffee Break: <strong>${formatearCLP(totalL2)}</strong>` : ''}<br>💰 Total: <strong>${formatearCLP(totalBruto)}</strong> <button class="btn-pequeno azul" onclick="descargarPDFServicio()" style="margin-left:10px;">📄 PDF con fotos</button>`;
+    msg.innerHTML = `✅ Servicio <strong>${rec.codigo}</strong> verificado y conforme${totalL1 > 0 ? `<br>🍽️ L1 · Banquetería: <strong>${formatearCLP(totalL1)}</strong>` : ''}${totalL2 > 0 ? `<br>☕ L2 · Coffee Break: <strong>${formatearCLP(totalL2)}</strong>` : ''}<br>💰 Total: <strong>${formatearCLP(totalBruto)}</strong> <button class="btn-pequeno azul" onclick="descargarPDFServicio()" style="margin-left:10px;">📄 PDF con fotos</button>`;
     msg.scrollIntoView({ behavior: 'smooth', block: 'center' });
     carritoRecepcion = [];
     fotosRecepcionTemp = {};
@@ -1532,177 +1471,7 @@ async function registrarServicio() {
     actualizarResumenes();
   } catch(e) { console.error(e); mostrarToast('❌ ' + (e.message||'Error')); }
   btn.disabled = false;
-  btn.textContent = '✅ Registrar Servicio';
-}
-
-// ============================================================
-// ENTREGA CON FOTOS
-// ============================================================
-function salCambiarDireccion() {
-  const direccion = document.getElementById('sal-depto-padre').value;
-  const wrapRecep = document.getElementById('sal-wrap-recepciones');
-  const selRecep = document.getElementById('sal-recepcion-sel');
-  const detalle = document.getElementById('sal-detalle');
-  const mensaje = document.getElementById('sal-mensaje');
-  if (detalle) detalle.style.display = 'none';
-  if (mensaje) mensaje.style.display = 'none';
-  recepcionSeleccionadaEntrega = null;
-  fotosEntregaTemp = {};
-  if (!direccion) { wrapRecep.style.display = 'none'; selRecep.innerHTML = '<option value="">— Selecciona un servicio —</option>'; return; }
-  const pendientes = recepciones.filter(r => !r.despachada && (r.departamento === direccion || r.departamento_padre === direccion));
-  wrapRecep.style.display = 'block';
-  if (!pendientes.length) { selRecep.innerHTML = '<option value="">— No hay servicios pendientes de entrega —</option>'; return; }
-  selRecep.innerHTML = '<option value="">— Selecciona un servicio —</option>' + pendientes.map(r => {
-    const totalItems = recepcionItems.filter(i => i.recepcion_id === r.id).reduce((s, i) => s + Number(i.cantidad||0), 0);
-    return `<option value="${r.id}">${escaparHtml(r.codigo)} · ${r.fecha_fmt} · ${totalItems} asistentes · ${formatearCLP(r.monto_total_bruto||0)}</option>`;
-  }).join('');
-}
-function salCargarServicio() {
-  const id = document.getElementById('sal-recepcion-sel').value;
-  const detalle = document.getElementById('sal-detalle');
-  const infoRecep = document.getElementById('sal-info-recepcion');
-  const bloqueL1 = document.getElementById('sal-bloque-l1');
-  const bloqueL2 = document.getElementById('sal-bloque-l2');
-  const listaL1 = document.getElementById('sal-lista-l1');
-  const listaL2 = document.getElementById('sal-lista-l2');
-  const totalL1 = document.getElementById('sal-total-l1');
-  const totalL2 = document.getElementById('sal-total-l2');
-  const mensaje = document.getElementById('sal-mensaje');
-  if (mensaje) mensaje.style.display = 'none';
-  if (!id) { detalle.style.display = 'none'; recepcionSeleccionadaEntrega = null; fotosEntregaTemp = {}; return; }
-  const r = recepciones.find(x => x.id === id);
-  if (!r) return;
-  recepcionSeleccionadaEntrega = r;
-  fotosEntregaTemp = {};
-  const items = recepcionItems.filter(i => i.recepcion_id === id);
-  const cuentasRecepcion = [...new Set(items.map(i => i.cuenta_id).filter(Boolean))].map(cid => cuentas.find(c => c.id === cid)).filter(Boolean);
-  const cuentasInfo = cuentasRecepcion.map(c => `💰 <strong>${escaparHtml(c.direccion)} · ${escaparHtml(c.subdepartamento)} · L${c.linea}</strong> (${escaparHtml(c.codigo)})`).join('<br>');
-  infoRecep.innerHTML = `<div style="font-weight:700; color:var(--azul); font-size:13px; margin-bottom:4px;">🍽️ Servicio ${escaparHtml(r.codigo)}</div><div>📅 Fecha: <strong>${r.fecha_fmt}</strong></div><div>🏭 Proveedor: <strong>${escaparHtml(r.proveedor||'N/E')}</strong></div>${r.numero_boleta ? `<div>📄 Boleta: <strong>${escaparHtml(r.numero_boleta)}</strong></div>` : ''}${cuentasInfo}<div>💵 Monto bruto: <strong>${formatearCLP(r.monto_total_bruto||0)}</strong></div>`;
-  const itemsL1 = [];
-  const itemsL2 = [];
-  items.forEach(it => {
-    const p = productos.find(x => x.id === it.producto_id);
-    if (!p) return;
-    const row = { item_id: it.id, producto_id: it.producto_id, nombre: p.nombre, cantidad: Number(it.cantidad), precio_neto: Number(it.precio_neto || p.precio_neto), subtotal_bruto: Number(it.subtotal_bruto || (Number(it.precio_neto || p.precio_neto) * 1.19 * Number(it.cantidad))) };
-    if (p.linea === 1) itemsL1.push(row); else itemsL2.push(row);
-  });
-  const renderFila = (x) => `
-    <div class="articulo-fila" style="grid-template-columns:1fr auto auto auto;gap:10px;">
-      <div class="nombre">${escaparHtml(x.nombre)}</div>
-      <div class="cant">${x.cantidad} pers.</div>
-      <div class="monto">${formatearCLP(x.subtotal_bruto)}</div>
-      <div style="text-align:right;">
-        <input type="file" id="foto-${x.item_id}" accept="image/jpeg" style="display:none;" onchange="subirFotoEntrega('${x.item_id}', event)">
-        <div id="foto-info-${x.item_id}">
-          <button class="btn-pequeno morado" onclick="document.getElementById('foto-${x.item_id}').click()">📷 Subir foto</button>
-        </div>
-      </div>
-    </div>
-  `;
-  if (itemsL1.length) { bloqueL1.style.display = 'block'; listaL1.innerHTML = itemsL1.map(renderFila).join(''); totalL1.textContent = 'Subtotal L1: ' + formatearCLP(itemsL1.reduce((s, x) => s + x.subtotal_bruto, 0)); } else bloqueL1.style.display = 'none';
-  if (itemsL2.length) { bloqueL2.style.display = 'block'; listaL2.innerHTML = itemsL2.map(renderFila).join(''); totalL2.textContent = 'Subtotal L2: ' + formatearCLP(itemsL2.reduce((s, x) => s + x.subtotal_bruto, 0)); } else bloqueL2.style.display = 'none';
-  detalle.style.display = 'block';
-}
-async function subirFotoEntrega(itemId, event) {
-  const file = event.target.files[0];
-  if (!file) return;
-  if (file.size > 3 * 1024 * 1024) { mostrarToast('❌ La foto excede los 3 MB'); event.target.value = ''; return; }
-  if (!file.type.startsWith('image/')) { mostrarToast('❌ Solo se aceptan imágenes JPG'); event.target.value = ''; return; }
-  const infoDiv = document.getElementById(`foto-info-${itemId}`);
-  if (infoDiv) infoDiv.innerHTML = '<span style="font-size:11px;color:var(--texto-gris);">⏳ Subiendo...</span>';
-  try {
-    const nombreArchivo = `${Date.now()}_${itemId.substring(0,8)}.jpg`;
-    const path = `entregas/${nombreArchivo}`;
-    const { error } = await sb.storage.from(STORAGE_FOTOS).upload(path, file, { contentType: 'image/jpeg', upsert: false });
-    if (error) throw error;
-    const { data: urlData } = sb.storage.from(STORAGE_FOTOS).getPublicUrl(path);
-    fotosEntregaTemp[itemId] = urlData.publicUrl;
-    if (infoDiv) infoDiv.innerHTML = `<div style="display:flex;gap:6px;align-items:center;justify-content:flex-end;"><img src="${urlData.publicUrl}" class="foto-salida-thumb"><button class="btn-pequeno rojo" onclick="quitarFotoEntrega('${itemId}')" title="Quitar">✕</button></div>`;
-    mostrarToast('✅ Foto subida');
-  } catch(e) { console.error(e); mostrarToast('❌ Error al subir: ' + (e.message || 'Error')); if (infoDiv) infoDiv.innerHTML = `<button class="btn-pequeno morado" onclick="document.getElementById('foto-${itemId}').click()">📷 Subir foto</button>`; }
-}
-function quitarFotoEntrega(itemId) {
-  delete fotosEntregaTemp[itemId];
-  const infoDiv = document.getElementById(`foto-info-${itemId}`);
-  if (infoDiv) infoDiv.innerHTML = `<button class="btn-pequeno morado" onclick="document.getElementById('foto-${itemId}').click()">📷 Subir foto</button>`;
-}
-async function registrarEntrega() {
-  if (!recepcionSeleccionadaEntrega) { mostrarToast('❌ Selecciona un servicio'); return; }
-  const receptor = document.getElementById('sal-receptor').value.trim();
-  const receptorRut = document.getElementById('sal-receptor-rut').value.trim();
-  const receptorEmail = document.getElementById('sal-receptor-email').value.trim();
-  const obs = document.getElementById('sal-obs').value.trim();
-  if (!receptor) { mostrarToast('❌ Ingresa el nombre del receptor'); return; }
-  if (!receptorRut) { mostrarToast('❌ Ingresa el RUT del receptor'); return; }
-  const r = recepcionSeleccionadaEntrega;
-  const items = recepcionItems.filter(i => i.recepcion_id === r.id);
-  const itemsSinFoto = items.filter(it => !fotosEntregaTemp[it.id]);
-  if (itemsSinFoto.length > 0) {
-    const nombres = itemsSinFoto.map(it => { const p = productos.find(x => x.id === it.producto_id); return p?.nombre || 'N/E'; });
-    mostrarToast(`❌ Faltan fotos de ${itemsSinFoto.length} menú(es): ${nombres.join(', ')}`, 8000);
-    const primerId = itemsSinFoto[0].id;
-    const elem = document.getElementById(`foto-info-${primerId}`);
-    if (elem) elem.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    return;
-  }
-  const btn = event.target; btn.disabled = true; btn.textContent = '⏳';
-  try {
-    const totalNeto = Number(r.monto_total || 0);
-    const totalBruto = Number(r.monto_total_bruto || 0);
-    const firma = obtenerFirma(nombreUsuario);
-    const { data: ent, error: e1 } = await sb.from('lb_entregas').insert({
-      departamento: r.departamento,
-      departamento_padre: r.departamento_padre || r.departamento,
-      subdepartamento_padre: r.subdepartamento_padre || null,
-      subdepartamento: r.subdepartamento || null,
-      receptor_nombre: receptor, receptor_rut: receptorRut, receptor_email: receptorEmail || null,
-      observacion: obs || null, responsable: nombreUsuario,
-      monto_total: totalNeto, monto_total_bruto: totalBruto, iva_total: totalBruto - totalNeto,
-      entregado_por_nombre: firma.nombre, entregado_por_cargo: firma.cargo,
-      recepcion_origen_id: r.id
-    }).select().single();
-    if (e1) throw e1;
-    const itemsInsert = items.map(it => ({
-      entrega_id: ent.id, producto_id: it.producto_id, cantidad: it.cantidad,
-      precio_neto: it.precio_neto, precio_bruto: it.precio_bruto,
-      subtotal: it.subtotal, subtotal_bruto: it.subtotal_bruto, iva: it.iva,
-      foto_url: fotosEntregaTemp[it.id] || null
-    }));
-    const { error: e2 } = await sb.from('lb_entrega_items').insert(itemsInsert);
-    if (e2) throw e2;
-    const { error: e3 } = await sb.from('lb_recepciones').update({ despachada: true, fecha_despacho: new Date().toISOString(), entrega_id: ent.id }).eq('id', r.id);
-    if (e3) throw e3;
-    ultimaEntrega = {
-      id: ent.id, codigo: ent.codigo,
-      productos: items.map(it => {
-        const p = productos.find(x => x.id === it.producto_id);
-        return { producto_id: it.producto_id, nombre: p?.nombre || 'N/E', linea: p?.linea || 1, cantidad: Number(it.cantidad), precio_neto: Number(it.precio_neto), precio_bruto: Number(it.precio_bruto), subtotal_bruto: Number(it.subtotal_bruto), foto_url: fotosEntregaTemp[it.id] || null };
-      }),
-      departamento: r.departamento, departamento_padre: r.departamento_padre || r.departamento,
-      subdepartamento_padre: r.subdepartamento_padre, subdepartamento: r.subdepartamento,
-      receptor, receptor_email: receptorEmail, receptor_rut: receptorRut, obs,
-      responsable: nombreUsuario, firma,
-      monto_total: totalNeto, monto_total_bruto: totalBruto,
-      fecha: formatearFecha(ent.fecha), recepcion_origen: r.codigo
-    };
-    mostrarToast(`✅ Entrega ${ent.codigo} registrada`);
-    const msg = document.getElementById('sal-mensaje');
-    msg.style.display = 'block';
-    msg.innerHTML = `✅ Entrega <strong>${ent.codigo}</strong> desde servicio <strong>${r.codigo}</strong> · ${formatearCLP(totalBruto)} <button class="btn-pequeno azul" onclick="descargarPDFEntrega()" style="margin-left:10px;">📄 PDF con fotos</button>`;
-    msg.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    document.getElementById('sal-receptor').value = '';
-    document.getElementById('sal-receptor-rut').value = '';
-    document.getElementById('sal-receptor-email').value = '';
-    document.getElementById('sal-obs').value = '';
-    document.getElementById('sal-detalle').style.display = 'none';
-    document.getElementById('sal-recepcion-sel').innerHTML = '<option value="">— Selecciona un servicio —</option>';
-    fotosEntregaTemp = {};
-    recepcionSeleccionadaEntrega = null;
-    await cargarTodo();
-    renderConsumo();
-    actualizarResumenes();
-  } catch(e) { console.error(e); mostrarToast('❌ ' + (e.message||'Error')); }
-  btn.disabled = false; btn.textContent = '✅ Registrar Entrega';
+  btn.textContent = '✅ Registrar Verificación Conforme';
 }
 
 // ============================================================
@@ -1809,41 +1578,34 @@ function calcularFinanzas() {
       recUds += Number(it.cantidad || 0); recNeto += Number(it.subtotal || 0); recIva += Number(it.iva || 0); recBruto += Number(it.subtotal_bruto || 0);
     });
   });
-  let entUds = 0, entNeto = 0, entIva = 0, entBruto = 0;
-  entregas.forEach(s => {
-    entregaItems.filter(i => i.entrega_id === s.id).forEach(it => {
-      const p = productos.find(x => x.id === it.producto_id);
-      const linea = p?.linea || 1;
-      if (!finPasaFiltro(s.fecha, s.departamento, linea)) return;
-      entUds += Number(it.cantidad || 0); entNeto += Number(it.subtotal || 0); entIva += Number(it.iva || 0); entBruto += Number(it.subtotal_bruto || 0);
-    });
-  });
   const porProducto = {};
   recepcionItems.forEach(it => {
     const r = recepciones.find(x => x.id === it.recepcion_id);
     const p = productos.find(x => x.id === it.producto_id);
     if (!r || !p) return;
     if (!finPasaFiltro(r.fecha, r.departamento, p.linea)) return;
-    if (!porProducto[it.producto_id]) porProducto[it.producto_id] = { rec: 0, ent: 0, precioNeto: Number(it.precio_neto||0) };
+    if (!porProducto[it.producto_id]) porProducto[it.producto_id] = { rec: 0, precioNeto: Number(it.precio_neto||0) };
     porProducto[it.producto_id].rec += Number(it.cantidad || 0);
   });
-  entregaItems.forEach(it => {
-    const s = entregas.find(x => x.id === it.entrega_id);
-    const p = productos.find(x => x.id === it.producto_id);
-    if (!s || !p) return;
-    if (!finPasaFiltro(s.fecha, s.departamento, p.linea)) return;
-    if (!porProducto[it.producto_id]) porProducto[it.producto_id] = { rec: 0, ent: 0, precioNeto: Number(it.precio_neto||0) };
-    porProducto[it.producto_id].ent += Number(it.cantidad || 0);
-  });
   let pendUds = 0, pendNeto = 0, pendIva = 0, pendBruto = 0;
-  Object.values(porProducto).forEach(x => {
-    const pend = x.rec - x.ent;
-    if (pend > 0) { const n = x.precioNeto * pend; pendUds += pend; pendNeto += n; pendIva += n * IVA; pendBruto += n * (1 + IVA); }
+  eventos.filter(e => ['PENDIENTE','APROBADA'].includes(e.estado)).forEach(e => {
+    const items = eventoItems.filter(i => i.evento_id === e.id);
+    items.forEach(it => {
+      const p = productos.find(x => x.id === it.producto_id);
+      const linea = p?.linea || it.linea || 1;
+      if (!finPasaFiltro(e.fecha_solicitud, e.departamento, linea)) return;
+      const cant = Number(it.cantidad || 0);
+      const pNeto = Number(it.precio_estimado || 0);
+      const pBruto = Number(it.precio_estimado_bruto || precioBruto(pNeto));
+      pendUds += cant; pendNeto += pNeto * cant; pendIva += (pBruto - pNeto) * cant; pendBruto += pBruto * cant;
+    });
   });
+  const totalContratado = 218925000 + 99568000;
+  const disponible = totalContratado - recBruto;
   return {
     rec: { uds: recUds, neto: recNeto, iva: recIva, bruto: recBruto },
-    ent: { uds: entUds, neto: entNeto, iva: entIva, bruto: entBruto },
-    pend: { uds: pendUds, neto: Math.round(pendNeto), iva: Math.round(pendIva), bruto: Math.round(pendBruto) }
+    pend: { uds: pendUds, neto: Math.round(pendNeto), iva: Math.round(pendIva), bruto: Math.round(pendBruto) },
+    disponible: { bruto: disponible }
   };
 }
 function renderFinanzas() {
@@ -1851,13 +1613,12 @@ function renderFinanzas() {
   const ef = calcularFinanzas();
   const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
   set('fin-num-rec', formatearCLP(ef.rec.bruto)); set('fin-uds-rec', ef.rec.uds + ' asistentes');
-  set('fin-num-ent', formatearCLP(ef.ent.bruto)); set('fin-uds-ent', ef.ent.uds + ' asistentes');
   set('fin-num-pend', formatearCLP(ef.pend.bruto)); set('fin-uds-pend', ef.pend.uds + ' asistentes');
-  set('fin-num-bod', formatearCLP(ef.pend.bruto)); set('fin-uds-bod', ef.pend.uds + ' asistentes');
+  set('fin-num-disp', formatearCLP(ef.disponible.bruto)); set('fin-uds-disp', 'del total contratado');
   const tbody = document.getElementById('fin-resumen-tbody');
   if (!tbody) return;
   const fila = (icono, label, x, color) => `<tr><td><span style="font-weight:700;color:${color};">${icono} ${label}</span></td><td style="text-align:right;font-weight:700;">${x.uds}</td><td style="text-align:right;">${formatearCLP(x.neto)}</td><td style="text-align:right;">${formatearCLP(x.iva)}</td><td style="text-align:right;font-weight:700;">${formatearCLP(x.bruto)}</td></tr>`;
-  tbody.innerHTML = fila('🍽️', 'Servido', ef.rec, 'var(--verde)') + fila('📤', 'Entregado conforme', ef.ent, 'var(--rojo)') + fila('⏳', 'Pendiente de entrega', ef.pend, 'var(--naranja)') + fila('📦', 'Por servir', ef.pend, 'var(--azul)');
+  tbody.innerHTML = fila('✅', 'Servido y conforme', ef.rec, 'var(--verde)') + fila('⏳', 'Pendiente de servir', ef.pend, 'var(--naranja)');
   renderDetalleProductosFin();
 }
 function renderDetalleProductosFin() {
@@ -1865,7 +1626,7 @@ function renderDetalleProductosFin() {
   if (!tbody) return;
   const filtro = (document.getElementById('fin-prod-filtro')?.value || '').toLowerCase().trim();
   const porProducto = {};
-  productos.forEach(p => { porProducto[p.id] = { nombre: p.nombre, linea: p.linea, rec: 0, ent: 0, precioNeto: Number(p.precio_neto||0) }; });
+  productos.forEach(p => { porProducto[p.id] = { nombre: p.nombre, linea: p.linea, rec: 0, pend: 0, precioNeto: Number(p.precio_neto||0) }; });
   recepcionItems.forEach(it => {
     const r = recepciones.find(x => x.id === it.recepcion_id);
     const p = productos.find(x => x.id === it.producto_id);
@@ -1873,39 +1634,33 @@ function renderDetalleProductosFin() {
     if (!finPasaFiltro(r.fecha, r.departamento, p.linea)) return;
     if (porProducto[it.producto_id]) porProducto[it.producto_id].rec += Number(it.cantidad || 0);
   });
-  entregaItems.forEach(it => {
-    const s = entregas.find(x => x.id === it.entrega_id);
-    const p = productos.find(x => x.id === it.producto_id);
-    if (!s || !p) return;
-    if (!finPasaFiltro(s.fecha, s.departamento, p.linea)) return;
-    if (porProducto[it.producto_id]) porProducto[it.producto_id].ent += Number(it.cantidad || 0);
+  eventos.filter(e => ['PENDIENTE','APROBADA'].includes(e.estado)).forEach(e => {
+    eventoItems.filter(i => i.evento_id === e.id).forEach(it => {
+      const p = productos.find(x => x.id === it.producto_id);
+      if (!p) return;
+      if (!finPasaFiltro(e.fecha_solicitud, e.departamento, p.linea)) return;
+      if (porProducto[it.producto_id]) porProducto[it.producto_id].pend += Number(it.cantidad || 0);
+    });
   });
-  let lista = Object.values(porProducto).filter(x => x.rec > 0 || x.ent > 0);
+  let lista = Object.values(porProducto).filter(x => x.rec > 0 || x.pend > 0);
   if (filtro) lista = lista.filter(x => x.nombre.toLowerCase().includes(filtro));
   lista.sort((a, b) => a.nombre.localeCompare(b.nombre));
-  if (!lista.length) { tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:20px;color:var(--texto-gris);">Sin movimientos</td></tr>'; document.getElementById('fin-prod-total').textContent = '0 menús'; return; }
-  let totalBruto = 0, totalRec = 0, totalEnt = 0, totalPend = 0, totalBod = 0;
+  if (!lista.length) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--texto-gris);">Sin movimientos</td></tr>'; document.getElementById('fin-prod-total').textContent = '0 menús'; return; }
+  let totalBruto = 0, totalRec = 0, totalPend = 0;
   tbody.innerHTML = lista.map(x => {
-    const pend = x.rec - x.ent;
-    const bod = pend > 0 ? pend : 0;
     const bruto = x.precioNeto * (1 + IVA);
     const montoBruto = x.rec * bruto;
-    totalBruto += montoBruto; totalRec += x.rec; totalEnt += x.ent;
-    totalPend += pend > 0 ? pend : 0; totalBod += bod;
-    const colorPend = pend > 0 ? 'var(--naranja)' : 'var(--texto-gris)';
+    totalBruto += montoBruto; totalRec += x.rec; totalPend += x.pend;
     return `<tr>
       <td><strong>${escaparHtml(x.nombre)}</strong></td>
       <td><span class="badge-linea l${x.linea}">L${x.linea}</span></td>
       <td style="text-align:right;">${x.rec}</td>
-      <td style="text-align:right;">${x.ent}</td>
-      <td style="text-align:right;color:${colorPend};font-weight:700;">${pend > 0 ? pend : 0}</td>
-      <td style="text-align:right;">${bod}</td>
+      <td style="text-align:right;color:var(--naranja);font-weight:700;">${x.pend}</td>
       <td style="text-align:right;font-weight:700;">${formatearCLP(montoBruto)}</td>
-      <td style="text-align:right;font-weight:700;">${formatearCLP(x.ent * bruto)}</td>
-      <td style="text-align:right;font-weight:700;color:${colorPend};">${formatearCLP(bod * bruto)}</td>
+      <td style="text-align:right;font-weight:700;color:var(--naranja);">${formatearCLP(x.pend * bruto)}</td>
     </tr>`;
   }).join('');
-  document.getElementById('fin-prod-total').textContent = `${lista.length} menús · Serv: ${totalRec} · Entreg: ${totalEnt} · Pend: ${totalPend} · Por servir: ${totalBod} · Total: ${formatearCLP(totalBruto)}`;
+  document.getElementById('fin-prod-total').textContent = `${lista.length} menús · Serv: ${totalRec} · Pend: ${totalPend} · Total servido: ${formatearCLP(totalBruto)}`;
 }
 
 // ============================================================
@@ -1921,16 +1676,14 @@ function renderAuditoriaResumen() {
   const canc = eventos.filter(s => s.estado === 'CANCELADA').length;
   const totalRec = recepciones.length;
   const montoRec = recepciones.reduce((s, r) => s + Number(r.monto_total_bruto||0), 0);
-  const totalEnt = entregas.length;
-  const montoEnt = entregas.reduce((s, x) => s + Number(x.monto_total_bruto||0), 0);
   const numSol = document.getElementById('aud-num-sol');
   if (!numSol) return;
   numSol.textContent = totalSol;
   document.getElementById('aud-det-sol').innerHTML = `🟡 ${pend} · 🔵 ${aprob} · 🟢 ${recib}<br>🔴 ${rech} · ⚫ ${canc}`;
   document.getElementById('aud-num-rec').textContent = totalRec;
-  document.getElementById('aud-det-rec').textContent = 'Monto: ' + formatearCLP(montoRec);
-  document.getElementById('aud-num-sal').textContent = totalEnt;
-  document.getElementById('aud-det-sal').textContent = 'Monto: ' + formatearCLP(montoEnt);
+  document.getElementById('aud-det-rec').textContent = 'Servicios verificados';
+  document.getElementById('aud-num-monto').textContent = formatearCLP(montoRec);
+  document.getElementById('aud-det-monto').textContent = 'Monto total verificado';
   document.getElementById('aud-num-pend').textContent = pend;
   document.getElementById('aud-det-pend').textContent = pend > 0 ? 'Requieren atención' : 'Sin pendientes';
 }
@@ -1980,7 +1733,7 @@ function renderAuditoriaArbol() {
         const expArea = auditoriaExpandidos.areas.has(keyArea);
         html += `<div class="aud-area" onclick="toggleAudArea('${escaparHtml(dir)}','${escaparHtml(dep)}','${escaparHtml(area)}')"><span class="chev">${expArea ? '▼' : '▶'}</span><span class="nombre">🏷️ ${escaparHtml(area)}</span><span class="stats">${sols.length} evt · ${formatearCLP(montoArea)}</span></div><div style="display:${expArea ? 'block' : 'none'};"><div class="aud-sol-lista">`;
         sols.forEach(s => {
-          html += `<div class="aud-sol-item" onclick="verTrazabilidad('${s.id}')"><div><div class="cod">${escaparHtml(s.codigo)}</div><div class="info">${escaparHtml(s.nombre_evento || s.solicitante_nombre || s.solicitante_email)} · ${s.fecha_fmt} · Urgencia: ${s.urgencia}</div></div><span class="badge-estado ${claseEstado(s.estado)}">${iconoEstado(s.estado)} ${s.estado}</span><div class="monto">${formatearCLP(s.monto_estimado_bruto||0)}</div></div>`;
+          html += `<div class="aud-sol-item" onclick="verTrazabilidad('${s.id}')"><div><div class="cod">${escaparHtml(s.codigo)}</div><div class="info">${escaparHtml(s.nombre_evento || s.solicitante_nombre || s.solicitante_email)} · ${s.fecha_fmt} · Urgencia: ${s.urgencia}</div></div><span class="badge-estado ${claseEstado(s.estado)}">${iconoEstado(s.estado)} ${textoEstado(s.estado)}</span><div class="monto">${formatearCLP(s.monto_estimado_bruto||0)}</div></div>`;
         });
         html += `</div></div>`;
       });
@@ -2000,11 +1753,10 @@ function toggleAudArea(dir, dep, area) { const k = dir + '||' + dep + '||' + are
 function verTrazabilidad(solId) {
   const s = eventos.find(x => x.id === solId);
   if (!s) return;
-  const items = eventoItems.filter(i => i.solicitud_id === solId || i.evento_id === solId);
+  const items = eventoItems.filter(i => i.evento_id === solId);
   const recAsociada = recepciones.find(r => r.id === s.recepcion_id);
   const recPorEvento = recepciones.filter(r => r.evento_id === solId);
   const recFinal = recAsociada || recPorEvento[0];
-  const entAsociada = recFinal ? entregas.find(x => x.id === recFinal.entrega_id) : null;
   const l1 = items.filter(i => i.linea === 1);
   const l2 = items.filter(i => i.linea === 2);
   const subL1 = l1.reduce((sum, it) => sum + (it.precio_estimado_bruto || precioBruto(it.precio_estimado)) * it.cantidad, 0);
@@ -2015,7 +1767,7 @@ function verTrazabilidad(solId) {
     return `<div style="display:grid;grid-template-columns:1fr auto auto;gap:8px;padding:6px 12px;font-size:11.5px;border-bottom:1px solid #f1f5f9;align-items:center;"><span>${escaparHtml(p?.nombre || 'N/E')}</span><span style="font-weight:700;color:var(--azul);text-align:center;">×${it.cantidad}</span><span style="font-weight:700;text-align:right;">${formatearCLP(pb * it.cantidad)}</span></div>`;
   }).join('');
   const labelSub = s.subdepartamento_padre ? `${s.subdepartamento_padre} / ${s.subdepartamento}` : (s.subdepartamento||'—');
-  let html = `<div style="background:linear-gradient(135deg,#eff6ff 0%,#dbeafe 100%);border:1px solid #bfdbfe;border-radius:14px;padding:14px;margin-bottom:14px;"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;"><div><div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#1e40af;font-weight:700;">Evento</div><div style="font-size:18px;font-weight:800;color:#1e3a8a;font-family:'Courier New',monospace;">${escaparHtml(s.codigo)}</div></div><span class="badge-estado ${claseEstado(s.estado)}" style="font-size:11px;padding:5px 14px;">${iconoEstado(s.estado)} ${s.estado}</span></div><div style="margin-top:10px;font-size:12px;color:#1e40af;">🍽️ ${escaparHtml(s.nombre_evento || 'Evento')}<br>🏢 ${escaparHtml(s.departamento_padre||s.departamento)} · ${escaparHtml(labelSub)}<br>👤 ${escaparHtml(s.solicitante_nombre||s.solicitante_email)} · 📅 ${s.fecha_fmt} · Urgencia: ${s.urgencia}</div></div>`;
+  let html = `<div style="background:linear-gradient(135deg,#eff6ff 0%,#dbeafe 100%);border:1px solid #bfdbfe;border-radius:14px;padding:14px;margin-bottom:14px;"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;"><div><div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#1e40af;font-weight:700;">Evento</div><div style="font-size:18px;font-weight:800;color:#1e3a8a;font-family:'Courier New',monospace;">${escaparHtml(s.codigo)}</div></div><span class="badge-estado ${claseEstado(s.estado)}" style="font-size:11px;padding:5px 14px;">${iconoEstado(s.estado)} ${textoEstado(s.estado)}</span></div><div style="margin-top:10px;font-size:12px;color:#1e40af;">🍽️ ${escaparHtml(s.nombre_evento || 'Evento')}<br>🏢 ${escaparHtml(s.departamento_padre||s.departamento)} · ${escaparHtml(labelSub)}<br>👤 ${escaparHtml(s.solicitante_nombre||s.solicitante_email)} · 📅 ${s.fecha_fmt} · Urgencia: ${s.urgencia}</div></div>`;
   if (l1.length) html += `<div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--azul);margin-top:12px;">🍽️ MENÚS L1 · BANQUETERÍA Y CÓCTEL (${l1.length})</div><div style="background:white;border:1px solid var(--borde);border-radius:10px;overflow:hidden;margin-top:6px;">${renderItems(l1)}<div style="padding:8px 12px;background:#eff6ff;font-weight:700;text-align:right;color:var(--azul);">Subtotal L1: ${formatearCLP(subL1)}</div></div>`;
   if (l2.length) html += `<div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--morado);margin-top:12px;">☕ MENÚS L2 · COFFEE BREAK (${l2.length})</div><div style="background:white;border:1px solid var(--borde);border-radius:10px;overflow:hidden;margin-top:6px;">${renderItems(l2)}<div style="padding:8px 12px;background:#f3e8ff;font-weight:700;text-align:right;color:var(--morado);">Subtotal L2: ${formatearCLP(subL2)}</div></div>`;
   html += `<div class="section-label" style="margin-top:20px;">📅 LÍNEA DE TIEMPO</div><div class="timeline-aud">`;
@@ -2023,11 +1775,10 @@ function verTrazabilidad(solId) {
   if (s.estado === 'APROBADA' || s.estado === 'RECIBIDA') html += `<div class="timeline-aud-item aprobacion"><div class="tl-titulo">✅ Aprobado</div><div class="tl-fecha">📅 ${formatearFecha(s.fecha_aprobacion) || '—'}</div><div class="tl-detalle">👤 ${escaparHtml(s.aprobado_por || '—')} · ${escaparHtml(s.aprobado_por_cargo || '')}</div></div>`;
   if (s.estado === 'RECHAZADA') html += `<div class="timeline-aud-item" style="border-left:4px solid var(--rojo);"><div class="tl-titulo" style="color:var(--rojo);">❌ Rechazado</div><div class="tl-detalle">${escaparHtml(s.motivo_rechazo || 'Sin motivo')}</div></div>`;
   if (s.estado === 'CANCELADA') html += `<div class="timeline-aud-item"><div class="tl-titulo" style="color:var(--texto-gris);">⚫ Cancelado</div><div class="tl-detalle">${escaparHtml(s.motivo_rechazo || 'Cancelado')}</div></div>`;
-  if (recFinal) html += `<div class="timeline-aud-item recepcion"><div class="tl-titulo">🍽️ Servicio <span class="tl-monto">${formatearCLP(recFinal.monto_total_bruto||0)}</span></div><div class="tl-fecha">📅 ${recFinal.fecha_fmt} · Código: <strong>${escaparHtml(recFinal.codigo)}</strong></div><div class="tl-detalle">🏭 ${escaparHtml(recFinal.proveedor||'N/E')}<br>👤 ${escaparHtml(recFinal.responsable||'N/E')}${recFinal.numero_boleta ? `<br>📄 Boleta: ${escaparHtml(recFinal.numero_boleta)}` : ''}</div></div>`;
-  if (entAsociada) html += `<div class="timeline-aud-item salida"><div class="tl-titulo">📤 Entrega <span class="tl-monto">${formatearCLP(entAsociada.monto_total_bruto||0)}</span></div><div class="tl-fecha">📅 ${entAsociada.fecha_fmt} · Código: <strong>${escaparHtml(entAsociada.codigo)}</strong></div><div class="tl-detalle">👤 Receptor: ${escaparHtml(entAsociada.receptor_nombre||'N/E')}<br>🆔 RUT: ${escaparHtml(entAsociada.receptor_rut||'N/E')}</div></div>`;
+  if (recFinal) html += `<div class="timeline-aud-item recepcion"><div class="tl-titulo">✅ Servicio verificado y conforme <span class="tl-monto">${formatearCLP(recFinal.monto_total_bruto||0)}</span></div><div class="tl-fecha">📅 ${recFinal.fecha_fmt} · Código: <strong>${escaparHtml(recFinal.codigo)}</strong></div><div class="tl-detalle">🏭 ${escaparHtml(recFinal.proveedor||'N/E')}<br>👤 ${escaparHtml(recFinal.responsable||'N/E')}${recFinal.numero_boleta ? `<br>📄 Boleta: ${escaparHtml(recFinal.numero_boleta)}` : ''}${recFinal.numero_factura ? `<br>🧾 Factura: ${escaparHtml(recFinal.numero_factura)}` : ''}</div></div>`;
   html += `</div>`;
-  if (s.estado === 'RECIBIDA' && !entAsociada) html += `<div class="aviso-info" style="margin-top:14px;">ℹ️ Este evento fue <strong>servido</strong> pero aún <strong>no tiene entrega conforme</strong>.</div>`;
-  else if (s.estado === 'PENDIENTE') html += `<div class="aviso-info" style="margin-top:14px;">⏳ Este evento está <strong>pendiente de aprobación</strong>.</div>`;
+  if (s.estado === 'PENDIENTE') html += `<div class="aviso-info" style="margin-top:14px;">⏳ Este evento está <strong>pendiente de aprobación</strong>.</div>`;
+  else if (s.estado === 'APROBADA') html += `<div class="aviso-info" style="margin-top:14px;">ℹ️ Este evento está <strong>aprobado</strong> pero aún <strong>no se ha verificado el servicio en terreno</strong>.</div>`;
   document.getElementById('modal-traz-titulo').textContent = `🔍 ${s.codigo}`;
   document.getElementById('modal-traz-contenido').innerHTML = html;
   document.getElementById('modal-trazabilidad').classList.add('visible');
@@ -2059,17 +1810,6 @@ function generarPDFBase(config) {
   doc.setFontSize(13);
   doc.text('N° ' + config.numero, pw-m-29, 21, { align:'center' });
   let y = 42;
-  if (config.mostrarProveedor) {
-    doc.setFillColor(255,250,235); doc.setDrawColor(224,142,11);
-    doc.roundedRect(m, y, pw-m*2, 24, 2, 2, 'FD');
-    doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(146,64,14);
-    doc.text('PROVEEDOR:', m+5, y+6);
-    doc.setFont('helvetica','normal'); doc.setTextColor(20,30,45);
-    doc.text(PROVEEDOR_OFICIAL.razon_social + ' · RUT ' + PROVEEDOR_OFICIAL.rut, m+30, y+6);
-    doc.text('Domicilio: ' + PROVEEDOR_OFICIAL.direccion, m+5, y+12);
-    doc.text('Contacto: ' + PROVEEDOR_OFICIAL.email, m+5, y+18);
-    y += 30;
-  }
   const filaH = 7;
   const boxH = 6 + config.filas.length * filaH;
   doc.setFillColor(...grisC); doc.setDrawColor(...borde);
@@ -2169,7 +1909,7 @@ async function descargarPDFServicio() {
   const doc = generarPDFBase({
     titulo: 'SERVICIO', numero: r.codigo,
     filas: [['Fecha', r.fecha],['Dirección', c.direccion || '—'],['Departamento', c.departamento_padre || '—'],['Área', c.subdepartamento || '—'],['N° Boleta', r.guia||'N/E'],['N° Factura', r.factura||'N/E']],
-    productos: r.productos, tituloProd: 'MENÚS SERVIDOS', desglose: false,
+    productos: r.productos, tituloProd: 'MENÚS VERIFICADOS EN TERRENO', desglose: false,
     firmaUnica: { cargo: 'Supervisor del Contrato', institucion: 'Municipalidad de Las Condes' }
   });
   const productosConFoto = r.productos.filter(p => p.foto_url);
@@ -2213,56 +1953,6 @@ async function descargarPDFServicio() {
   doc.save(`Servicio_${r.codigo}.pdf`);
   mostrarToast('✅ PDF descargado con fotos');
 }
-async function descargarPDFEntrega() {
-  if (!ultimaEntrega) return;
-  const s = ultimaEntrega;
-  const doc = generarPDFBase({
-    titulo: 'ENTREGA', numero: s.codigo,
-    filas: [['Fecha', s.fecha],['Dirección', s.departamento_padre || '—'],['Departamento', s.subdepartamento_padre || '—'],['Área', s.subdepartamento || '—'],['Servicio origen', s.recepcion_origen || '—'],['Receptor', s.receptor],['RUT', s.receptor_rut || 'N/E'],['Email', s.receptor_email||'N/E']],
-    productos: s.productos, tituloProd: 'MENÚS ENTREGADOS', desglose: true,
-    firmaUnica: { cargo: 'Supervisor del Contrato', institucion: 'Municipalidad de Las Condes' }
-  });
-  const productosConFoto = s.productos.filter(p => p.foto_url);
-  if (productosConFoto.length > 0) {
-    doc.addPage();
-    const pw = doc.internal.pageSize.getWidth();
-    const ph = doc.internal.pageSize.getHeight();
-    const m = 16;
-    doc.setFillColor(22, 100, 192); doc.rect(0, 0, pw, 24, 'F');
-    doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(13);
-    doc.text('RESPALDO FOTOGRÁFICO', m, 12);
-    doc.setFont('helvetica','normal'); doc.setFontSize(9);
-    doc.text('Entrega N° ' + s.codigo + ' · ' + s.fecha, m, 19);
-    const imagenesData = await Promise.all(productosConFoto.map(async p => {
-      try {
-        const resp = await fetch(p.foto_url);
-        const blob = await resp.blob();
-        const dataUrl = await new Promise((resolve) => { const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.readAsDataURL(blob); });
-        return { ...p, dataUrl };
-      } catch(e) { return { ...p, dataUrl: null }; }
-    }));
-    const cols = 2;
-    const fotoW = (pw - m * 3) / 2;
-    const fotoH = fotoW * 0.75;
-    const gapY = 14;
-    let x = m; let y = 34; let colIdx = 0;
-    for (const foto of imagenesData) {
-      if (colIdx === cols) { colIdx = 0; x = m; y += fotoH + gapY + 8; }
-      if (y + fotoH + 12 > ph - 20) { doc.addPage(); y = 16; x = m; colIdx = 0; }
-      doc.setDrawColor(226, 232, 240); doc.setFillColor(245, 247, 252);
-      doc.roundedRect(x, y, fotoW, fotoH + 12, 2, 2, 'FD');
-      if (foto.dataUrl) { try { doc.addImage(foto.dataUrl, 'JPEG', x + 2, y + 2, fotoW - 4, fotoH - 4); } catch(e) {} }
-      else { doc.setFontSize(9); doc.setTextColor(150); doc.text('(Imagen no disponible)', x + fotoW/2, y + fotoH/2, { align: 'center' }); }
-      doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(26, 38, 52);
-      doc.text(foto.nombre.substring(0, 45), x + 3, y + fotoH + 4);
-      doc.setFont('helvetica','normal'); doc.setFontSize(7); doc.setTextColor(74, 90, 110);
-      doc.text(`${foto.cantidad} pers. · L${foto.linea}`, x + 3, y + fotoH + 9);
-      x += fotoW + m; colIdx++;
-    }
-  }
-  doc.save(`Entrega_${s.codigo}.pdf`);
-  mostrarToast('✅ PDF descargado con fotos');
-}
 function descargarPDFEvento(id) {
   const s = eventos.find(x => x.id === id);
   if (!s) return;
@@ -2290,18 +1980,9 @@ function descargarPDFEvento(id) {
   doc.setFontSize(13);
   doc.text('N° ' + s.codigo, pw-m-29, 21, { align:'center' });
   let y = 42;
-  doc.setFillColor(255,250,235); doc.setDrawColor(224,142,11);
-  doc.roundedRect(m, y, pw-m*2, 24, 2, 2, 'FD');
-  doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(146,64,14);
-  doc.text('PROVEEDOR:', m+5, y+6);
-  doc.setFont('helvetica','normal'); doc.setTextColor(20,30,45);
-  doc.text(PROVEEDOR_OFICIAL.razon_social + ' · RUT ' + PROVEEDOR_OFICIAL.rut, m+30, y+6);
-  doc.text('Domicilio: ' + PROVEEDOR_OFICIAL.direccion, m+5, y+12);
-  doc.text('Contacto: ' + PROVEEDOR_OFICIAL.email, m+5, y+18);
-  y += 30;
   const filaH = 7;
   const fEvt = s.fecha_evento ? new Date(s.fecha_evento + 'T00:00:00').toLocaleDateString('es-CL') : '—';
-  const filasInfo = [['Fecha evento', fEvt],['Hora', s.hora_evento ? s.hora_evento.substring(0,5) : '—'],['Nombre', s.nombre_evento || '—'],['Lugar', s.lugar_evento || '—'],['Dirección', s.departamento_padre || s.departamento || '—'],['Departamento', s.subdepartamento_padre || '—'],['Área', s.subdepartamento || '—'],['Solicitante', s.solicitante_nombre||s.solicitante_email],['Urgencia', s.urgencia],['Estado', s.estado]];
+  const filasInfo = [['Fecha evento', fEvt],['Hora', s.hora_evento ? s.hora_evento.substring(0,5) : '—'],['Nombre', s.nombre_evento || '—'],['Lugar', s.lugar_evento || '—'],['Dirección', s.departamento_padre || s.departamento || '—'],['Departamento', s.subdepartamento_padre || '—'],['Área', s.subdepartamento || '—'],['Solicitante', s.solicitante_nombre||s.solicitante_email],['Urgencia', s.urgencia],['Estado', textoEstado(s.estado)]];
   const boxH = 6 + filasInfo.length * filaH;
   doc.setFillColor(...grisC); doc.setDrawColor(...borde);
   doc.roundedRect(m, y, pw-m*2, boxH, 2, 2, 'FD');
@@ -2454,22 +2135,6 @@ function exportarExcelRecepciones() {
   XLSX.writeFile(wb, `Servicios_${fechaActual()}.xlsx`);
   mostrarToast('✅ Excel exportado');
 }
-function exportarExcelSalidas() {
-  if (!entregas.length) { mostrarToast('❌ Sin entregas'); return; }
-  const data = [];
-  entregas.forEach(s => {
-    const items = entregaItems.filter(i => i.entrega_id === s.id);
-    items.forEach(it => {
-      const p = productos.find(x => x.id === it.producto_id);
-      data.push({ codigo: s.codigo, fecha: s.fecha_fmt, direccion: s.departamento_padre || s.departamento || '', depto: s.subdepartamento_padre || '', area: s.subdepartamento || '', receptor: s.receptor_nombre || '', rut: s.receptor_rut || '', email: s.receptor_email || '', linea: 'L' + (p?.linea || 1), producto: p?.nombre || 'N/E', cantidad: Number(it.cantidad || 0), neto: Number(it.subtotal || 0), iva: Number(it.iva || 0), bruto: Number(it.subtotal_bruto || 0), responsable: s.responsable || '' });
-    });
-  });
-  const wb = XLSX.utils.book_new();
-  const ws = hojaExcel(data, [{ key:'codigo', label:'Entrega', width:14, align:'center' }, { key:'fecha', label:'Fecha', width:18, align:'center' }, { key:'direccion', label:'Dirección', width:28 }, { key:'depto', label:'Departamento', width:28 }, { key:'area', label:'Área', width:28 }, { key:'receptor', label:'Receptor', width:25 }, { key:'rut', label:'RUT', width:14 }, { key:'email', label:'Email', width:25 }, { key:'linea', label:'L', width:6, align:'center' }, { key:'producto', label:'Menú', width:50 }, { key:'cantidad', label:'Asistentes', width:12, align:'center' }, { key:'neto', label:'Neto', width:14, align:'right', money:true }, { key:'iva', label:'IVA', width:12, align:'right', money:true }, { key:'bruto', label:'Bruto', width:14, align:'right', money:true }, { key:'responsable', label:'Responsable', width:25 }]);
-  XLSX.utils.book_append_sheet(wb, ws, 'Entregas');
-  XLSX.writeFile(wb, `Entregas_${fechaActual()}.xlsx`);
-  mostrarToast('✅ Excel exportado');
-}
 function exportarExcelCuentas() {
   if (!cuentas.length) { mostrarToast('❌ Sin cuentas'); return; }
   const data = cuentas.map(c => { const cons = calcularConsumidoCuenta(c.id); const res = calcularReservadoCuenta(c.id); return { direccion: c.direccion, depto: c.departamento_padre || '—', area: c.subdepartamento, linea: 'L' + c.linea, cuenta: c.codigo, asignado: Number(c.monto_asignado), reservado: res, consumido: cons, disponible: Number(c.monto_asignado) - cons - res }; });
@@ -2489,11 +2154,11 @@ function exportarExcelEventos() {
       const pNeto = Number(it.precio_estimado || 0);
       const pBruto = Number(it.precio_estimado_bruto || precioBruto(pNeto));
       const cant = Number(it.cantidad || 0);
-      data.push({ codigo: s.codigo, fecha: s.fecha_fmt, nombre_evento: s.nombre_evento || '', fecha_evento: s.fecha_evento || '', lugar: s.lugar_evento || '', direccion: s.departamento_padre || s.departamento || '', depto: s.subdepartamento_padre || '', area: s.subdepartamento || '', solicitante: s.solicitante_nombre || s.solicitante_email || '', estado: s.estado, urgencia: s.urgencia || '', linea: 'L' + (it.linea || p?.linea || 1), producto: p?.nombre || 'N/E', cantidad: cant, neto: pNeto * cant, iva: (pBruto - pNeto) * cant, bruto: Number(it.subtotal_bruto || pBruto * cant) });
+      data.push({ codigo: s.codigo, fecha: s.fecha_fmt, nombre_evento: s.nombre_evento || '', fecha_evento: s.fecha_evento || '', lugar: s.lugar_evento || '', direccion: s.departamento_padre || s.departamento || '', depto: s.subdepartamento_padre || '', area: s.subdepartamento || '', solicitante: s.solicitante_nombre || s.solicitante_email || '', estado: textoEstado(s.estado), urgencia: s.urgencia || '', linea: 'L' + (it.linea || p?.linea || 1), producto: p?.nombre || 'N/E', cantidad: cant, neto: pNeto * cant, iva: (pBruto - pNeto) * cant, bruto: Number(it.subtotal_bruto || pBruto * cant) });
     });
   });
   const wb = XLSX.utils.book_new();
-  const ws = hojaExcel(data, [{ key:'codigo', label:'Evento', width:14, align:'center' }, { key:'fecha', label:'Fecha solicitud', width:18, align:'center' }, { key:'nombre_evento', label:'Nombre', width:32 }, { key:'fecha_evento', label:'Fecha evento', width:14, align:'center' }, { key:'lugar', label:'Lugar', width:30 }, { key:'direccion', label:'Dirección', width:28 }, { key:'depto', label:'Departamento', width:28 }, { key:'area', label:'Área', width:28 }, { key:'solicitante', label:'Solicitante', width:28 }, { key:'estado', label:'Estado', width:14, align:'center' }, { key:'urgencia', label:'Urgencia', width:12, align:'center' }, { key:'linea', label:'L', width:6, align:'center' }, { key:'producto', label:'Menú', width:50 }, { key:'cantidad', label:'Asistentes', width:12, align:'center' }, { key:'neto', label:'Neto', width:14, align:'right', money:true }, { key:'iva', label:'IVA', width:12, align:'right', money:true }, { key:'bruto', label:'Bruto', width:14, align:'right', money:true }]);
+  const ws = hojaExcel(data, [{ key:'codigo', label:'Evento', width:14, align:'center' }, { key:'fecha', label:'Fecha solicitud', width:18, align:'center' }, { key:'nombre_evento', label:'Nombre', width:32 }, { key:'fecha_evento', label:'Fecha evento', width:14, align:'center' }, { key:'lugar', label:'Lugar', width:30 }, { key:'direccion', label:'Dirección', width:28 }, { key:'depto', label:'Departamento', width:28 }, { key:'area', label:'Área', width:28 }, { key:'solicitante', label:'Solicitante', width:28 }, { key:'estado', label:'Estado', width:20, align:'center' }, { key:'urgencia', label:'Urgencia', width:12, align:'center' }, { key:'linea', label:'L', width:6, align:'center' }, { key:'producto', label:'Menú', width:50 }, { key:'cantidad', label:'Asistentes', width:12, align:'center' }, { key:'neto', label:'Neto', width:14, align:'right', money:true }, { key:'iva', label:'IVA', width:12, align:'right', money:true }, { key:'bruto', label:'Bruto', width:14, align:'right', money:true }]);
   XLSX.utils.book_append_sheet(wb, ws, 'Eventos');
   XLSX.writeFile(wb, `Eventos_${fechaActual()}.xlsx`);
   mostrarToast('✅ Excel exportado');
@@ -2511,39 +2176,14 @@ function exportarExcelFinanzas() {
   if (lin) filtros.push('Línea: L' + lin);
   const txtFiltros = filtros.length ? filtros.join(' · ') : 'Sin filtros (todo el histórico)';
   const resumen = [
-    { concepto: '🍽️ Servido', uds: ef.rec.uds, neto: ef.rec.neto, iva: ef.rec.iva, bruto: ef.rec.bruto },
-    { concepto: '📤 Entregado conforme', uds: ef.ent.uds, neto: ef.ent.neto, iva: ef.ent.iva, bruto: ef.ent.bruto },
-    { concepto: '⏳ Pendiente de entrega', uds: ef.pend.uds, neto: ef.pend.neto, iva: ef.pend.iva, bruto: ef.pend.bruto },
-    { concepto: '📦 Por servir', uds: ef.pend.uds, neto: ef.pend.neto, iva: ef.pend.iva, bruto: ef.pend.bruto }
+    { concepto: '✅ Servido y conforme', uds: ef.rec.uds, neto: ef.rec.neto, iva: ef.rec.iva, bruto: ef.rec.bruto },
+    { concepto: '⏳ Pendiente de servir', uds: ef.pend.uds, neto: ef.pend.neto, iva: ef.pend.iva, bruto: ef.pend.bruto },
+    { concepto: '💰 Disponible', uds: '—', neto: '—', iva: '—', bruto: ef.disponible.bruto }
   ];
   const wb = XLSX.utils.book_new();
   const wsResumen = hojaExcel(resumen, [{ key:'concepto', label:'Concepto', width:32 }, { key:'uds', label:'Asistentes', width:14, align:'right' }, { key:'neto', label:'Neto', width:16, align:'right', money:true }, { key:'iva', label:'IVA', width:14, align:'right', money:true }, { key:'bruto', label:'Bruto', width:16, align:'right', money:true }]);
   XLSX.utils.sheet_add_aoa(wsResumen, [[{ v: 'Filtros aplicados:', t: 's', s: { font: { bold: true, sz: 10, name: 'Century Gothic' } } }, { v: txtFiltros, t: 's', s: { sz: 10, name: 'Century Gothic' } }]], { origin: 'A6' });
   XLSX.utils.book_append_sheet(wb, wsResumen, 'Estado Financiero');
-  const porProducto = {};
-  productos.forEach(p => { porProducto[p.id] = { nombre: p.nombre, linea: p.linea, rec: 0, ent: 0, precioNeto: Number(p.precio_neto||0) }; });
-  recepcionItems.forEach(it => {
-    const r = recepciones.find(x => x.id === it.recepcion_id);
-    const p = productos.find(x => x.id === it.producto_id);
-    if (!r || !p) return;
-    if (!finPasaFiltro(r.fecha, r.departamento, p.linea)) return;
-    if (porProducto[it.producto_id]) porProducto[it.producto_id].rec += Number(it.cantidad || 0);
-  });
-  entregaItems.forEach(it => {
-    const s = entregas.find(x => x.id === it.entrega_id);
-    const p = productos.find(x => x.id === it.producto_id);
-    if (!s || !p) return;
-    if (!finPasaFiltro(s.fecha, s.departamento, p.linea)) return;
-    if (porProducto[it.producto_id]) porProducto[it.producto_id].ent += Number(it.cantidad || 0);
-  });
-  const detalle = Object.values(porProducto).filter(x => x.rec > 0 || x.ent > 0).sort((a,b) => a.nombre.localeCompare(b.nombre)).map(x => {
-    const pend = x.rec - x.ent;
-    const bod = pend > 0 ? pend : 0;
-    const bruto = x.precioNeto * (1 + IVA);
-    return { producto: x.nombre, linea: 'L' + x.linea, rec: x.rec, ent: x.ent, pend: pend > 0 ? pend : 0, bod: bod, recBruto: x.rec * bruto, entBruto: x.ent * bruto, pendBruto: (pend > 0 ? pend : 0) * bruto, bodBruto: bod * bruto };
-  });
-  const wsDetalle = hojaExcel(detalle, [{ key:'producto', label:'Menú', width:50 }, { key:'linea', label:'L', width:6, align:'center' }, { key:'rec', label:'Servido', width:14, align:'right' }, { key:'ent', label:'Entregado', width:14, align:'right' }, { key:'pend', label:'Pendiente', width:14, align:'right' }, { key:'bod', label:'Por servir', width:14, align:'right' }, { key:'recBruto', label:'Servido ($)', width:16, align:'right', money:true }, { key:'entBruto', label:'Entregado ($)', width:16, align:'right', money:true }, { key:'pendBruto', label:'Pendiente ($)', width:16, align:'right', money:true }]);
-  XLSX.utils.book_append_sheet(wb, wsDetalle, 'Detalle por menú');
   XLSX.writeFile(wb, `EstadoFinanciero_${fechaActual()}.xlsx`);
   mostrarToast('✅ Excel exportado');
 }
@@ -2582,7 +2222,7 @@ function verReporte(tipo) {
       return { tipo:'consumo', nombre: p.nombre, linea: 'L' + p.linea, neto: Number(p.precio_neto), iva: pb - Number(p.precio_neto), bruto: pb, consumido: consumido, valor: consumido * pb, txt: `${p.nombre} L${p.linea}` };
     });
   } else if (tipo === 'recepciones') {
-    titulo.textContent = '🍽️ SERVICIOS PRESTADOS';
+    titulo.textContent = '🍽️ SERVICIOS VERIFICADOS';
     thead.innerHTML = '<tr><th>Servicio</th><th>Fecha</th><th>Dirección</th><th>Proveedor</th><th>L</th><th>Menú</th><th style="text-align:right;">Asist.</th><th style="text-align:right;">Neto</th><th style="text-align:right;">Bruto</th></tr>';
     reporteDatos = [];
     recepciones.forEach(r => {
@@ -2590,17 +2230,6 @@ function verReporte(tipo) {
       its.forEach(it => {
         const p = productos.find(x => x.id === it.producto_id);
         reporteDatos.push({ tipo:'recepciones', codigo: r.codigo, fecha: r.fecha_fmt, depto: r.departamento || '', proveedor: r.proveedor || '', linea: 'L' + (p?.linea||1), producto: p?.nombre || 'N/E', cantidad: Number(it.cantidad||0), neto: Number(it.subtotal||0), bruto: Number(it.subtotal_bruto||0), txt: `${r.codigo} ${r.departamento} ${r.proveedor} ${p?.nombre||''}` });
-      });
-    });
-  } else if (tipo === 'salidas') {
-    titulo.textContent = '📤 ENTREGAS CONFORMES';
-    thead.innerHTML = '<tr><th>Entrega</th><th>Fecha</th><th>Dirección</th><th>Receptor</th><th>L</th><th>Menú</th><th style="text-align:right;">Asist.</th><th style="text-align:right;">Neto</th><th style="text-align:right;">Bruto</th></tr>';
-    reporteDatos = [];
-    entregas.forEach(s => {
-      const its = entregaItems.filter(i => i.entrega_id === s.id);
-      its.forEach(it => {
-        const p = productos.find(x => x.id === it.producto_id);
-        reporteDatos.push({ tipo:'salidas', codigo: s.codigo, fecha: s.fecha_fmt, depto: s.departamento || '', receptor: s.receptor_nombre || '', linea: 'L' + (p?.linea||1), producto: p?.nombre || 'N/E', cantidad: Number(it.cantidad||0), neto: Number(it.subtotal||0), bruto: Number(it.subtotal_bruto||0), txt: `${s.codigo} ${s.departamento} ${s.receptor_nombre} ${p?.nombre||''}` });
       });
     });
   } else if (tipo === 'cuentas') {
@@ -2633,9 +2262,9 @@ function filtrarReporte() {
     let tu = 0, tv = 0;
     tbody.innerHTML = lista.map(d => { tu += d.consumido; tv += d.valor; const color = d.consumido === 0 ? 'var(--texto-gris)' : 'var(--verde)'; return `<tr><td><strong>${escaparHtml(d.nombre)}</strong></td><td><span class="badge-linea l${d.linea.replace('L','')}">${d.linea}</span></td><td style="text-align:right;">${formatearCLP(d.neto)}</td><td style="text-align:right;">${formatearCLP(d.iva)}</td><td style="text-align:right;">${formatearCLP(d.bruto)}</td><td style="text-align:right;font-weight:700;color:${color};">${d.consumido}</td><td style="text-align:right;font-weight:700;">${formatearCLP(d.valor)}</td></tr>`; }).join('');
     document.getElementById('rep-detalle-total').textContent = `${lista.length} menús · ${tu} asistentes · ${formatearCLP(tv)}`;
-  } else if (reporteActual === 'recepciones' || reporteActual === 'salidas') {
+  } else if (reporteActual === 'recepciones') {
     let tc = 0, tn = 0, tb = 0;
-    tbody.innerHTML = lista.map(d => { tc += d.cantidad; tn += d.neto; tb += d.bruto; const receptorOProv = d.receptor || d.proveedor || ''; return `<tr><td><strong>${escaparHtml(d.codigo)}</strong></td><td style="font-size:11px;">${d.fecha}</td><td style="font-size:11px;">${escaparHtml(d.depto)}</td><td style="font-size:11px;">${escaparHtml(receptorOProv)}</td><td><span class="badge-linea l${d.linea.replace('L','')}">${d.linea}</span></td><td style="font-size:11px;">${escaparHtml(d.producto)}</td><td style="text-align:right;">${d.cantidad}</td><td style="text-align:right;">${formatearCLP(d.neto)}</td><td style="text-align:right;font-weight:700;">${formatearCLP(d.bruto)}</td></tr>`; }).join('');
+    tbody.innerHTML = lista.map(d => { tc += d.cantidad; tn += d.neto; tb += d.bruto; return `<tr><td><strong>${escaparHtml(d.codigo)}</strong></td><td style="font-size:11px;">${d.fecha}</td><td style="font-size:11px;">${escaparHtml(d.depto)}</td><td style="font-size:11px;">${escaparHtml(d.proveedor)}</td><td><span class="badge-linea l${d.linea.replace('L','')}">${d.linea}</span></td><td style="font-size:11px;">${escaparHtml(d.producto)}</td><td style="text-align:right;">${d.cantidad}</td><td style="text-align:right;">${formatearCLP(d.neto)}</td><td style="text-align:right;font-weight:700;">${formatearCLP(d.bruto)}</td></tr>`; }).join('');
     document.getElementById('rep-detalle-total').textContent = `${lista.length} líneas · ${tc} asistentes · Neto: ${formatearCLP(tn)} · Bruto: ${formatearCLP(tb)}`;
   } else if (reporteActual === 'cuentas') {
     let ta = 0, tr = 0, tc = 0;
@@ -2643,7 +2272,7 @@ function filtrarReporte() {
     document.getElementById('rep-detalle-total').textContent = `${lista.length} cuentas · Asignado: ${formatearCLP(ta)} · Reservado: ${formatearCLP(tr)} · Consumido: ${formatearCLP(tc)}`;
   } else if (reporteActual === 'eventos') {
     let tc = 0, tn = 0, tb = 0;
-    tbody.innerHTML = lista.map(d => { tc += d.cantidad; tn += d.neto; tb += d.bruto; return `<tr><td><strong>${escaparHtml(d.codigo)}</strong></td><td style="font-size:11px;">${d.fecha}</td><td style="font-size:11px;">${escaparHtml(d.depto)}</td><td style="font-size:11px;">${escaparHtml(d.solicitante)}</td><td style="text-align:center;"><span class="badge-estado ${claseEstado(d.estado)}">${iconoEstado(d.estado)} ${d.estado}</span></td><td><span class="badge-linea l${d.linea.replace('L','')}">${d.linea}</span></td><td style="font-size:11px;">${escaparHtml(d.producto)}</td><td style="text-align:right;">${d.cantidad}</td><td style="text-align:right;">${formatearCLP(d.neto)}</td><td style="text-align:right;font-weight:700;">${formatearCLP(d.bruto)}</td></tr>`; }).join('');
+    tbody.innerHTML = lista.map(d => { tc += d.cantidad; tn += d.neto; tb += d.bruto; return `<tr><td><strong>${escaparHtml(d.codigo)}</strong></td><td style="font-size:11px;">${d.fecha}</td><td style="font-size:11px;">${escaparHtml(d.depto)}</td><td style="font-size:11px;">${escaparHtml(d.solicitante)}</td><td style="text-align:center;"><span class="badge-estado ${claseEstado(d.estado)}">${iconoEstado(d.estado)} ${textoEstado(d.estado)}</span></td><td><span class="badge-linea l${d.linea.replace('L','')}">${d.linea}</span></td><td style="font-size:11px;">${escaparHtml(d.producto)}</td><td style="text-align:right;">${d.cantidad}</td><td style="text-align:right;">${formatearCLP(d.neto)}</td><td style="text-align:right;font-weight:700;">${formatearCLP(d.bruto)}</td></tr>`; }).join('');
     document.getElementById('rep-detalle-total').textContent = `${lista.length} líneas · ${tc} asistentes · Neto: ${formatearCLP(tn)} · Bruto: ${formatearCLP(tb)}`;
   }
 }
@@ -2654,12 +2283,7 @@ function actualizarResumenes() {
     rrh.textContent = hoy.length;
     document.getElementById('res-rec-unidades').textContent = hoy.reduce((s, r) => s + recepcionItems.filter(ri => ri.recepcion_id === r.id).reduce((a, x) => a + Number(x.cantidad||0), 0), 0);
     document.getElementById('res-rec-monto').textContent = formatearCLP(hoy.reduce((s, r) => s + Number(r.monto_total_bruto||0), 0));
-    document.getElementById('res-stock-critico').textContent = 0;
-    document.getElementById('res-stock-critico2').textContent = 0;
-    const hEnt = entregas.filter(s => esHoy(s.fecha_fmt));
-    document.getElementById('res-sal-hoy').textContent = hEnt.length;
-    document.getElementById('res-sal-unidades').textContent = hEnt.reduce((s, x) => s + entregaItems.filter(si => si.entrega_id === x.id).reduce((a, y) => a + Number(y.cantidad||0), 0), 0);
-    document.getElementById('res-sal-prods').textContent = productos.length;
+    document.getElementById('res-rec-prods').textContent = productos.length;
   }
   if (esAdmin()) renderReportes();
 }
@@ -2677,13 +2301,6 @@ function cambiarTab(tabId) {
   if (tabId === 'tab-mi-evento') { renderMisEventos(); actualizarBadgePendientes(); }
   if (tabId === 'tab-eventos' && esAdmin()) renderEventosAdmin();
   if (tabId === 'tab-servicio') { poblarVinculoEvento(); actualizarResumenes(); }
-  if (tabId === 'tab-entrega') {
-    document.getElementById('sal-depto-padre').value = '';
-    document.getElementById('sal-wrap-recepciones').style.display = 'none';
-    document.getElementById('sal-detalle').style.display = 'none';
-    document.getElementById('sal-mensaje').style.display = 'none';
-    actualizarResumenes();
-  }
   if (tabId === 'tab-consumo') renderConsumo();
   if (tabId === 'tab-cuentas' && esAdmin()) renderCuentas();
   if (tabId === 'tab-finanzas' && esAdmin()) renderFinanzas();
@@ -2726,12 +2343,6 @@ window.subirFotoServicio = subirFotoServicio;
 window.quitarFotoServicio = quitarFotoServicio;
 window.registrarServicio = registrarServicio;
 window.descargarPDFServicio = descargarPDFServicio;
-window.salCambiarDireccion = salCambiarDireccion;
-window.salCargarServicio = salCargarServicio;
-window.subirFotoEntrega = subirFotoEntrega;
-window.quitarFotoEntrega = quitarFotoEntrega;
-window.registrarEntrega = registrarEntrega;
-window.descargarPDFEntrega = descargarPDFEntrega;
 window.renderConsumo = renderConsumo;
 window.renderCuentas = renderCuentas;
 window.renderFinanzas = renderFinanzas;
@@ -2741,7 +2352,6 @@ window.exportarExcelFinanzas = exportarExcelFinanzas;
 window.renderAuditoria = renderAuditoria;
 window.exportarExcelConsumo = exportarExcelConsumo;
 window.exportarExcelRecepciones = exportarExcelRecepciones;
-window.exportarExcelSalidas = exportarExcelSalidas;
 window.exportarExcelCuentas = exportarExcelCuentas;
 window.exportarExcelEventos = exportarExcelEventos;
 window.verReporte = verReporte;
